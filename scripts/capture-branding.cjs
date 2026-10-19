@@ -48,8 +48,25 @@ async function capture() {
         if (overflow > 0) throw Error(`${section} overflows by ${overflow}px at ${width}px`);
       }
     }
+    await page.locator('nav a[href="#access"]').click();
+    await page.getByRole('button', { name: 'Change password', exact: true }).click();
+    await page.getByLabel('Current password', { exact: true }).fill('preview-password');
+    await page.getByLabel('New password', { exact: true }).fill('new-preview-password');
+    await page.getByLabel('Confirm new password', { exact: true }).fill('does-not-match');
+    await page.getByRole('button', { name: 'Save password', exact: true }).click();
+    await page.getByText('New passwords do not match.', { exact: true }).waitFor();
+    await page.getByLabel('Confirm new password', { exact: true }).fill('new-preview-password');
+    await page.getByRole('button', { name: 'Save password', exact: true }).click();
+    await page.waitForSelector('#editor-dialog:not([open])', { state: 'attached' });
+    await page.reload();
+    await page.waitForSelector('#app:not([hidden])');
+    await page.locator('#logout').click();
+    await page.getByLabel('Username', { exact: true }).fill('preview');
+    await page.getByLabel('Password', { exact: true }).fill('new-preview-password');
+    await page.getByRole('button', { name: 'Open workspace' }).click();
+    await page.waitForSelector('#app:not([hidden])');
     if (errors.length) throw Error(errors.join('\n'));
-    console.log('Captured login, overview, marketplace, and integrations. Six pages fit at 390, 1024, and 1440px without browser errors.');
+    console.log('Captured four dashboard pages. Six pages fit at 390, 1024, and 1440px. Password confirmation, save, reload, and sign-in passed without browser errors.');
   } finally {
     await browser?.close();
     listener.closeAllConnections();

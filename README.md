@@ -142,6 +142,22 @@ See [.env.example](.env.example) for the starter configuration.
 | `GIGA_ROUTER_DEFAULT_MARKETPLACES` | Set to `false` to skip built-in catalog seeding | Enabled |
 | `GIGA_ROUTER_PUBLIC_URL` | Public HTTPS origin for hosted OAuth callbacks | Browser request origin |
 
+### Dashboard password
+
+This is a single-user dashboard. Sign in with the username and initial password
+from `.env`, then open **Access & endpoints → Change password**. Enter your
+current password and confirm a new password with at least 8 characters.
+
+The new password is saved as a salted scrypt hash in `DATA_DIR/admin-auth.json`
+and survives container rebuilds and restarts. It takes precedence over the initial
+password in `.env`. Other dashboard sessions are signed out; your current session
+stays signed in. Gateway API keys are separate and continue working.
+
+Back up the complete data volume to keep account settings and provider connections.
+To recover a forgotten dashboard password, stop the router, remove only
+`admin-auth.json` from its data volume, and start it with a new initial password
+in `.env`.
+
 `GITHUB_TOKEN` is used only for GitHub requests and never returned by the
 dashboard. `HOST_BIND` controls Docker's published port, not the native Node.js
 listener. Back up the complete data directory or Docker volume, including

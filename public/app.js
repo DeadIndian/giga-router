@@ -226,7 +226,7 @@ function renderAccess() {
     ['OpenAI-compatible API', origin + '/v1', 'openai-url'], ['Anthropic Messages API', origin, 'anthropic-url'], ['MCP gateway', origin + '/mcp', 'mcp-url'],
   ].map(([name, url, id]) => `<div class="endpoint"><div><h3>${name}</h3><code>${esc(url)}</code></div>${button('Copy', 'copy-endpoint', id, 'small quiet', 'copy')}</div>`).join('')}</div>
   <div class="panel"><div class="panel-header"><h2>Access keys</h2>${button('Create key', 'add-key', '', 'small', 'plus')}</div><div class="setting-row"><div><h3>Router key ${tag(STATE.hasRouterKey ? 'Configured' : 'Not set', STATE.hasRouterKey ? 'green' : '')}</h3><p>Your existing ROUTER_KEY. Allows LLM and all MCP servers.</p></div>${STATE.hasRouterKey ? button('Copy key', 'copy-router-key', '', 'small quiet', 'copy') : ''}</div>${STATE.keys.map((key) => `<div class="setting-row"><div><h3>${esc(key.name)} ${key.revokedAt ? tag('Revoked', 'red') : tag(key.scopes.join(' + '))}</h3><p><code>${esc(key.prefix)}…</code> · ${key.serverIds !== null ? `${key.serverIds?.length || 0} MCP servers allowed` : 'All MCP servers'} · Used ${timeAgo(key.lastUsedAt)}</p></div>${!key.revokedAt ? button('Revoke', 'revoke-key', key.id, 'small danger') : ''}</div>`).join('')}</div></div>
-  <div><div class="panel"><div class="panel-header"><h2>Quick connection guide</h2>${icon('terminal')}</div><div class="panel-body"><h3>Claude Code / Anthropic SDK</h3><div class="code-block with-copy">${iconButton('Copy Anthropic setup', 'copy-snippet', 'claude', 'copy')}<pre>${esc(snippets.claude)}</pre></div><p class="subtle" style="font-size:10px;margin-bottom:22px">Replace YOUR_GATEWAY_KEY with a key from this page. The base URL does not include /v1.</p><h3>OpenAI-compatible clients</h3><div class="code-block with-copy">${iconButton('Copy OpenAI setup', 'copy-snippet', 'openai', 'copy')}<pre>${esc(snippets.openai)}</pre></div><h3 class="section-space">MCP client configuration</h3><div class="code-block with-copy">${iconButton('Copy MCP configuration', 'copy-snippet', 'mcp', 'copy')}<pre>${esc(snippets.mcp)}</pre></div><p class="subtle" style="font-size:10px">Use a client that supports Streamable HTTP and custom authorization headers. Installed skills appear as MCP prompts and resources.</p></div></div></div></div>`;
+  <div><div class="panel"><div class="panel-header"><h2>Dashboard account</h2>${icon("user")}</div><div class="setting-row"><div><h3>Sign-in password</h3><p>Change your dashboard password. Saved across restarts.</p></div>${button("Change password", "change-password", "", "small quiet", "lock")}</div></div><div class="panel"><div class="panel-header"><h2>Quick connection guide</h2>${icon('terminal')}</div><div class="panel-body"><h3>Claude Code / Anthropic SDK</h3><div class="code-block with-copy">${iconButton('Copy Anthropic setup', 'copy-snippet', 'claude', 'copy')}<pre>${esc(snippets.claude)}</pre></div><p class="subtle" style="font-size:10px;margin-bottom:22px">Replace YOUR_GATEWAY_KEY with a key from this page. The base URL does not include /v1.</p><h3>OpenAI-compatible clients</h3><div class="code-block with-copy">${iconButton('Copy OpenAI setup', 'copy-snippet', 'openai', 'copy')}<pre>${esc(snippets.openai)}</pre></div><h3 class="section-space">MCP client configuration</h3><div class="code-block with-copy">${iconButton('Copy MCP configuration', 'copy-snippet', 'mcp', 'copy')}<pre>${esc(snippets.mcp)}</pre></div><p class="subtle" style="font-size:10px">Use a client that supports Streamable HTTP and custom authorization headers. Installed skills appear as MCP prompts and resources.</p></div></div></div></div>`;
 }
 
 function renderPage() {
@@ -284,6 +284,17 @@ function bindForm(handler) {
     } catch (error) {
       if ($('form-error')) $('form-error').textContent = error.message;
     } finally { if (submit.isConnected) { submit.disabled = false; submit.innerHTML = original; } }
+  });
+}
+
+function changePassword() {
+  showDialog('Change password', `<form id="edit-form"><div class="dialog-body"><p class="details-description">Use at least 8 characters. Your new password is saved for future sign-ins. Other dashboard sessions will be signed out.</p>${field('currentPassword', 'Current password', '', { type: 'password', required: true, autocomplete: 'current-password' })}${field('newPassword', 'New password', '', { type: 'password', required: true, autocomplete: 'new-password' })}${field('confirmPassword', 'Confirm new password', '', { type: 'password', required: true, autocomplete: 'new-password' })}</div>${footer('Save password')}</form>`, 'DASHBOARD ACCOUNT');
+  $('field-newPassword').minLength = 8;
+  $('field-currentPassword').focus();
+  bindForm(async (form, values) => {
+    if (values.newPassword !== values.confirmPassword) throw new Error('New passwords do not match.');
+    await api('/api/account/password', { method: 'POST', body: values });
+    form.reset(); closeDialog(); toast('Password changed. You’re still signed in.');
   });
 }
 
@@ -628,6 +639,7 @@ async function handleAction(node) {
     case 'delete-source': return confirmAction('Remove this repository?', 'It disappears from the marketplace. Your installed skills stay in your library.', () => api(`/api/sources/${id}`, { method: 'DELETE' }));
     case 'show-more': STATE.limit += 60; return renderSkillResults();
     case 'clear-filters': STATE.search = ''; STATE.sourceFilter = ''; STATE.marketFilter = ''; STATE.limit = 60; return renderPage();
+    case 'change-password': return changePassword();
     case 'add-key': return addKey();
     case 'revoke-key': return confirmAction('Revoke this key?', 'Clients using this key will no longer be able to make LLM or MCP requests.', () => api(`/api/access/keys/${id}`, { method: 'DELETE' }));
     case 'copy-router-key': await copyText((await api('/api/access/router-key')).key); return toast('Router key copied');
