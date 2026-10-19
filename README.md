@@ -1,10 +1,48 @@
+<div align="center">
+
+<img src="public/favicon.svg" alt="Giga Router logo" width="80" />
+
 # Giga Router
 
-Your unified dashboard for **LLM providers, MCP servers, and agent skills**.
-Built on the existing LLM Router's Anthropic/OpenAI translation, streaming,
-scheduled routing, and failover engine.
+### LLM providers, MCP servers, and agent skills. One self-hosted dashboard.
 
-## Workspace
+Route model requests, connect your tools, and manage reusable agent instructions
+from one workspace. Giga Router translates between Anthropic and OpenAI request
+formats, handles streaming and tool calls, and combines scheduled routing,
+failover, and an authenticated MCP gateway.
+
+[![CI](https://img.shields.io/github/actions/workflow/status/DeadIndian/llmrouter/ci.yml?style=flat-square)](https://github.com/DeadIndian/llmrouter/actions/workflows/ci.yml)
+[![Node.js](https://img.shields.io/badge/Node.js-22%2B-339933?style=flat-square&logo=node.js&logoColor=white)](https://nodejs.org/)
+[![Express](https://img.shields.io/badge/Express-4-000000?style=flat-square&logo=express&logoColor=white)](package.json)
+[![Version](https://img.shields.io/badge/version-1.1.0-d9f87e?style=flat-square)](package.json)
+[![MCP SDK](https://img.shields.io/badge/MCP%20SDK-1.32.1-6b7280?style=flat-square)](package.json)
+
+[Getting started](#installation) ·
+[Implementation guide](docs/giga-router.md) ·
+[Connect apps and tools](docs/mcp-integrations.md) ·
+[Report an issue](https://github.com/DeadIndian/llmrouter/issues)
+
+<img src="docs/screenshots/marketplace.png" alt="Giga Router marketplace with searchable skill cards, license information, and copy and install actions" width="100%" />
+
+</div>
+
+## Table of contents
+
+- [Features](#features)
+- [Screenshots](#screenshots)
+- [Installation](#installation)
+- [Configuration](#configuration)
+- [Skills and marketplace](#skills-and-marketplace)
+- [Unified MCP gateway](#unified-mcp-gateway)
+- [Direct model selection](#direct-model-selection)
+- [Claude Code](#claude-code)
+- [Tests](#tests)
+- [Project structure](#project-structure)
+- [Contributing](#contributing)
+- [License](#license)
+- [Maintainer](#maintainer)
+
+## Features
 
 - **Overview:** current routing, configuration counts, and recent gateway calls.
 - **Providers & routing:** custom OpenAI/Anthropic-compatible endpoints, custom
@@ -18,33 +56,86 @@ scheduled routing, and failover engine.
 - **Access & endpoints:** client configurations and scoped, revocable API keys,
   optionally restricted to selected MCP servers.
 
-## Run
+## Screenshots
 
-Requires Docker Compose, or Node.js 22 for local development.
+The marketplace above includes pinned, searchable skill catalogs. The integration
+catalog below walks you through connecting hosted apps and local tools.
+
+<img src="docs/screenshots/integrations.png" alt="Giga Router integration catalog showing guided setup for GitHub, Notion, Linear, Supabase, Context7, and Tavily" width="100%" />
+
+## Installation
+
+### Docker Compose
+
+Requires Docker with the Compose plugin.
+
+```bash
+git clone https://github.com/DeadIndian/llmrouter.git
+cd llmrouter
+cp .env.example .env
+```
+
+Edit `.env` and set `user`, `password`, and a random `ROUTER_KEY` before starting.
+Generate a gateway key with:
+
+```bash
+docker run --rm node:22-alpine node -e "console.log(require('node:crypto').randomBytes(32).toString('hex'))"
+```
+
+Then start the router:
 
 ```bash
 docker compose up -d --build
 ```
 
-Open **http://127.0.0.1:3002** and sign in with the existing `user` and `password`
-configured in `.env`. **Access & endpoints** has connection URLs and keys.
-The existing `llmrouter-data` Docker volume preserves configuration, skills, and
-marketplace indexes across rebuilds. The Compose service remains `llmrouter` for
-compatibility with the existing deployment.
+Open **http://127.0.0.1:3002** and sign in with the username and password you
+configured. Add your first provider in **Providers & routing**. **Access &
+endpoints** has connection URLs and gateway keys for your clients.
 
-For a new installation, copy `.env.example` to `.env` and set your username,
-password, and a random `ROUTER_KEY` before starting.
+The `llmrouter-data` Docker volume preserves configuration, skills, and marketplace
+indexes across rebuilds. The Compose service is named `llmrouter`.
 
-For development without Docker:
+### Local development
+
+Requires Node.js 22 or later and npm.
+
+```bash
+git clone https://github.com/DeadIndian/llmrouter.git
+cd llmrouter
+npm ci
+cp .env.example .env
+```
+
+Set your credentials in `.env`, then run:
 
 ```bash
 node --env-file=.env server.js
 ```
 
 This uses `./data` unless `DATA_DIR` is set; it does not automatically use the
-Docker volume. `GITHUB_TOKEN` is optional: set it for private sources and higher
-GitHub API limits. It is used only for GitHub requests and never returned by the
-dashboard.
+Docker volume. `npm start` also runs `server.js`, but expects environment variables
+to be supplied by your shell or process manager.
+
+## Configuration
+
+See [.env.example](.env.example) for the starter configuration.
+
+| Variable | Purpose | Default |
+| --- | --- | --- |
+| `user` | Dashboard username; `ADMIN_USER` is also accepted | `admin` |
+| `password` | Dashboard password; `ADMIN_PASSWORD` is also accepted | Set your own in `.env` |
+| `ROUTER_KEY` | Gateway access key for LLM and MCP clients | Set a random key in `.env` |
+| `PORT` | HTTP listen port; keep `3002` with the bundled Compose port mapping | `3002` |
+| `HOST_BIND` | Host-side Docker bind address; use `0.0.0.0` for LAN access | `127.0.0.1` |
+| `DATA_DIR` | Persistent data directory | `./data` locally; `/app/data` in Compose |
+| `GITHUB_TOKEN` | Optional token for private sources and higher GitHub API limits | Unset |
+| `GIGA_ROUTER_DEFAULT_MARKETPLACES` | Set to `false` to skip built-in catalog seeding | Enabled |
+| `GIGA_ROUTER_PUBLIC_URL` | Public HTTPS origin for hosted OAuth callbacks | Browser request origin |
+
+`GITHUB_TOKEN` is used only for GitHub requests and never returned by the
+dashboard. `HOST_BIND` controls Docker's published port, not the native Node.js
+listener. Back up the complete data directory or Docker volume, including
+`mcp-credentials.key`, to preserve encrypted integration credentials.
 
 ## Skills and marketplace
 
@@ -248,5 +339,32 @@ license preservation, MCP aggregation, scoped keys, and session isolation.
 HTTP tests use isolated temporary configuration and loopback mock upstreams.
 They never call paid providers or change the running router's configuration.
 
-See [docs/giga-router.md](docs/giga-router.md) for implementation scope and
-[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) for upstream attribution.
+## Project structure
+
+```text
+server.js              Express app, routing, protocol translation, and streaming
+lib/                   Authentication, persistence, MCP, OAuth, and skills
+public/                Self-hosted dashboard, styles, scripts, and icons
+marketplaces/builtin/  Pinned skill catalogs and source manifest
+scripts/               Release-time marketplace snapshot updater
+fixtures/              Local MCP test backend
+test.js, test-*.js      Translation and integration tests
+docs/                  Implementation and app-connection guides
+```
+
+## Contributing
+
+Issues and pull requests are welcome. Install dependencies with `npm ci`, make
+your changes, and run `npm test` and `npm run check` before opening a pull request.
+Include reproduction steps for bugs and explain the intended behavior for new
+features. See [docs/giga-router.md](docs/giga-router.md) for implementation scope.
+
+## License
+
+A project license has not been selected. Dependencies and bundled marketplace
+content retain their own licenses; see
+[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) for their notices and provenance.
+
+## Maintainer
+
+[DeadIndian](https://github.com/DeadIndian)
