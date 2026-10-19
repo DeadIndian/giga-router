@@ -20,6 +20,8 @@ fallbacks. MCP connections and reusable skills live in the same dashboard.
 [Getting started](#installation) ·
 [Implementation guide](docs/giga-router.md) ·
 [Connect apps and tools](docs/mcp-integrations.md) ·
+[Free API providers](docs/free-providers.md) ·
+[Update the live server](docs/operations.md) ·
 [Report an issue](https://github.com/DeadIndian/giga-router/issues)
 
 <img src="docs/screenshots/overview.png" alt="Giga Router overview with routing status, model and tool connections, and steps to get started" width="100%" />
@@ -47,6 +49,8 @@ fallbacks. MCP connections and reusable skills live in the same dashboard.
 - **Overview:** current routing, configuration counts, and recent gateway calls.
 - **Providers & routing:** custom OpenAI/Anthropic-compatible endpoints, custom
   headers and User-Agent settings, fallback priorities, and routing schedules.
+- **Free APIs:** documented free-provider presets, direct API-key links, labeled
+  accounts with separate credentials, and previewed FreeLLMAPI/OmniRoute key imports.
 - **MCP servers:** Streamable HTTP, legacy SSE, or stdio servers exposed through
   one authenticated `/mcp` endpoint, with tool discovery and enable/disable.
 - **My skills:** create/edit skills, install from GitHub, toggle agent
@@ -98,6 +102,10 @@ docker compose up -d --build
 
 On a Linux host with systemd, run `sudo ./scripts/deploy-local.sh` to enable Docker
 at boot, rebuild the app, wait for health checks, and verify saved configuration.
+
+For ongoing updates, follow [docs/operations.md](docs/operations.md): pull the
+tested commit, then run the helper. Port **3002 is production**; use temporary
+data and another port for development. Pushing code alone does not redeploy it.
 The container restarts automatically unless you explicitly stop it.
 
 Open **http://127.0.0.1:3002** and sign in with the username and password you

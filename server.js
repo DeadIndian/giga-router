@@ -12,6 +12,7 @@ const { mountMcp, closeAllMcp, closeKeySessions, notifyMcpClients } = mcpService
 const { mountIntegrations } = require('./lib/mcp-integrations');
 const { recordActivity, activitySnapshot } = require('./lib/activity');
 const { httpUrl, inputError, headerMap, maskedMap } = require('./lib/validation');
+const { catalog: providerCatalog, accountPreset, importAccounts } = require('./lib/provider-catalog');
 
 const PORT = process.env.PORT || 3002;
 
@@ -784,6 +785,16 @@ app.get('/api/overview', sessionAuth, (req, res) => {
 
 function providerSlug(provider) { return provider.name.toLowerCase().replace(/[^a-z0-9-]+/g, '-').replace(/^-|-$/g, '') || provider.id; }
 function publicProvider(provider) { return { ...provider, apiKey: provider.apiKey ? '***' : '', headers: maskedMap(provider.headers), slug: providerSlug(provider) }; }
+function addPresetAccount(cfg, preset) {
+  const provider = validatedProvider(preset);
+  const baseName = provider.name;
+  for (let n = 2; cfg.providers.some(entry => providerSlug(entry) === providerSlug(provider)); n++) provider.name = `${baseName} ${n}`;
+  provider.catalogId = preset.catalogId;
+  provider.accountLabel = preset.accountLabel;
+  cfg.providers.push(provider);
+  if (!cfg.activeId) cfg.activeId = provider.id;
+  return provider;
+}
 function validatedProvider(body, previous = {}) {
   const provider = { ...previous, id: previous.id || crypto.randomUUID() };
   for (const field of ['name', 'type', 'baseUrl', 'defaultModel']) {
@@ -813,6 +824,26 @@ function validatedProvider(body, previous = {}) {
   return provider;
 }
 
+app.get('/api/providers/catalog', sessionAuth, (req, res) => res.json({ items: providerCatalog() }));
+app.post('/api/providers/catalog/:catalogId/accounts', sessionAuth, (req, res) => {
+  const cfg = loadConfig();
+  const provider = addPresetAccount(cfg, accountPreset(req.params.catalogId, req.body));
+  saveConfig(cfg);
+  res.json(publicProvider(provider));
+});
+app.post('/api/providers/import', sessionAuth, (req, res) => {
+  if (typeof req.body.apply !== 'boolean') throw inputError('Choose preview or apply');
+  const { accounts, skipped } = importAccounts(req.body.document);
+  const cfg = loadConfig();
+  const added = [], duplicates = [];
+  for (const preset of accounts) {
+    if (cfg.providers.some(p => p.baseUrl === preset.baseUrl && p.apiKey === preset.apiKey && p.defaultModel === preset.defaultModel)) {
+      duplicates.push({ catalogId: preset.catalogId, accountLabel: preset.accountLabel });
+    } else added.push(publicProvider(addPresetAccount(cfg, preset)));
+  }
+  if (req.body.apply && added.length) saveConfig(cfg);
+  res.json({ applied: req.body.apply, items: added, skipped, duplicates });
+});
 app.post('/api/providers', sessionAuth, (req, res) => {
   const cfg = loadConfig();
   const provider = validatedProvider(req.body);

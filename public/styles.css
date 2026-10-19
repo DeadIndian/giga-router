@@ -280,6 +280,10 @@ details > div { padding: 6px 12px 0; }
 .integration-card p { font-size: 13px; color: var(--secondary); line-height: 1.75; margin-bottom: 18px; }
 .integration-kind { color: var(--muted); font-size: 11px; margin-top: auto; margin-bottom: 18px; }
 .integration-card > .button { width: 100%; }
+.provider-card .provider-models { margin-bottom: 16px; display: grid; gap: 8px; }
+.provider-models code { overflow-wrap: anywhere; font-size: 11px; }
+.provider-card .connection-actions { margin-top: auto; }
+#provider-import-preview p { font-size: 12px; margin-top: 12px; overflow-wrap: anywhere; }
 .connection-grid { display: grid; gap: 18px; grid-template-columns: repeat(auto-fill, minmax(min(410px, 100%), 1fr)); }
 .connection-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 22px; min-width: 0; }
 .connection-heading { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 18px; }

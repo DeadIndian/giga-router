@@ -40,6 +40,34 @@ async function capture() {
     await page.getByRole('button', { name: 'Browse integrations', exact: true }).first().click();
     await page.waitForSelector('.integration-card');
     await page.screenshot({ path: path.join(output, 'integrations.png') });
+    await page.locator('nav a[href="#providers"]').click();
+    await page.getByRole('button', { name: 'Free APIs', exact: true }).click();
+    const groqCard = page.locator('.provider-card').filter({ has: page.getByRole('heading', { name: 'Groq', exact: true }) });
+    for (const [label, key] of [['Personal', 'fake-personal-key'], ['Work', 'fake-work-key']]) {
+      await groqCard.getByRole('button', { name: /Add (another )?account/ }).click();
+      await page.getByLabel('Account label', { exact: true }).fill(label);
+      await page.getByLabel('API key', { exact: true }).fill(key);
+      await page.getByRole('button', { name: 'Add account', exact: true }).last().click();
+      await page.waitForSelector('#editor-dialog:not([open])', { state: 'attached' });
+    }
+    await groqCard.getByText(/2 accounts added/).waitFor();
+    for (const width of [390, 1024, 1440]) {
+      await page.setViewportSize({ width, height: width === 390 ? 844 : 1000 });
+      const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+      if (overflow > 0) throw Error(`Free APIs overflows by ${overflow}px at ${width}px`);
+    }
+    await page.screenshot({ path: path.join(output, 'free-apis.png') });
+    await page.getByRole('button', { name: 'Import API keys', exact: true }).click();
+    await page.locator('#provider-import-file').setInputFiles({ name: 'keys.json', mimeType: 'application/json', buffer: Buffer.from(JSON.stringify({ source: 'freellmapi', version: 1, keys: [{ platform: 'mistral', label: 'Imported', key: 'fake-import-key' }] })) });
+    await page.getByRole('button', { name: 'Preview accounts', exact: true }).click();
+    await page.locator('#provider-import-preview').getByText(/Mistral · Imported/).waitFor();
+    if ((await page.locator('#provider-import-preview').textContent()).includes('fake-import-key')) throw Error('Import preview exposed API key');
+    await page.getByRole('button', { name: 'Import accounts', exact: true }).click();
+    await page.waitForSelector('#editor-dialog:not([open])', { state: 'attached' });
+    await page.getByRole('button', { name: /^Providers 3$/ }).click();
+    await page.getByText('Groq · Personal', { exact: true }).waitFor();
+    await page.getByText('Groq · Work', { exact: true }).waitFor();
+    await page.getByText('Mistral · Imported', { exact: true }).waitFor();
     for (const section of ['overview', 'providers', 'mcp', 'skills', 'marketplace', 'access']) {
       await page.locator(`nav a[href="#${section}"]`).click();
       for (const width of [390, 1024, 1440]) {
@@ -66,7 +94,7 @@ async function capture() {
     await page.getByRole('button', { name: 'Open workspace' }).click();
     await page.waitForSelector('#app:not([hidden])');
     if (errors.length) throw Error(errors.join('\n'));
-    console.log('Captured four dashboard pages. Six pages fit at 390, 1024, and 1440px. Password confirmation, save, reload, and sign-in passed without browser errors.');
+    console.log('Dashboard layouts fit at 390, 1024, and 1440px. Free API accounts, key import preview/apply, and password changes passed without browser errors.');
   } finally {
     await browser?.close();
     listener.closeAllConnections();

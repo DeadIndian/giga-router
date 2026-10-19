@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node server.js",
     "test": "node --test test.js test-*.js",
-    "check": "node --check server.js && node --check public/app.js && node --check lib/auth.js && node --check lib/mcp.js && node --check lib/skills.js && node --check lib/storage.js && node --check lib/github-source.js && node --check lib/validation.js && node --check lib/activity.js && node --check lib/marketplace-defaults.js && node --check lib/mcp-catalog.js && node --check lib/mcp-integrations.js && node --check lib/mcp-oauth.js && node --check lib/mcp-vault.js && node --check scripts/update-marketplaces.js",
+    "check": "node --check server.js && node --check public/app.js && node --check lib/auth.js && node --check lib/mcp.js && node --check lib/skills.js && node --check lib/storage.js && node --check lib/github-source.js && node --check lib/validation.js && node --check lib/activity.js && node --check lib/marketplace-defaults.js && node --check lib/mcp-catalog.js && node --check lib/provider-catalog.js && node --check lib/mcp-integrations.js && node --check lib/mcp-oauth.js && node --check lib/mcp-vault.js && node --check scripts/update-marketplaces.js && node --check scripts/capture-branding.cjs && bash -n scripts/deploy-local.sh",
     "update:marketplaces": "node scripts/update-marketplaces.js"
   },
   "dependencies": {

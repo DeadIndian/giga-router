@@ -6,7 +6,7 @@ const tag = (text, style = '') => `<span class="tag ${style}">${esc(text)}</span
 const button = (label, action, id = '', style = '', symbol = '') => `<button class="button ${style}" data-action="${action}" data-id="${esc(id)}">${symbol ? icon(symbol) : ''}${esc(label)}</button>`;
 const iconButton = (label, action, id, symbol) => `<button class="icon-button" title="${esc(label)}" aria-label="${esc(label)}" data-action="${action}" data-id="${esc(id)}">${icon(symbol)}</button>`;
 const origin = location.origin;
-const STATE = { providers: [], activeId: null, routing: {}, servers: [], skills: [], marketplace: [], sources: [], keys: [], overview: {}, integrations: [], mcpSetup: {}, mcpTab: 'connections', integrationSearch: '', integrationCategory: '', page: 'overview', providerTab: 'providers', marketTab: 'browse', search: '', sourceFilter: '', marketFilter: '', limit: 60 };
+const STATE = { providers: [], providerCatalog: [], activeId: null, routing: {}, servers: [], skills: [], marketplace: [], sources: [], keys: [], overview: {}, integrations: [], mcpSetup: {}, mcpTab: 'connections', integrationSearch: '', integrationCategory: '', page: 'overview', providerTab: 'providers', marketTab: 'browse', search: '', sourceFilter: '', marketFilter: '', limit: 60 };
 const previews = new Map();
 let authenticated = false;
 let loading = false;
@@ -56,13 +56,13 @@ async function loadWorkspace(render = true) {
   loading = true;
   $('refresh').disabled = true;
   try {
-    const [config, routing, servers, skills, marketplace, keys, overview, integrations] = await Promise.all([
-      api('/api/config'), api('/api/routing'), api('/api/mcp/servers'), api('/api/skills'), api('/api/marketplace'), api('/api/access/keys'), api('/api/overview'), api('/api/mcp/catalog'),
+    const [config, routing, servers, skills, marketplace, keys, overview, integrations, providers] = await Promise.all([
+      api('/api/config'), api('/api/routing'), api('/api/mcp/servers'), api('/api/skills'), api('/api/marketplace'), api('/api/access/keys'), api('/api/overview'), api('/api/mcp/catalog'), api('/api/providers/catalog'),
     ]);
     Object.assign(STATE, { providers: config.providers, activeId: config.activeId, hasRouterKey: config.hasRouterKey, routing,
       servers: servers.items, mcpSessions: servers.sessions, skills: skills.items, marketplace: marketplace.items,
       sources: marketplace.sources, keys: keys.items, environmentKey: keys.environmentKey, overview,
-      defaultsEnabled: marketplace.defaultsEnabled, removedDefaults: marketplace.removedDefaults || [], integrations: integrations.items, mcpSetup: integrations.setup });
+      defaultsEnabled: marketplace.defaultsEnabled, removedDefaults: marketplace.removedDefaults || [], integrations: integrations.items, mcpSetup: integrations.setup, providerCatalog: providers.items });
     if (STATE.sourceFilter && !STATE.sources.some((source) => source.id === STATE.sourceFilter)) STATE.sourceFilter = '';
     authenticated = true;
     $('login-screen').hidden = true;
@@ -132,13 +132,56 @@ function renderOverview() {
 }
 
 function renderProviders() {
-  const tabs = `<div class="tab-bar"><button class="${STATE.providerTab === 'providers' ? 'active' : ''}" data-action="provider-tab" data-id="providers">Providers ${tag(STATE.providers.length)}</button><button class="${STATE.providerTab === 'routing' ? 'active' : ''}" data-action="provider-tab" data-id="routing">Routing & schedules</button></div>`;
+  const tabs = `<div class="tab-bar"><button class="${STATE.providerTab === 'providers' ? 'active' : ''}" data-action="provider-tab" data-id="providers">Providers ${tag(STATE.providers.length)}</button><button class="${STATE.providerTab === 'free' ? 'active' : ''}" data-action="provider-tab" data-id="free">Free APIs</button><button class="${STATE.providerTab === 'routing' ? 'active' : ''}" data-action="provider-tab" data-id="routing">Routing & schedules</button></div>`;
+  if (STATE.providerTab === 'free') return tabs + renderFreeProviders();
   if (STATE.providerTab === 'routing') return tabs + renderRouting();
   const health = new Map((STATE.routing.health || []).map((entry) => [entry.id, entry]));
   return tabs + `<div class="info-strip">${icon('git-branch')}<p>Both <code>/v1/messages</code> and <code>/v1/chat/completions</code> use your existing routing engine. To select a provider directly, use its <code>provider/model</code> alias.</p><a href="#access">Connection guide ↗</a></div>` + (STATE.providers.length ? `<div class="panel"><div class="table-scroll"><table><thead><tr><th>PROVIDER</th><th>API FORMAT</th><th>MODEL ALIAS</th><th>STATE</th><th></th></tr></thead><tbody>${STATE.providers.map((provider) => {
     const status = health.get(provider.id);
     return `<tr><td><div class="table-entity"><span class="entity-icon">${icon('box')}</span><div><strong>${esc(provider.name)} ${provider.id === STATE.activeId ? tag('Active', 'green') : ''}</strong><small>${esc(provider.baseUrl)}</small></div></div></td><td>${tag(provider.type === 'anthropic' ? 'Anthropic' : 'OpenAI')}</td><td><span class="model-id">${esc(provider.slug)}/${esc(provider.defaultModel)}</span>${iconButton('Copy model alias', 'copy-alias', provider.id, 'copy')}</td><td>${tag(provider.enabled === false ? 'Disabled' : status?.tripped ? 'Tripped' : status?.cooling ? 'Cooling' : 'Enabled', provider.enabled === false ? '' : status?.tripped || status?.cooling ? 'amber' : 'green')}</td><td><div class="table-actions">${provider.id !== STATE.activeId && provider.enabled !== false ? button('Use', 'use-provider', provider.id, 'small') : ''}${iconButton('Edit provider', 'edit-provider', provider.id, 'edit-2')}${iconButton(provider.enabled === false ? 'Enable provider' : 'Disable provider', 'toggle-provider', provider.id, provider.enabled === false ? 'play' : 'pause')}${iconButton('Delete provider', 'delete-provider', provider.id, 'trash-2')}</div></td></tr>`;
   }).join('')}</tbody></table></div></div>` : empty('Bring your first provider', 'Add any OpenAI-compatible or Anthropic-compatible endpoint, including a local model server.', 'git-branch', button('Add provider', 'add-provider', '', 'primary', 'plus')));
+}
+
+function renderFreeProviders() {
+  return `<div class="info-strip">${icon('key')}<p>Get an API key, add a labeled account, and choose its model. You can add several accounts per provider and order them in Routing & schedules. Provider quota rules still apply.</p>${button('Import API keys', 'import-providers', '', 'small quiet', 'upload')}</div>` + [
+    ['free', 'Verified free tiers', 'Official free-tier documentation checked on 19 October 2026. Presets do not verify your key or guarantee a model stays free.'],
+    ['limited', 'Development & evaluation', 'Free access with development or evaluation restrictions. Check the terms for your intended use.'],
+    ['unverified', 'Community presets', 'Useful API-key configurations from OmniRoute. Free access has not been independently verified.'],
+  ].map(([group, title, description]) => `<div class="section-heading section-space"><div><h2>${title}</h2><p>${description}</p></div></div><div class="skill-grid">${STATE.providerCatalog.filter(p => p.group === group).map(p => {
+    const count = STATE.providers.filter(account => account.catalogId === p.id).length;
+    return `<article class="integration-card provider-card"><div class="skill-card-top"><span class="entity-icon">${icon('box')}</span>${tag(p.tier, group === 'free' ? 'green' : 'amber')}</div><h3>${esc(p.name)}</h3><p>${esc(p.note)}</p><div class="provider-models"><span class="subtle">MODEL PRESETS</span>${p.models.map(model => `<code>${esc(model)}</code>`).join('')}</div><p class="subtle">${count} account${count === 1 ? '' : 's'} added${p.verifiedAt ? ` · Docs checked ${esc(p.verifiedAt)}` : ''}</p><div class="connection-actions"><a class="button small" href="${esc(p.keyUrl)}" target="_blank" rel="noopener noreferrer">Get API key ${icon('arrow-up-right')}</a><a class="button small quiet" href="${esc(p.docsUrl)}" target="_blank" rel="noopener noreferrer">Quota details</a>${button(count ? 'Add another account' : 'Add account', 'add-preset', p.id, 'small primary', 'plus')}</div></article>`;
+  }).join('')}</div>`).join('');
+}
+
+function addPresetAccount(id) {
+  const entry = STATE.providerCatalog.find(p => p.id === id);
+  if (!entry) return;
+  showDialog(`Add ${entry.name} account`, `<form id="edit-form"><div class="dialog-body"><p class="details-description">${esc(entry.note)} <a href="${esc(entry.keyUrl)}" target="_blank" rel="noopener noreferrer">Get your API key ↗</a></p>${field('accountLabel', 'Account label', '', { required: true, placeholder: 'Personal, Work, or account email', help: 'Each account has its own saved key and routing entry.' })}${field('apiKey', 'API key', '', { required: true, type: 'password', autocomplete: 'new-password' })}${entry.accountIdRequired ? field('accountId', 'Cloudflare account ID', '', { required: true, help: '32-character account ID from the Cloudflare dashboard.' }) : ''}${field('defaultModel', 'Model ID', entry.defaultModel, { required: true, help: 'Choose a preset or enter another model available to your key. Check its price first.' })}<datalist id="provider-model-options">${entry.models.map(model => `<option value="${esc(model)}"></option>`).join('')}</datalist><p class="subtle">${esc(entry.baseUrl)}</p></div>${footer('Add account')}</form>`, 'API-KEY PROVIDER');
+  $('field-defaultModel').setAttribute('list', 'provider-model-options');
+  $('field-accountLabel').maxLength = 80;
+  bindForm(async (form, values) => {
+    await api(`/api/providers/catalog/${entry.id}/accounts`, { method: 'POST', body: values });
+    form.reset(); closeDialog(); toast('Account added. Choose its place in your fallback order.'); await loadWorkspace();
+  });
+}
+
+function importProviderKeys() {
+  showDialog('Import API-key accounts', `<form id="edit-form"><div class="dialog-body"><p class="details-description">Choose a FreeLLMAPI JSON key export or an export from <code>scripts/export-omniroute-keys.py</code>. Only supported API-key providers are imported. Review the account names before saving; matching keys and models are skipped.</p><div class="field"><label for="provider-import-file">API-key export file</label><input id="provider-import-file" type="file" accept=".json,application/json" required></div><div id="provider-import-preview" aria-live="polite"></div></div>${footer('Preview accounts')}</form>`, 'IMPORT PROVIDERS');
+  let documentToImport = null;
+  $('provider-import-file').addEventListener('change', () => { documentToImport = null; $('provider-import-preview').innerHTML = ''; $('edit-form').querySelector('button[type=submit]').textContent = 'Preview accounts'; });
+  bindForm(async (form) => {
+    if (documentToImport) {
+      const result = await api('/api/providers/import', { method: 'POST', body: { apply: true, document: documentToImport } });
+      documentToImport = null; form.reset(); closeDialog(); toast(`Imported ${result.items.length} accounts`); await loadWorkspace(); return;
+    }
+    const file = $('provider-import-file').files[0];
+    if (!file || file.size > 2 * 1024 * 1024) throw new Error('Choose a JSON export smaller than 2 MB.');
+    let parsed;
+    try { parsed = JSON.parse(await file.text()); } catch { throw new Error('Export must contain valid JSON.'); }
+    const result = await api('/api/providers/import', { method: 'POST', body: { apply: false, document: parsed } });
+    $('provider-import-preview').innerHTML = `<p class="details-description">${result.items.length} accounts ready · ${result.duplicates.length} duplicates · ${result.skipped.length} unsupported accounts</p>${result.items.map(p => `<p>${esc(p.name)} · <code>${esc(p.defaultModel)}</code></p>`).join('')}${result.skipped.map(item => `<p class="subtle">Record ${item.index}: ${esc(item.reason)}</p>`).join('')}`;
+    if (result.items.length) { documentToImport = parsed; form.querySelector('button[type=submit]').textContent = 'Import accounts'; }
+  });
 }
 
 function renderRouting() {
@@ -276,14 +319,13 @@ function bindForm(handler) {
     event.preventDefault();
     const form = event.currentTarget;
     const submit = form.querySelector('button[type=submit]');
-    const original = submit.innerHTML;
     submit.disabled = true;
     $('form-error').textContent = '';
     try {
       await handler(form, Object.fromEntries(new FormData(form)));
     } catch (error) {
       if ($('form-error')) $('form-error').textContent = error.message;
-    } finally { if (submit.isConnected) { submit.disabled = false; submit.innerHTML = original; } }
+    } finally { if (submit.isConnected) submit.disabled = false; }
   });
 }
 
@@ -567,6 +609,8 @@ async function handleAction(node) {
   const skill = STATE.skills.find((entry) => entry.id === id);
   switch (action) {
     case 'add-provider': return editProvider();
+    case 'add-preset': return addPresetAccount(id);
+    case 'import-providers': return importProviderKeys();
     case 'edit-provider': return editProvider(provider);
     case 'use-provider': await api('/api/active', { method: 'POST', body: { id } }); toast('Active provider changed'); return loadWorkspace();
     case 'toggle-provider': await api(`/api/providers/${id}`, { method: 'PUT', body: { enabled: provider.enabled === false } }); return loadWorkspace();
