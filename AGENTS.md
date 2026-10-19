@@ -18,6 +18,10 @@ data volume as user data. Brief deployment downtime is acceptable; keep it short
 - Commits must not include LLM attribution or co-author trailers.
 - Free provider integrations use documented API keys. Do not add browser cookies,
   extracted session tokens, or subscription-login workarounds.
+- Model presets are bundled in `lib/provider-models.json`. Use
+  `npm run update:providers`, review its diff and provider terms, then follow
+  `docs/free-providers.md`. Keep official verification separate from community
+  free claims; never run catalog updates against production configuration.
 
 ## Update production
 

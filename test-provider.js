@@ -45,6 +45,12 @@ t('flag off -> reasoning_effort preserved', () => {
   const { upstreamBody } = buildUpstream({ ...base }, body, 'openai');
   assert.strictEqual(upstreamBody.reasoning_effort, 'medium');
 });
+t('singleToolCall disables parallel tool calls without altering the caller body', () => {
+  const body = { messages: [], tools: TOOLS, parallel_tool_calls: true };
+  const { upstreamBody } = buildUpstream({ ...base, compat: { singleToolCall: true } }, body, 'openai');
+  assert.strictEqual(upstreamBody.parallel_tool_calls, false);
+  assert.strictEqual(body.parallel_tool_calls, true);
+});
 t('flag on + tools + effort -> forced to none', () => {
   const body = { messages: [], tools: TOOLS, reasoning_effort: 'medium' };
   const { upstreamBody } = buildUpstream({ ...base, compat: { noReasoningEffortWithTools: true } }, body, 'openai');

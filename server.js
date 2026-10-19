@@ -566,6 +566,7 @@ function buildUpstream(provider, body, clientFormat) {
   // Note the anthropic->openai conversion injects reasoning_effort itself, so this
   // must run AFTER the body is built, not before.
   const compat = (provider.compat && typeof provider.compat === 'object') ? provider.compat : {};
+  if (compat.singleToolCall && upstreamBody.tools?.length) upstreamBody = { ...upstreamBody, parallel_tool_calls: false };
   if (compat.noReasoningEffortWithTools && upstreamBody.tools?.length && upstreamBody.reasoning_effort) {
     upstreamBody = { ...upstreamBody, reasoning_effort: 'none' };
   }
@@ -812,7 +813,7 @@ function validatedProvider(body, previous = {}) {
     if (typeof body.userAgent !== 'string' || /[\r\n]/.test(body.userAgent)) throw inputError('User-Agent must be a single-line string');
     provider.userAgent = body.userAgent.trim();
   }
-  if (body.compat !== undefined) provider.compat = { noReasoningEffortWithTools: !!body.compat?.noReasoningEffortWithTools };
+  if (body.compat !== undefined) provider.compat = { noReasoningEffortWithTools: !!body.compat?.noReasoningEffortWithTools, singleToolCall: body.compat?.singleToolCall === undefined ? !!previous.compat?.singleToolCall : !!body.compat.singleToolCall };
   if (body.enabled !== undefined) {
     if (typeof body.enabled !== 'boolean') throw inputError('Enabled must be a boolean');
     provider.enabled = body.enabled;

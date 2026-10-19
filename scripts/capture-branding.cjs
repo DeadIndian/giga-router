@@ -51,6 +51,20 @@ async function capture() {
       await page.waitForSelector('#editor-dialog:not([open])', { state: 'attached' });
     }
     await groqCard.getByText(/2 accounts added/).waitFor();
+    await page.getByLabel('Find a provider or model', { exact: true }).fill('SimpleLLM');
+    const simpleCard = page.locator('.provider-card').filter({ has: page.getByRole('heading', { name: 'SimpleLLM', exact: true }) });
+    await simpleCard.getByRole('button', { name: 'Add this model', exact: true }).first().click();
+    const selected = await page.getByLabel('Model ID', { exact: true }).inputValue();
+    if (!selected.startsWith('free-')) throw Error('Model selection was not passed to account setup');
+    await page.getByLabel('Model ID', { exact: true }).selectOption('__custom__');
+    await page.getByLabel('Custom model ID', { exact: true }).fill('custom-preview-model');
+    await page.getByRole('button', { name: 'Cancel', exact: true }).click();
+    await page.getByLabel('Find a provider or model', { exact: true }).fill('DeepSeek');
+    if (await page.locator('.provider-card').count() < 3) throw Error('Model search did not find multiple providers');
+    await page.getByLabel('Free access', { exact: true }).selectOption('free');
+    await page.getByRole('heading', { name: 'Source-listed free access', exact: true }).waitFor({ state: 'hidden' });
+    await page.getByLabel('Free access', { exact: true }).selectOption('');
+    await page.getByLabel('Find a provider or model', { exact: true }).fill('');
     for (const width of [390, 1024, 1440]) {
       await page.setViewportSize({ width, height: width === 390 ? 844 : 1000 });
       const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
@@ -94,7 +108,7 @@ async function capture() {
     await page.getByRole('button', { name: 'Open workspace' }).click();
     await page.waitForSelector('#app:not([hidden])');
     if (errors.length) throw Error(errors.join('\n'));
-    console.log('Dashboard layouts fit at 390, 1024, and 1440px. Free API accounts, key import preview/apply, and password changes passed without browser errors.');
+    console.log('Dashboard layouts fit at 390, 1024, and 1440px. Free API/model search, tier filtering, model selection, accounts, key imports, and password changes passed without browser errors.');
   } finally {
     await browser?.close();
     listener.closeAllConnections();

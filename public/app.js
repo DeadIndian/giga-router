@@ -8,6 +8,8 @@ const iconButton = (label, action, id, symbol) => `<button class="icon-button" t
 const origin = location.origin;
 const STATE = { providers: [], providerCatalog: [], activeId: null, routing: {}, servers: [], skills: [], marketplace: [], sources: [], keys: [], overview: {}, integrations: [], mcpSetup: {}, mcpTab: 'connections', integrationSearch: '', integrationCategory: '', page: 'overview', providerTab: 'providers', marketTab: 'browse', search: '', sourceFilter: '', marketFilter: '', limit: 60 };
 const previews = new Map();
+STATE.providerSearch = '';
+STATE.providerGroup = '';
 let authenticated = false;
 let loading = false;
 let setupWizard = null;
@@ -143,23 +145,40 @@ function renderProviders() {
 }
 
 function renderFreeProviders() {
-  return `<div class="info-strip">${icon('key')}<p>Get an API key, add a labeled account, and choose its model. You can add several accounts per provider and order them in Routing & schedules. Provider quota rules still apply.</p>${button('Import API keys', 'import-providers', '', 'small quiet', 'upload')}</div>` + [
+  return `<div class="info-strip">${icon('key')}<p>Get an API key, add a labeled account, and choose its model. Multiple accounts and models per provider work with your fallback chain. Provider quota rules apply.</p>${button('Import API keys', 'import-providers', '', 'small quiet', 'upload')}</div><div class="provider-search-row"><div class="field"><label for="provider-search">Find a provider or model</label><input id="provider-search" type="search" value="${esc(STATE.providerSearch)}" placeholder="DeepSeek, Qwen, Gemma, GPT-OSS…"></div><div class="field"><label for="provider-group">Free access</label><select id="provider-group"><option value="">All providers</option><option value="free" ${STATE.providerGroup === 'free' ? 'selected' : ''}>Verified free tiers</option><option value="limited" ${STATE.providerGroup === 'limited' ? 'selected' : ''}>Development & research</option><option value="unverified" ${STATE.providerGroup === 'unverified' ? 'selected' : ''}>Source-listed access</option></select></div></div><div id="provider-results">${freeProviderResults()}</div>`;
+}
+function freeProviderResults() {
+  const query = STATE.providerSearch.trim().toLowerCase();
+  const entries = STATE.providerCatalog.filter(p => (!STATE.providerGroup || STATE.providerGroup === p.group) &&
+    (!query || `${p.name} ${p.note} ${p.models.join(' ')}`.toLowerCase().includes(query)));
+  const total = entries.reduce((sum, p) => sum + p.models.length, 0);
+  return `<p class="subtle">${entries.length} providers · ${total} model presets · Catalog checked ${esc(STATE.providerCatalog[0]?.catalogCheckedAt || '')}</p>` + [
     ['free', 'Verified free tiers', 'Official free-tier documentation checked on 19 October 2026. Presets do not verify your key or guarantee a model stays free.'],
-    ['limited', 'Development & evaluation', 'Free access with development or evaluation restrictions. Check the terms for your intended use.'],
-    ['unverified', 'Community presets', 'Useful API-key configurations from OmniRoute. Free access has not been independently verified.'],
-  ].map(([group, title, description]) => `<div class="section-heading section-space"><div><h2>${title}</h2><p>${description}</p></div></div><div class="skill-grid">${STATE.providerCatalog.filter(p => p.group === group).map(p => {
+    ['limited', 'Development, research & evaluation', 'Free access with development, research, or evaluation restrictions. Check the terms for your intended use.'],
+    ['unverified', 'Source-listed free access', 'Models from FreeLLMAPI and OmniRoute. Current free terms have not been independently verified here.'],
+  ].filter(([group]) => entries.some(p => p.group === group)).map(([group, title, description]) => `<div class="section-heading section-space"><div><h2>${title}</h2><p>${description}</p></div></div><div class="skill-grid">${entries.filter(p => p.group === group).map(p => {
     const count = STATE.providers.filter(account => account.catalogId === p.id).length;
-    return `<article class="integration-card provider-card"><div class="skill-card-top"><span class="entity-icon">${icon('box')}</span>${tag(p.tier, group === 'free' ? 'green' : 'amber')}</div><h3>${esc(p.name)}</h3><p>${esc(p.note)}</p><div class="provider-models"><span class="subtle">MODEL PRESETS</span>${p.models.map(model => `<code>${esc(model)}</code>`).join('')}</div><p class="subtle">${count} account${count === 1 ? '' : 's'} added${p.verifiedAt ? ` · Docs checked ${esc(p.verifiedAt)}` : ''}</p><div class="connection-actions"><a class="button small" href="${esc(p.keyUrl)}" target="_blank" rel="noopener noreferrer">Get API key ${icon('arrow-up-right')}</a><a class="button small quiet" href="${esc(p.docsUrl)}" target="_blank" rel="noopener noreferrer">Quota details</a>${button(count ? 'Add another account' : 'Add account', 'add-preset', p.id, 'small primary', 'plus')}</div></article>`;
+    const providerMatches = !query || p.name.toLowerCase().includes(query);
+    const models = p.modelDetails.filter(model => providerMatches || `${model.id} ${model.name}`.toLowerCase().includes(query));
+    return `<article class="integration-card provider-card"><div class="skill-card-top"><span class="entity-icon">${icon('box')}</span>${tag(p.tier, group === 'free' ? 'green' : 'amber')}</div><h3>${esc(p.name)}</h3><p>${esc(p.note)}</p><details class="provider-model-details" ${query ? 'open' : ''}><summary>${models.length} model presets</summary><div class="provider-models">${models.map(model => `<div class="provider-model-row"><code>${esc(model.id)}</code><small>${esc(model.status)}${model.contextWindow ? ` · ${Math.round(model.contextWindow / 1024)}K context` : ''}</small><button class="button small quiet" data-action="add-preset-model" data-id="${esc(p.id)}" data-model="${esc(model.id)}">Add this model</button></div>`).join('')}</div></details><p class="subtle">${count} account${count === 1 ? '' : 's'} added${p.verifiedAt ? ` · Docs checked ${esc(p.verifiedAt)}` : ''}</p><div class="connection-actions"><a class="button small" href="${esc(p.keyUrl)}" target="_blank" rel="noopener noreferrer">Get API key ${icon('arrow-up-right')}</a><a class="button small quiet" href="${esc(p.docsUrl)}" target="_blank" rel="noopener noreferrer">Quota details</a><a class="button small quiet" href="${esc(p.sourceUrl)}" target="_blank" rel="noopener noreferrer">Catalog source</a>${button(count ? 'Add another account' : 'Add account', 'add-preset', p.id, 'small primary', 'plus')}</div></article>`;
   }).join('')}</div>`).join('');
 }
 
-function addPresetAccount(id) {
+function addPresetAccount(id, selectedModel) {
   const entry = STATE.providerCatalog.find(p => p.id === id);
   if (!entry) return;
   showDialog(`Add ${entry.name} account`, `<form id="edit-form"><div class="dialog-body"><p class="details-description">${esc(entry.note)} <a href="${esc(entry.keyUrl)}" target="_blank" rel="noopener noreferrer">Get your API key ↗</a></p>${field('accountLabel', 'Account label', '', { required: true, placeholder: 'Personal, Work, or account email', help: 'Each account has its own saved key and routing entry.' })}${field('apiKey', 'API key', '', { required: true, type: 'password', autocomplete: 'new-password' })}${entry.accountIdRequired ? field('accountId', 'Cloudflare account ID', '', { required: true, help: '32-character account ID from the Cloudflare dashboard.' }) : ''}${field('defaultModel', 'Model ID', entry.defaultModel, { required: true, help: 'Choose a preset or enter another model available to your key. Check its price first.' })}<datalist id="provider-model-options">${entry.models.map(model => `<option value="${esc(model)}"></option>`).join('')}</datalist><p class="subtle">${esc(entry.baseUrl)}</p></div>${footer('Add account')}</form>`, 'API-KEY PROVIDER');
-  $('field-defaultModel').setAttribute('list', 'provider-model-options');
+  const modelSelect = document.createElement('select');
+  modelSelect.id = 'field-defaultModel'; modelSelect.name = 'defaultModel';
+  modelSelect.innerHTML = entry.models.map(model => `<option value="${esc(model)}">${esc(model)}</option>`).join('') + '<option value="__custom__">Enter another model ID…</option>';
+  modelSelect.value = selectedModel || entry.defaultModel;
+  $('field-defaultModel').replaceWith(modelSelect);
+  const custom = document.createElement('input'); custom.name = 'customModel'; custom.id = 'custom-model'; custom.placeholder = 'Custom model ID'; custom.setAttribute('aria-label', 'Custom model ID'); custom.hidden = true;
+  modelSelect.after(custom);
+  modelSelect.addEventListener('change', () => { custom.hidden = modelSelect.value !== '__custom__'; custom.required = !custom.hidden; if (!custom.hidden) custom.focus(); });
   $('field-accountLabel').maxLength = 80;
   bindForm(async (form, values) => {
+    values.defaultModel = values.defaultModel === '__custom__' ? values.customModel : values.defaultModel;
     await api(`/api/providers/catalog/${entry.id}/accounts`, { method: 'POST', body: values });
     form.reset(); closeDialog(); toast('Account added. Choose its place in your fallback order.'); await loadWorkspace();
   });
@@ -610,6 +629,7 @@ async function handleAction(node) {
   switch (action) {
     case 'add-provider': return editProvider();
     case 'add-preset': return addPresetAccount(id);
+    case 'add-preset-model': return addPresetAccount(id, node.dataset.model);
     case 'import-providers': return importProviderKeys();
     case 'edit-provider': return editProvider(provider);
     case 'use-provider': await api('/api/active', { method: 'POST', body: { id } }); toast('Active provider changed'); return loadWorkspace();
@@ -706,10 +726,12 @@ document.addEventListener('click', async (event) => {
   finally { if (node.isConnected && node.tagName === 'BUTTON') { node.disabled = false; node.innerHTML = original; hydrateIcons(); } }
 });
 document.addEventListener('input', (event) => {
+  if (event.target.id === 'provider-search') { STATE.providerSearch = event.target.value; $('provider-results').innerHTML = freeProviderResults(); hydrateIcons(); }
   if (event.target.id === 'skill-search') { STATE.search = event.target.value; STATE.limit = 60; renderSkillResults(); }
   if (event.target.id === 'integration-search') { STATE.integrationSearch = event.target.value; renderIntegrationResults(); }
 });
 document.addEventListener('change', (event) => {
+  if (event.target.id === 'provider-group') { STATE.providerGroup = event.target.value; $('provider-results').innerHTML = freeProviderResults(); hydrateIcons(); }
   if (event.target.id === 'source-filter') { STATE.sourceFilter = event.target.value; STATE.limit = 60; renderSkillResults(); }
   if (event.target.id === 'market-filter') { STATE.marketFilter = event.target.value; STATE.limit = 60; renderSkillResults(); }
   if (event.target.id === 'integration-category') { STATE.integrationCategory = event.target.value; renderIntegrationResults(); }

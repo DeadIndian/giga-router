@@ -20,6 +20,16 @@ The Vercel code was modified to support GitHub-only sources, explicit ref/path
 overrides, strict host checking, and pre-URL-normalization traversal validation.
 It does not include Vercel's CLI, telemetry, or agent installers.
 
+## Provider catalog data
+
+Public model identifiers and factual metadata in `lib/provider-models.json`
+come from [FreeLLMAPI's public monthly catalog](https://api.freellmapi.co/v1/latest)
+and official provider APIs, with setup facts checked against
+[FreeLLMAPI](https://github.com/tashfeenahmed/freellmapi) and the locally installed
+[OmniRoute](https://www.npmjs.com/package/omniroute). The snapshot records source
+and check date; these projects' provider adapter code is not bundled here.
+Community free-access claims are labeled separately from official verification.
+
 ## Vercel Skills license
 
 MIT License

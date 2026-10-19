@@ -50,7 +50,8 @@ fallbacks. MCP connections and reusable skills live in the same dashboard.
 - **Providers & routing:** custom OpenAI/Anthropic-compatible endpoints, custom
   headers and User-Agent settings, fallback priorities, and routing schedules.
 - **Free APIs:** documented free-provider presets, direct API-key links, labeled
-  accounts with separate credentials, and previewed FreeLLMAPI/OmniRoute key imports.
+  accounts with separate credentials, searchable model lists from FreeLLMAPI and
+  official catalogs, and previewed FreeLLMAPI/OmniRoute key imports.
 - **MCP servers:** Streamable HTTP, legacy SSE, or stdio servers exposed through
   one authenticated `/mcp` endpoint, with tool discovery and enable/disable.
 - **My skills:** create/edit skills, install from GitHub, toggle agent

@@ -9,7 +9,9 @@ const { catalog, accountPreset, importAccounts } = require('./lib/provider-catal
 
 test('catalog distinguishes verified free tiers from evaluation and unverified presets', () => {
   const entries = catalog();
-  assert.deepEqual(entries.filter(p => p.group === 'free').map(p => p.id), ['groq', 'gemini', 'mistral', 'openrouter', 'cloudflare']);
+  for (const id of ['groq', 'gemini', 'mistral', 'openrouter', 'cloudflare', 'electronhub', 'simplellm', 'inferbase']) assert.equal(entries.find(p => p.id === id).group, 'free');
+  assert.ok(entries.length >= 30);
+  assert.ok(entries.reduce((total, p) => total + p.models.length, 0) >= 300);
   assert.equal(entries.find(p => p.id === 'agnes').verifiedAt, null);
   assert.equal(entries.find(p => p.id === 'cohere').group, 'limited');
   assert.equal(entries.some(p => p.id === 'cerebras' || p.id === 'huggingface'), false);
@@ -17,9 +19,26 @@ test('catalog distinguishes verified free tiers from evaluation and unverified p
     assert.equal(new URL(entry.keyUrl).protocol, 'https:');
     assert.equal(new URL(entry.docsUrl).protocol, 'https:');
     assert.ok(entry.models.includes(entry.defaultModel));
+    assert.equal(new Set(entry.models).size, entry.models.length);
+    assert.equal(entry.modelDetails.length, entry.models.length);
+    assert.ok(entry.models.every(id => typeof id === 'string' && id.length > 0));
   }
   entries[0].models.push('modified');
   assert.equal(catalog()[0].models.includes('modified'), false);
+});
+
+test('expanded provider presets preserve endpoint, model, and tool compatibility', () => {
+  for (const id of ['electronhub', 'sealion', 'xkiro', 'modelscope', 'waterfall', 'simplellm', 'typhoon', 'poolside', 'longcat']) {
+    const entry = catalog().find(p => p.id === id);
+    const account = accountPreset(id, { apiKey: 'fake-key', accountLabel: 'Work', defaultModel: entry.models.at(-1) });
+    assert.equal(account.baseUrl, entry.baseUrl);
+    assert.equal(account.defaultModel, entry.models.at(-1));
+    assert.equal(account.apiKey, 'fake-key');
+    assert.equal(account.userAgent, 'GigaRouter/1.1');
+  }
+  assert.equal(accountPreset('nvidia', { apiKey: 'fake-key' }).compat.singleToolCall, true);
+  const result = importAccounts({ source: 'freellmapi', version: 1, keys: [{ platform: 'electronhub', key: 'fake-key' }, { platform: 'sealion', key: 'fake-key' }] });
+  assert.equal(result.accounts.length, 2); assert.equal(result.skipped.length, 0);
 });
 
 test('account presets require API keys and validate Cloudflare paths', () => {
