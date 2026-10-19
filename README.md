@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="public/favicon.svg" alt="Giga Router logo" width="80" />
+<img src="public/favicon.svg" alt="Giga Router logo" width="80" height="80" />
 
 # Giga Router
 
@@ -15,16 +15,14 @@ fallbacks. MCP connections and reusable skills live in the same dashboard.
 
 [![CI](https://img.shields.io/github/actions/workflow/status/DeadIndian/giga-router/ci.yml?style=flat-square)](https://github.com/DeadIndian/giga-router/actions/workflows/ci.yml)
 [![Node.js](https://img.shields.io/badge/Node.js-22%2B-339933?style=flat-square&logo=node.js&logoColor=white)](https://nodejs.org/)
-[![Express](https://img.shields.io/badge/Express-4-000000?style=flat-square&logo=express&logoColor=white)](package.json)
 [![Version](https://img.shields.io/badge/version-1.1.0-d9f87e?style=flat-square)](package.json)
-[![MCP SDK](https://img.shields.io/badge/MCP%20SDK-1.32.1-6b7280?style=flat-square)](package.json)
 
 [Getting started](#installation) ·
 [Implementation guide](docs/giga-router.md) ·
 [Connect apps and tools](docs/mcp-integrations.md) ·
 [Report an issue](https://github.com/DeadIndian/giga-router/issues)
 
-<img src="docs/screenshots/marketplace.png" alt="Giga Router marketplace with searchable skill cards, license information, and copy and install actions" width="100%" />
+<img src="docs/screenshots/overview.png" alt="Giga Router overview with routing status, model and tool connections, and steps to get started" width="100%" />
 
 </div>
 
@@ -60,10 +58,18 @@ fallbacks. MCP connections and reusable skills live in the same dashboard.
 
 ## Screenshots
 
-The marketplace above includes pinned, searchable skill catalogs. The integration
-catalog below walks you through connecting hosted apps and local tools.
+<details>
+<summary>Find a skill or connect an app</summary>
+
+Browse skill catalogs, read a preview, and copy or install what you need.
+
+<img src="docs/screenshots/marketplace.png" alt="Giga Router marketplace with searchable skill cards, previews, and copy and install actions" width="100%" />
+
+Choose an app or local tool and follow its connection guide.
 
 <img src="docs/screenshots/integrations.png" alt="Giga Router integration catalog showing guided setup for GitHub, Notion, Linear, Supabase, Context7, and Tavily" width="100%" />
+
+</details>
 
 ## Installation
 
