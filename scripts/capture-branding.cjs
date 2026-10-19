@@ -65,9 +65,9 @@ async function capture() {
     await page.getByRole('button', { name: 'Import accounts', exact: true }).click();
     await page.waitForSelector('#editor-dialog:not([open])', { state: 'attached' });
     await page.getByRole('button', { name: /^Providers 3$/ }).click();
-    await page.getByText('Groq · Personal', { exact: true }).waitFor();
-    await page.getByText('Groq · Work', { exact: true }).waitFor();
-    await page.getByText('Mistral · Imported', { exact: true }).waitFor();
+    await page.locator('tbody tr').filter({ hasText: 'Groq · Personal' }).waitFor();
+    await page.locator('tbody tr').filter({ hasText: 'Groq · Work' }).waitFor();
+    await page.locator('tbody tr').filter({ hasText: 'Mistral · Imported' }).waitFor();
     for (const section of ['overview', 'providers', 'mcp', 'skills', 'marketplace', 'access']) {
       await page.locator(`nav a[href="#${section}"]`).click();
       for (const width of [390, 1024, 1440]) {

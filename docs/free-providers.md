@@ -29,6 +29,14 @@ Google, Cloudflare, and Cohere use their documented OpenAI-compatible API:
 [Cloudflare](https://developers.cloudflare.com/workers-ai/configuration/open-ai-compatibility/),
 [Cohere](https://docs.cohere.com/docs/compatibility-api).
 
+OpenRouter also includes explicit presets for `minimax/minimax-m3.1-flash:free`,
+`nvidia/nemotron-3.5-lightning:free`, `google/gemma-4-26b-a4b-it:free`,
+`cohere/north-mini-code:free`, and `nvidia/nemotron-3-super-120b-a12b:free`.
+Their prompt/completion prices were both zero in the
+[public model catalog](https://openrouter.ai/api/v1/models) on the verification
+date. Model rotation is common; `openrouter/free` remains the default so the
+provider can choose an available free model.
+
 ## Free development/evaluation access
 
 | Provider / get a key | Preset | Scope |
