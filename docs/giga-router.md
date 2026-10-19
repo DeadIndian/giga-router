@@ -4,7 +4,10 @@
 
 The app is the existing Express/Node 22 router in `server.js`. Its provider
 configuration and routing windows live in `DATA_DIR/config.json`. The running
-Docker service uses the `llmrouter-data` volume. Anthropic/OpenAI translation,
+Docker service uses the `llmrouter_llmrouter-data` volume by default, explicitly
+mapped so a folder rename preserves existing data. Compose also keeps the
+`llmrouter` project and service identity to update the existing container.
+Anthropic/OpenAI translation,
 streaming, scheduled routing, and failover remain the routing engine.
 
 ## Acceptance criteria
@@ -64,6 +67,8 @@ streaming, scheduled routing, and failover remain the routing engine.
 
 Graphite surfaces, warm white text, lime primary actions, crisp dividers, and a
 small routing-node brand mark. Side navigation keeps the workspace legible.
+The logo comes from `public/favicon.svg` in every surface; see
+[branding.md](branding.md) for the name, message, and visual conventions.
 Task actions remain next to their relevant provider, source, server, or skill.
 Marketplace cards prioritize description, source, installed state, and the copy
 action. System fonts and local icons keep the first render fast and stable.

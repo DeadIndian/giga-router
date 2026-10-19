@@ -14,11 +14,11 @@ let setupWizard = null;
 const oauthReturn = new URLSearchParams(location.search).get('mcp_oauth');
 
 const PAGE = {
-  overview: { label: 'Overview', eyebrow: 'CONTROL PANEL', title: 'Your agent stack,<br>under one roof.', description: 'Manage what your agents connect to, and what they know.' },
-  providers: { label: 'Providers & routing', eyebrow: 'MODEL INFRASTRUCTURE', title: 'Every model. One gateway.', description: 'Bring your own endpoints, control your fallback chain, and route on your schedule.' },
+  overview: { label: 'Overview', eyebrow: 'YOUR ROUTER', title: 'Your models and tools,<br>connected.', description: 'See where requests go. Manage your connections from one place.' },
+  providers: { label: 'Providers & routing', eyebrow: 'YOUR MODELS', title: 'Every model. One connection.', description: 'Add a provider, choose your model, and set a fallback if you need one.' },
   mcp: { label: 'MCP servers', eyebrow: 'YOUR ASSISTANT’S TOOLBOX', title: 'Connect the apps you use.', description: 'Choose an app or tool. We’ll walk you through setup, one step at a time.' },
-  skills: { label: 'My skills', eyebrow: 'YOUR INSTRUCTION LIBRARY', title: 'A better starting point.', description: 'Reusable instructions for your agents. One click to copy into any chat.' },
-  marketplace: { label: 'Marketplace', eyebrow: 'DISCOVER & INSTALL', title: 'Good skills travel.', description: 'Turn GitHub repositories into your own skill marketplace.' },
+  skills: { label: 'My skills', eyebrow: 'YOUR INSTRUCTIONS', title: 'Useful instructions, ready to use.', description: 'Save a skill. Copy it into a chat or share it with your assistant.' },
+  marketplace: { label: 'Marketplace', eyebrow: 'FIND A SKILL', title: 'Find instructions for the job.', description: 'Browse skills, read the preview, and install the ones you need.' },
   access: { label: 'Access & endpoints', eyebrow: 'CONNECT YOUR CLIENTS', title: 'One key. All your tools.', description: 'Connect your editor or agent to Giga Router, with scoped keys you can revoke.' },
 };
 
@@ -122,7 +122,7 @@ function renderOverview() {
   <div class="overview-grid"><div>${routePanel()}<div class="panel"><div class="panel-header"><h2>Recent gateway activity</h2><span class="subtle" style="font-size:10px">Since ${esc(new Date(STATE.overview.startedAt || Date.now()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }))}</span></div>
     ${recent.length ? `<div class="table-scroll"><table><thead><tr><th>REQUEST</th><th>TYPE</th><th>STATUS</th><th>TIME</th></tr></thead><tbody>${recent.slice(0, 6).map((event) => `<tr><td><strong>${esc(event.name)}</strong>${event.model ? `<div class="model-id">${esc(event.model)}</div>` : ''}</td><td>${tag(event.kind.toUpperCase())}</td><td>${tag(event.status === 'ok' ? 'Success' : 'Failed', event.status === 'ok' ? 'green' : 'red')}</td><td class="subtle">${timeAgo(event.at)}</td></tr>`).join('')}</tbody></table></div>` : empty('Ready when you are', 'LLM and MCP calls will appear here as your agents use the gateway.', 'activity', '', true)}
     </div><div class="panel"><div class="panel-header"><h2>Your skills, within reach</h2><a href="#skills">View library ${icon('arrow-up-right')}</a></div>${STATE.skills.length ? `<div class="quick-list">${STATE.skills.slice(0, 3).map((skill) => `<div class="quick-link"><span class="entity-icon">${icon('file-text')}</span><div style="flex:1;min-width:0"><h3>${esc(skill.name)}</h3><p>${esc(skill.sourceName || 'Personal')}</p></div>${button('Copy for chat', 'copy-skill', skill.id, 'small', 'copy')}</div>`).join('')}</div>` : empty('Start a small, useful library', 'Save your own instructions or install a skill from GitHub.', 'layers', '', true)}</div></div>
-    <div class="overview-right"><div class="panel"><div class="panel-header"><h2>Build your stack</h2>${icon('arrow-up-right')}</div><div class="quick-list">
+    <div class="overview-right"><div class="panel"><div class="panel-header"><h2>Get connected</h2>${icon('arrow-up-right')}</div><div class="quick-list">
       <a class="quick-link" href="#providers"><span class="entity-icon">${icon('git-branch')}</span><div><h3>Bring your own model</h3><p>Custom endpoints. Your API keys.</p></div>${icon('chevron-right')}</a>
       <a class="quick-link" href="#mcp"><span class="entity-icon">${icon('server')}</span><div><h3>Connect an MCP server</h3><p>One endpoint for all your tools.</p></div>${icon('chevron-right')}</a>
       <a class="quick-link" href="#marketplace"><span class="entity-icon">${icon('compass')}</span><div><h3>Find your next skill</h3><p>Browse repositories you choose.</p></div>${icon('chevron-right')}</a>

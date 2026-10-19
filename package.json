@@ -1,7 +1,7 @@
 {
   "name": "giga-router",
   "version": "1.1.0",
-  "description": "Unified dashboard for custom LLM providers, MCP servers, and agent skills",
+  "description": "A no-fuss router for your models, tools, and skills",
   "private": true,
   "scripts": {
     "start": "node server.js",

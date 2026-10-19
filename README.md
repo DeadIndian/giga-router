@@ -4,14 +4,16 @@
 
 # Giga Router
 
-### LLM providers, MCP servers, and agent skills. One self-hosted dashboard.
+### Routing without the fuss.
 
-Route model requests, connect your tools, and manage reusable agent instructions
-from one workspace. Giga Router translates between Anthropic and OpenAI request
-formats, handles streaming and tool calls, and combines scheduled routing,
-failover, and an authenticated MCP gateway.
+A no-fuss router for your models, tools, and skills. Connect your providers and
+apps once, then keep using the editor or assistant you already know. Run it on
+your own machine, choose a model, and get on with your work.
 
-[![CI](https://img.shields.io/github/actions/workflow/status/DeadIndian/llmrouter/ci.yml?style=flat-square)](https://github.com/DeadIndian/llmrouter/actions/workflows/ci.yml)
+Giga Router handles OpenAI and Anthropic requests, streaming, tool calls, and
+fallbacks. MCP connections and reusable skills live in the same dashboard.
+
+[![CI](https://img.shields.io/github/actions/workflow/status/DeadIndian/giga-router/ci.yml?style=flat-square)](https://github.com/DeadIndian/giga-router/actions/workflows/ci.yml)
 [![Node.js](https://img.shields.io/badge/Node.js-22%2B-339933?style=flat-square&logo=node.js&logoColor=white)](https://nodejs.org/)
 [![Express](https://img.shields.io/badge/Express-4-000000?style=flat-square&logo=express&logoColor=white)](package.json)
 [![Version](https://img.shields.io/badge/version-1.1.0-d9f87e?style=flat-square)](package.json)
@@ -20,7 +22,7 @@ failover, and an authenticated MCP gateway.
 [Getting started](#installation) ·
 [Implementation guide](docs/giga-router.md) ·
 [Connect apps and tools](docs/mcp-integrations.md) ·
-[Report an issue](https://github.com/DeadIndian/llmrouter/issues)
+[Report an issue](https://github.com/DeadIndian/giga-router/issues)
 
 <img src="docs/screenshots/marketplace.png" alt="Giga Router marketplace with searchable skill cards, license information, and copy and install actions" width="100%" />
 
@@ -70,8 +72,8 @@ catalog below walks you through connecting hosted apps and local tools.
 Requires Docker with the Compose plugin.
 
 ```bash
-git clone https://github.com/DeadIndian/llmrouter.git
-cd llmrouter
+git clone https://github.com/DeadIndian/giga-router.git
+cd giga-router
 cp .env.example .env
 ```
 
@@ -92,16 +94,18 @@ Open **http://127.0.0.1:3002** and sign in with the username and password you
 configured. Add your first provider in **Providers & routing**. **Access &
 endpoints** has connection URLs and gateway keys for your clients.
 
-The `llmrouter-data` Docker volume preserves configuration, skills, and marketplace
-indexes across rebuilds. The Compose service is named `llmrouter`.
+The Docker volume preserves configuration, skills, and marketplace indexes
+across rebuilds. Compose keeps the existing `llmrouter` project and service names
+and uses `llmrouter_llmrouter-data`, preserving existing installs after the rename.
+Set `GIGA_ROUTER_DATA_VOLUME` in `.env` to use a different volume.
 
 ### Local development
 
 Requires Node.js 22 or later and npm.
 
 ```bash
-git clone https://github.com/DeadIndian/llmrouter.git
-cd llmrouter
+git clone https://github.com/DeadIndian/giga-router.git
+cd giga-router
 npm ci
 cp .env.example .env
 ```
