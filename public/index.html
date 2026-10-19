@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#17191d">
+  <meta name="description" content="Your control panel for LLM providers, MCP servers, and agent skills.">
+  <title>Giga Router</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/vendor/feather.js" defer></script>
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#workspace">Skip to workspace</a>
+  <section id="login-screen" class="login-screen">
+    <div class="login-brand"><span class="brand-mark" aria-hidden="true">g<span>r</span></span><span>Giga Router</span></div>
+    <form id="login-form" class="login-panel">
+      <span class="eyebrow">YOUR AGENT WORKSPACE</span>
+      <h1>Everything, routed.</h1>
+      <p class="subtle">Your models, tools, and skills. One place to run them.</p>
+      <label for="login-user">Username</label>
+      <input id="login-user" name="user" autocomplete="username" required autofocus>
+      <label for="login-password">Password</label>
+      <input id="login-password" name="password" type="password" autocomplete="current-password" required>
+      <button class="button primary" type="submit">Open workspace <i data-feather="arrow-right"></i></button>
+      <p id="login-error" class="form-error" role="alert"></p>
+    </form>
+    <p class="login-footer">Built on your LLM Router. Powered by open source.</p>
+  </section>
+
+  <div id="app" class="app-shell" hidden>
+    <aside class="sidebar" aria-label="Main navigation">
+      <a class="brand" href="#overview"><span class="brand-mark" aria-hidden="true">g<span>r</span></span><span>Giga Router<small>Agent infrastructure</small></span></a>
+      <div class="workspace-label"><span class="status-dot"></span>Personal workspace<span class="local-label">LOCAL</span></div>
+      <span class="nav-group">WORKSPACE</span>
+      <nav id="navigation">
+        <a href="#overview" data-page="overview"><i data-feather="grid"></i>Overview</a>
+        <a href="#providers" data-page="providers"><i data-feather="git-branch"></i>Providers & routing<span id="nav-providers" class="nav-count">0</span></a>
+        <a href="#mcp" data-page="mcp"><i data-feather="server"></i>MCP servers<span id="nav-mcp" class="nav-count">0</span></a>
+        <a href="#skills" data-page="skills"><i data-feather="layers"></i>My skills<span id="nav-skills" class="nav-count">0</span></a>
+        <a href="#marketplace" data-page="marketplace"><i data-feather="compass"></i>Marketplace</a>
+        <span class="nav-group">CONNECT</span>
+        <a href="#access" data-page="access"><i data-feather="key"></i>Access & endpoints</a>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="sidebar-tip"><i data-feather="clipboard"></i><strong>Skills, on your terms.</strong><p>Copy instructions into any chat, or let your agent load them over MCP.</p><a href="#skills">Open your library <span>↗</span></a></div>
+        <button class="account" id="logout"><span class="avatar">P</span><span>Personal workspace<small>Sign out</small></span><i data-feather="log-out"></i></button>
+      </div>
+    </aside>
+    <main id="workspace" class="workspace" tabindex="-1">
+      <header class="topbar"><div class="breadcrumb">Workspace <span>/</span><strong id="page-label">Overview</strong></div><div class="topbar-actions"><span class="gateway-status"><span class="status-dot"></span>Gateway online</span><button class="icon-button" id="refresh" aria-label="Refresh workspace"><i data-feather="refresh-cw"></i></button><button class="icon-button mobile-logout" data-action="logout" aria-label="Sign out"><i data-feather="log-out"></i></button></div></header>
+      <div class="page-header"><div><span id="page-eyebrow" class="eyebrow">CONTROL PANEL</span><h1 id="page-title">Your agent stack,<br>under one roof.</h1><p id="page-description" class="subtle">Manage what your agents connect to, and what they know.</p></div><div id="page-actions" class="page-actions"></div></div>
+      <div id="page-content" class="page-content" aria-live="polite"><div class="loading-state">Loading your workspace…</div></div>
+      <footer class="workspace-footer"><span>Giga Router <span class="subtle">/</span> Your infrastructure. Your rules.</span><a href="#access">Connection guide <i data-feather="arrow-up-right"></i></a></footer>
+    </main>
+  </div>
+
+  <dialog id="editor-dialog" class="editor-dialog" aria-labelledby="dialog-title">
+    <div class="dialog-heading"><div><span id="dialog-eyebrow" class="eyebrow">WORKSPACE</span><h2 id="dialog-title"></h2></div><button class="icon-button" id="dialog-close" aria-label="Close dialog"><i data-feather="x"></i></button></div>
+    <div id="dialog-content"></div>
+  </dialog>
+  <div id="toasts" class="toasts" role="status" aria-live="polite" aria-atomic="false"></div>
+  <noscript>This dashboard needs JavaScript to manage your router.</noscript>
+</body>
+</html>

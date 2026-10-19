@@ -1,0 +1,115 @@
+{
+  "generatedAt": "2026-10-18T14:30:46.561Z",
+  "sources": [
+    {
+      "id": "superpowers",
+      "name": "Superpowers",
+      "url": "https://github.com/obra/superpowers",
+      "path": "skills",
+      "ref": "main",
+      "commit": "bb92a77741419a4ab5f06e711a283343f1ada0c3",
+      "skillCount": 15,
+      "license": "MIT",
+      "compressedBytes": 77902
+    },
+    {
+      "id": "microsoft",
+      "name": "Microsoft Skills",
+      "url": "https://github.com/microsoft/skills",
+      "path": ".github",
+      "ref": "main",
+      "commit": "8850874f66fb4d905bfcfcb923a18883bb70d1cd",
+      "skillCount": 212,
+      "license": "MIT",
+      "compressedBytes": 663705
+    },
+    {
+      "id": "github-copilot",
+      "name": "GitHub Awesome Copilot",
+      "url": "https://github.com/github/awesome-copilot",
+      "path": "skills",
+      "ref": "main",
+      "commit": "cb64ad12e32737ae764becd6885462e9b4c7cb00",
+      "skillCount": 450,
+      "license": "MIT",
+      "compressedBytes": 1735463
+    },
+    {
+      "id": "expo",
+      "name": "Expo Skills",
+      "url": "https://github.com/expo/skills",
+      "path": "plugins",
+      "ref": "main",
+      "commit": "7ddc1f5796996e5c7efe2fc3fa9168eb24e8dac1",
+      "skillCount": 25,
+      "license": "MIT",
+      "compressedBytes": 101134
+    },
+    {
+      "id": "supabase",
+      "name": "Supabase Agent Skills",
+      "url": "https://github.com/supabase/agent-skills",
+      "path": "skills",
+      "ref": "main",
+      "commit": "c9be0e931b7930f7d02126d04774d904c381e7d7",
+      "skillCount": 2,
+      "license": "MIT",
+      "compressedBytes": 10212
+    },
+    {
+      "id": "everything-claude-code",
+      "name": "Everything Claude Code",
+      "url": "https://github.com/affaan-m/ECC",
+      "path": "skills",
+      "ref": "main",
+      "commit": "76aaa77df6adc5b889e689007bf99b9a4f74af34",
+      "skillCount": 311,
+      "license": "MIT",
+      "compressedBytes": 1193552
+    },
+    {
+      "id": "wshobson-agents",
+      "name": "wshobson Agents",
+      "url": "https://github.com/wshobson/agents",
+      "path": "plugins",
+      "ref": "main",
+      "commit": "0874a27b17a22e2b7c2e2bcd725768e0803cad06",
+      "skillCount": 185,
+      "license": "MIT",
+      "compressedBytes": 418845
+    },
+    {
+      "id": "marketing",
+      "name": "Marketing Skills",
+      "url": "https://github.com/coreyhaines31/marketingskills",
+      "path": "skills",
+      "ref": "main",
+      "commit": "365b412152b9542499ca1439426f7fc3cc92bb65",
+      "skillCount": 50,
+      "license": "MIT",
+      "compressedBytes": 328690
+    },
+    {
+      "id": "claude-engineering",
+      "name": "Claude Skills · Engineering",
+      "url": "https://github.com/alirezarezvani/claude-skills",
+      "path": "engineering-team",
+      "ref": "main",
+      "commit": "19392f7a08264ed00486a251f5b2098321771f94",
+      "skillCount": 53,
+      "license": "MIT",
+      "compressedBytes": 213764
+    },
+    {
+      "id": "n8n",
+      "name": "n8n Skills",
+      "url": "https://github.com/czlonkowski/n8n-skills",
+      "path": "skills",
+      "ref": "main",
+      "commit": "c640094d949c5a7bfce7d51fc9c049e3dcd3be44",
+      "skillCount": 15,
+      "license": "MIT",
+      "compressedBytes": 117950
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+services:
+  llmrouter:
+    build: .
+    env_file:
+      - .env
+    environment:
+      NODE_ENV: production
+      DATA_DIR: /app/data
+    # Localhost by default — set HOST_BIND=0.0.0.0 in .env for LAN access.
+    ports:
+      - "${HOST_BIND:-127.0.0.1}:${PORT:-3002}:3002"
+    volumes:
+      - llmrouter-data:/app/data
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    restart: unless-stopped
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "node",
+          "-e",
+          "fetch('http://127.0.0.1:3002/api/ping').then((res) => { if (!res.ok) process.exit(1); }).catch(() => process.exit(1));"
+        ]
+      interval: 30s
+      timeout: 5s
+      start_period: 10s
+      retries: 3
+
+volumes:
+  llmrouter-data:
