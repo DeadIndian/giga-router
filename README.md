@@ -96,6 +96,10 @@ Then start the router:
 docker compose up -d --build
 ```
 
+On a Linux host with systemd, run `sudo ./scripts/deploy-local.sh` to enable Docker
+at boot, rebuild the app, wait for health checks, and verify saved configuration.
+The container restarts automatically unless you explicitly stop it.
+
 Open **http://127.0.0.1:3002** and sign in with the username and password you
 configured. Add your first provider in **Providers & routing**. **Access &
 endpoints** has connection URLs and gateway keys for your clients.
