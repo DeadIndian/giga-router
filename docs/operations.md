@@ -21,10 +21,12 @@ If `git status` shows local changes, preserve or commit them before pulling;
 do not discard them. The deployment script:
 
 1. Enables Docker at boot and validates Compose configuration.
-2. Builds the image while the previous container continues serving. Build
-   failure leaves that container running.
-3. Tags the running image `giga-router:previous` for rollback, takes a configuration
-   fingerprint, and backs up `config.json` and `admin-auth.json` inside the volume
+2. Saves the running image as `giga-router:previous` when its image metadata is
+   available, then builds while the previous container continues serving. Build
+   failure leaves that container running. Missing image metadata or a failed
+   rollback tag produces a warning and does not block deployment.
+3. Takes a configuration fingerprint and backs up `config.json` and
+   `admin-auth.json` inside the volume
    with mode 0600. Each deployment replaces these two recovery copies.
 4. Recreates only the router with the new image, waits for health, and verifies
    port 3002, restart policy, and the saved account/configuration fingerprint.
@@ -102,9 +104,12 @@ the router is running again.
 
 ## Roll back code
 
-The previous successful container image remains tagged after an update. Keep
-the current `.env` and volume. Create a temporary Compose override in this
-repository:
+When the helper reports `Previous image saved as giga-router:previous`, that
+image is available for code rollback. If it reports that the previous image
+could not be saved, the tag may be absent or point to an older deployment;
+do not assume it represents the container just replaced. Data backup and
+verification still run. Keep the current `.env` and volume. Create a temporary
+Compose override:
 
 ```bash
 cat > /tmp/giga-router-rollback.yml <<'YAML'

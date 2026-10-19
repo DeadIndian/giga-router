@@ -9,15 +9,25 @@ fi
 
 systemctl enable --now docker
 docker compose config --quiet
-# Build while the current container keeps serving. A failed build leaves it running.
-docker compose build llmrouter
-
 snapshot_script='const fs=require("fs"),crypto=require("crypto");const p="/app/data/config.json";if(!fs.existsSync(p)){console.log("none");process.exit(0)}const c=JSON.parse(fs.readFileSync(p));const a="/app/data/admin-auth.json";const stable={providers:c.providers,activeId:c.activeId,routing:c.routing,mcpServers:c.mcpServers,skills:c.skills,accessKeys:c.accessKeys,account:fs.existsSync(a)?fs.readFileSync(a,"utf8"):null};console.log(crypto.createHash("sha256").update(JSON.stringify(stable)).digest("hex"))'
 previous_container=$(docker compose ps -q llmrouter)
 before='none'
 if [ -n "$previous_container" ]; then
   previous_image=$(docker inspect "$previous_container" --format '{{.Image}}')
-  docker image tag "$previous_image" giga-router:previous
+  # A running container can outlive its image metadata. Rollback is optional;
+  # saved-data backup and verification below must still run if tagging fails.
+  # Tag before building so replacing the Compose image cannot lose the old tag.
+  if docker image inspect "$previous_image" >/dev/null 2>&1 && docker image tag "$previous_image" giga-router:previous; then
+    echo 'Previous image saved as giga-router:previous.'
+  else
+    echo 'Previous image could not be saved for rollback; continuing with data backup. An existing giga-router:previous tag may be older.' >&2
+  fi
+fi
+
+# Build while the current container keeps serving. A failed build leaves it running.
+docker compose build llmrouter
+
+if [ -n "$previous_container" ]; then
   before=$(docker exec "$previous_container" node -e "$snapshot_script")
   docker exec "$previous_container" node -e 'const fs=require("fs");for(const name of ["config","admin-auth"]){const p="/app/data/"+name+".json";if(fs.existsSync(p)){const backup="/app/data/"+name+".pre-deployment.json";fs.copyFileSync(p,backup);fs.chmodSync(backup,0o600)}}'
 fi
