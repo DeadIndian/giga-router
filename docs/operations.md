@@ -27,7 +27,8 @@ do not discard them. The deployment script:
    rollback tag produces a warning and does not block deployment.
 3. Takes a configuration fingerprint and backs up `config.json` and
    `admin-auth.json` inside the volume
-   with mode 0600. Each deployment replaces these two recovery copies.
+   with mode 0600. Each deployment replaces these two recovery copies. It also
+   saves the MCP vault/key under `backups/credentials-<timestamp>` inside the volume.
 4. Recreates only the router with the new image, waits for health, and verifies
    port 3002, restart policy, and the saved account/configuration fingerprint.
 
@@ -35,6 +36,17 @@ There is a brief interruption during container recreation. Requests and streams
 in flight may disconnect; clients should retry. The router is normally ready
 within seconds; the script allows up to 120 seconds for health checks. Avoid
 dashboard edits while it takes the fingerprint and recreates the container.
+
+The fingerprint excludes key-use timestamps and MCP connection status. It checks
+provider keys, routing, access grants, password state, and static vault settings.
+Every vault record must decrypt with the saved key. OAuth access/refresh tokens
+and their expiry are allowed to rotate during traffic.
+
+Skill writes now use immutable generations referenced by `config.json`. Existing
+legacy bundles remain readable. After editing/updating a skill on this release,
+an older image that only reads `skills/<id>/files` cannot read its new generation.
+For code rollback across this boundary, use a matching full backup in an isolated
+restore first; retaining a new config pointer with an old reader is incompatible.
 
 The script does not pull Git commits itself. Repeat the commands above for each
 update. A Git push alone does not update this local Docker service.
@@ -103,6 +115,22 @@ store it securely outside Git. Use the deployment helper for the upgrade after
 the router is running again.
 
 ## Roll back code
+
+### Verify a backup first
+
+Extract a full backup into a private directory separate from the running volume,
+then run:
+
+```bash
+node scripts/verify-restore.cjs /path/to/extracted-data-backup
+```
+
+The verifier makes a temporary copy, checks saved settings, decrypts vault
+records, validates installed skill manifests and portable files, and removes the
+copy. It prints counts only and starts no providers or MCP servers. Keep the
+extracted backup private and remove it when recovery is complete.
+
+### Recreate the previous image
 
 When the helper reports `Previous image saved as giga-router:previous`, that
 image is available for code rollback. If it reports that the previous image

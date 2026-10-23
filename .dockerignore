@@ -6,3 +6,5 @@ config-backup-*.json
 *.log
 .git
 .gstack
+_site
+site

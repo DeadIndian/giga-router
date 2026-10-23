@@ -12,6 +12,7 @@ STATE.providerSearch = '';
 STATE.providerGroup = '';
 let authenticated = false;
 let loading = false;
+const pageLoads = new Map();
 let setupWizard = null;
 const oauthReturn = new URLSearchParams(location.search).get('mcp_oauth');
 
@@ -44,7 +45,19 @@ async function api(endpoint, options = {}) {
     if (response.status === 401 && authenticated) showLogin();
     throw new Error(typeof data.error === 'string' ? data.error : data.error?.message || `Request failed (${response.status})`);
   }
+  if (options.method && options.method !== 'GET') pageLoads.clear();
   return data;
+}
+
+async function loadPageData() {
+  const endpoint = STATE.page === 'marketplace' ? '/api/marketplace' : STATE.page === 'mcp' ? '/api/mcp/catalog' : STATE.page === 'providers' && STATE.providerTab === 'free' ? '/api/providers/catalog' : null;
+  if (!endpoint) return;
+  if (!pageLoads.has(endpoint)) pageLoads.set(endpoint, api(endpoint).then(data => {
+    if (endpoint === '/api/marketplace') Object.assign(STATE, { marketplace: data.items, sources: data.sources, defaultsEnabled: data.defaultsEnabled, removedDefaults: data.removedDefaults || [] });
+    if (endpoint === '/api/mcp/catalog') Object.assign(STATE, { integrations: data.items, mcpSetup: data.setup });
+    if (endpoint === '/api/providers/catalog') STATE.providerCatalog = data.items;
+  }).catch(error => { pageLoads.delete(endpoint); toast(`Catalog unavailable: ${error.message}. Use Refresh to retry.`, true); }));
+  await pageLoads.get(endpoint);
 }
 
 function showLogin() {
@@ -58,13 +71,13 @@ async function loadWorkspace(render = true) {
   loading = true;
   $('refresh').disabled = true;
   try {
-    const [config, routing, servers, skills, marketplace, keys, overview, integrations, providers] = await Promise.all([
-      api('/api/config'), api('/api/routing'), api('/api/mcp/servers'), api('/api/skills'), api('/api/marketplace'), api('/api/access/keys'), api('/api/overview'), api('/api/mcp/catalog'), api('/api/providers/catalog'),
+    const [config, routing, servers, skills, sources, keys, overview] = await Promise.all([
+      api('/api/config'), api('/api/routing'), api('/api/mcp/servers'), api('/api/skills'), api('/api/sources'), api('/api/access/keys'), api('/api/overview'),
     ]);
     Object.assign(STATE, { providers: config.providers, activeId: config.activeId, hasRouterKey: config.hasRouterKey, routing,
-      servers: servers.items, mcpSessions: servers.sessions, skills: skills.items, marketplace: marketplace.items,
-      sources: marketplace.sources, keys: keys.items, environmentKey: keys.environmentKey, overview,
-      defaultsEnabled: marketplace.defaultsEnabled, removedDefaults: marketplace.removedDefaults || [], integrations: integrations.items, mcpSetup: integrations.setup, providerCatalog: providers.items });
+      servers: servers.items, mcpSessions: servers.sessions, skills: skills.items,
+      sources: sources.items, keys: keys.items, environmentKey: keys.environmentKey, overview });
+    await loadPageData();
     if (STATE.sourceFilter && !STATE.sources.some((source) => source.id === STATE.sourceFilter)) STATE.sourceFilter = '';
     authenticated = true;
     $('login-screen').hidden = true;
@@ -104,11 +117,13 @@ function routePanel() {
   const effective = STATE.routing.effective || {};
   const provider = STATE.providers.find((item) => item.id === effective.providerId);
   const chain = effective.chain || [];
-  return `<div class="panel"><div class="panel-header"><h2>Live routing</h2>${tag(STATE.routing.mode === 'manual' ? 'Manual mode' : 'Auto mode', 'green')}</div><div class="panel-body">
+  return `<div class="panel" id="live-route"><div class="panel-header"><h2>Live routing</h2>${tag(STATE.routing.mode === 'manual' ? 'Manual mode' : 'Auto mode', 'green')}</div><div class="panel-body">
     <span class="route-label">NEXT REQUEST ROUTES TO</span><div class="current-route"><span class="entity-icon accent">${icon('git-branch')}</span><div><h3>${esc(effective.provider || 'No provider connected')}</h3><p>${esc(provider?.defaultModel || 'Add your first model endpoint to get started')}</p></div>${provider ? tag('Selected', 'green') : ''}</div>
     ${chain.length ? `<div class="route-chain">${chain.map((name, i) => `${i ? icon('arrow-right') : ''}<span class="chain-node"><span>${i + 1}</span>${esc(name)}</span>`).join('')}</div>` : ''}
     <div class="route-note"><span>${effective.scheduled ? `Schedule: ${esc(effective.scheduled.label || effective.scheduled.start + '–' + effective.scheduled.end)}` : STATE.routing.mode === 'manual' ? 'Pinned to your active provider' : 'Priority order with automatic failover'}</span>${provider ? '<a href="#providers" data-action="routing-tab">Configure ' + icon('arrow-up-right') + '</a>' : button('Add provider', 'add-provider', '', 'small quiet', 'plus')}</div>
     ${effective.tripped ? `<p class="form-error">${esc(effective.tripped)} is temporarily out of the chain after repeated failures.</p>` : ''}
+    ${(effective.skipped || []).map(p => `<p class="subtle">${esc(p.name)}: ${esc(p.reason)}</p>`).join('')}
+    <p class="subtle">Default request preview. Model aliases and profiles select their own routes.</p>
   </div></div>`;
 }
 
@@ -117,12 +132,11 @@ function renderOverview() {
     ['LLM providers', STATE.providers.length, 'git-branch', `${STATE.providers.filter((p) => p.enabled !== false).length} enabled`, '#providers'],
     ['MCP servers', STATE.servers.length, 'server', `${STATE.mcpSessions || 0} active sessions`, '#mcp'],
     ['Installed skills', STATE.skills.length, 'layers', `${STATE.skills.filter((s) => s.enabled !== false).length} available to agents`, '#skills'],
-    ['Marketplace sources', STATE.sources.length, 'github', `${STATE.marketplace.length} skills indexed`, '#marketplace'],
+    ['Marketplace sources', STATE.sources.length, 'github', `${STATE.overview.indexedSkills || 0} skills indexed`, '#marketplace'],
   ];
-  const recent = STATE.overview.recent || [];
   return `<div class="stats-grid">${stats.map(([label, value, symbol, note, href]) => `<a class="stat" href="${href}"><div class="stat-label">${esc(label)}${icon(symbol)}</div><div class="stat-value">${value}</div><div class="stat-note">${esc(note)}</div></a>`).join('')}</div>
-  <div class="overview-grid"><div>${routePanel()}<div class="panel"><div class="panel-header"><h2>Recent gateway activity</h2><span class="subtle" style="font-size:10px">Since ${esc(new Date(STATE.overview.startedAt || Date.now()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }))}</span></div>
-    ${recent.length ? `<div class="table-scroll"><table><thead><tr><th>REQUEST</th><th>TYPE</th><th>STATUS</th><th>TIME</th></tr></thead><tbody>${recent.slice(0, 6).map((event) => `<tr><td><strong>${esc(event.name)}</strong>${event.model ? `<div class="model-id">${esc(event.model)}</div>` : ''}</td><td>${tag(event.kind.toUpperCase())}</td><td>${tag(event.status === 'ok' ? 'Success' : 'Failed', event.status === 'ok' ? 'green' : 'red')}</td><td class="subtle">${timeAgo(event.at)}</td></tr>`).join('')}</tbody></table></div>` : empty('Ready when you are', 'LLM and MCP calls will appear here as your agents use the gateway.', 'activity', '', true)}
+   <div class="overview-grid"><div>${routePanel()}<div class="panel"><div class="panel-header"><h2>Recent gateway activity</h2><span class="subtle" style="font-size:10px">Saved locally across restarts</span></div>
+    <div class="table-scroll"><table><thead><tr><th>REQUEST</th><th>TYPE</th><th>STATUS</th><th>TIME</th></tr></thead><tbody id="recent-activity"></tbody></table></div>
     </div><div class="panel"><div class="panel-header"><h2>Your skills, within reach</h2><a href="#skills">View library ${icon('arrow-up-right')}</a></div>${STATE.skills.length ? `<div class="quick-list">${STATE.skills.slice(0, 3).map((skill) => `<div class="quick-link"><span class="entity-icon">${icon('file-text')}</span><div style="flex:1;min-width:0"><h3>${esc(skill.name)}</h3><p>${esc(skill.sourceName || 'Personal')}</p></div>${button('Copy for chat', 'copy-skill', skill.id, 'small', 'copy')}</div>`).join('')}</div>` : empty('Start a small, useful library', 'Save your own instructions or install a skill from GitHub.', 'layers', '', true)}</div></div>
     <div class="overview-right"><div class="panel"><div class="panel-header"><h2>Get connected</h2>${icon('arrow-up-right')}</div><div class="quick-list">
       <a class="quick-link" href="#providers"><span class="entity-icon">${icon('git-branch')}</span><div><h3>Bring your own model</h3><p>Custom endpoints. Your API keys.</p></div>${icon('chevron-right')}</a>
@@ -153,7 +167,7 @@ function freeProviderResults() {
     (!query || `${p.name} ${p.note} ${p.models.join(' ')}`.toLowerCase().includes(query)));
   const total = entries.reduce((sum, p) => sum + p.models.length, 0);
   return `<p class="subtle">${entries.length} providers · ${total} model presets · Catalog checked ${esc(STATE.providerCatalog[0]?.catalogCheckedAt || '')}</p>` + [
-    ['free', 'Verified free tiers', 'Official free-tier documentation checked on 19 October 2026. Presets do not verify your key or guarantee a model stays free.'],
+    ['free', 'Verified free tiers', 'Official documentation dates appear on each provider. Presets do not verify your key or guarantee a model stays free.'],
     ['limited', 'Development, research & evaluation', 'Free access with development, research, or evaluation restrictions. Check the terms for your intended use.'],
     ['unverified', 'Source-listed free access', 'Models from FreeLLMAPI and OmniRoute. Current free terms have not been independently verified here.'],
   ].filter(([group]) => entries.some(p => p.group === group)).map(([group, title, description]) => `<div class="section-heading section-space"><div><h2>${title}</h2><p>${description}</p></div></div><div class="skill-grid">${entries.filter(p => p.group === group).map(p => {
@@ -307,14 +321,29 @@ function renderPage() {
   $('page-content').innerHTML = STATE.page === 'overview' ? renderOverview() : STATE.page === 'providers' ? renderProviders() : STATE.page === 'mcp' ? renderMcp() : STATE.page === 'skills' ? searchToolbar(false) : STATE.page === 'marketplace' ? renderMarketplace() : renderAccess();
   if (STATE.page === 'skills' || (STATE.page === 'marketplace' && STATE.marketTab === 'browse')) renderSkillResults();
   if (STATE.page === 'mcp' && STATE.mcpTab === 'browse') renderIntegrationResults();
+  if (STATE.page === 'providers' && STATE.providerTab === 'providers') for (const node of document.querySelectorAll('[data-action="edit-provider"]')) {
+    node.insertAdjacentHTML('beforebegin', iconButton('Test provider', 'test-provider', node.dataset.id, 'zap') + iconButton('Reset provider cooldown', 'reset-provider', node.dataset.id, 'refresh-cw'));
+  }
+  if (STATE.page === 'providers' && STATE.providerTab === 'routing') {
+    $('page-content').insertAdjacentHTML('beforeend', `<div class="panel"><div class="panel-header"><h2>Routing profiles</h2>${button('Add profile', 'edit-profile', '', 'small', 'plus')}</div><div class="panel-body"><p class="subtle">Select a saved chain with model <code>profile/name</code>.</p>${(STATE.routing.profiles || []).map(p => `<div class="setting-row"><code>profile/${esc(p.id)}</code><span>${esc(p.providerIds.map(id => STATE.providers.find(p => p.id === id)?.name || id).join(' → '))}</span>${button('Edit', 'edit-profile', p.id, 'small quiet')}${button('Remove', 'delete-profile', p.id, 'small quiet')}</div>`).join('')}</div></div>`);
+  }
+  refreshActivity();
   hydrateIcons();
 }
 
-function navigate() {
+function refreshActivity() {
+  if (STATE.page !== 'overview') return;
+  const tbody = $('recent-activity');
+  if (!tbody || tbody.querySelector('details[open]') || tbody.contains(document.activeElement)) return;
+  if (!STATE.overview.recent?.length) { tbody.innerHTML = `<tr><td colspan="4">${empty('Ready when you are', 'LLM and MCP calls will appear here as your agents use the gateway.', 'activity', '', true)}</td></tr>`; return; }
+  tbody.innerHTML = (STATE.overview.recent || []).slice(0, 6).map(event => `<tr><td><strong>${esc(event.name)}</strong>${event.model ? `<div class="model-id">${esc(event.model)}</div>` : ''}${event.requestId ? `<details><summary>Request details</summary><p><code>${esc(event.requestId)}</code></p><p>${event.durationMs} ms total${event.firstTokenMs != null ? ` · ${event.firstTokenMs} ms to first output` : ''}</p>${(event.attempts || []).map(a => `<p>${esc(a.provider)} · ${esc(a.status)}${a.category ? ` (${esc(a.category)})` : ''} · ${a.durationMs} ms</p>`).join('')}${(event.skipped || []).map(p => `<p>${esc(p.name)} skipped: ${esc(p.reason)}</p>`).join('')}${event.usage ? `<pre>${esc(JSON.stringify(event.usage, null, 2))}</pre>` : ''}</details>` : ''}</td><td>${tag(event.kind.toUpperCase())}</td><td>${tag(event.status === 'ok' ? 'Success' : event.status === 'cancelled' ? 'Cancelled' : 'Failed', event.status === 'ok' ? 'green' : 'amber')}</td><td class="subtle">${timeAgo(event.at)}</td></tr>`).join('');
+}
+
+async function navigate() {
   const requested = location.hash.slice(1) || 'overview';
   STATE.page = PAGE[requested] ? requested : 'overview';
   STATE.search = ''; STATE.limit = 60;
-  if (authenticated) renderPage();
+  if (authenticated) { await loadPageData(); renderPage(); }
 }
 
 function showDialog(title, content, eyebrow = 'WORKSPACE') {
@@ -361,18 +390,61 @@ function changePassword() {
 
 function editProvider(provider = {}) {
   showDialog(provider.id ? 'Edit provider' : 'Bring your own provider', `<form id="edit-form"><div class="dialog-body"><p class="details-description">Add a custom endpoint. Both client API formats work through the same router.</p><div class="field-grid">${field('name', 'Provider name', provider.name, { required: true, placeholder: 'My provider' })}<div class="field"><label for="field-type">API format</label><select id="field-type" name="type"><option value="openai" ${provider.type !== 'anthropic' ? 'selected' : ''}>OpenAI-compatible</option><option value="anthropic" ${provider.type === 'anthropic' ? 'selected' : ''}>Anthropic Messages</option></select></div>${field('baseUrl', 'Base URL', provider.baseUrl, { required: true, type: 'url', full: true, placeholder: 'https://api.example.com/v1', help: 'Local HTTP endpoints work too. For other API roots, set an endpoint path below.' })}${field('defaultModel', 'Default model', provider.defaultModel, { required: true, full: true, placeholder: 'provider/model-id' })}${field('apiKey', 'Provider API key', '', { type: 'password', full: true, autocomplete: 'new-password', placeholder: provider.apiKey ? 'Leave blank to keep your saved key' : 'Optional for auth-less local models' })}</div><details><summary>Compatibility & custom headers</summary><div>${field('userAgent', 'User-Agent', provider.userAgent, { placeholder: 'Optional client User-Agent' })}${field('endpointPath', 'Endpoint path', provider.endpointPath, { placeholder: 'chat/completions', help: 'Optional. Appended directly to your base URL instead of the default /v1 path.' })}${field('headers', 'Custom headers (JSON)', JSON.stringify(provider.headers || {}, null, 2), { multiline: true, mono: true, rows: 4, help: 'Saved values are masked. Leave *** to preserve them.' })}<label class="check-label"><input type="checkbox" name="noReasoning" ${provider.compat?.noReasoningEffortWithTools ? 'checked' : ''}>Force reasoning_effort=none when calling tools</label></div></details></div>${footer(provider.id ? 'Save provider' : 'Add provider')}</form>`, 'LLM PROVIDER');
+  $('edit-form').querySelector('.dialog-body').insertAdjacentHTML('beforeend', `<details><summary>Model capabilities</summary><p class="subtle">Catalog values are hints. Override them for this model and account; Responses must be enabled explicitly.</p>${['tools', 'vision', 'responses', 'countTokens'].map(key => `<div class="field"><label for="cap-${key}">${esc({ tools: 'Tool calling', vision: 'Image input', responses: 'Native Responses API', countTokens: 'Native token counting' }[key])}</label><select id="cap-${key}" name="cap-${key}"><option value="">Catalog / unknown</option><option value="true" ${provider.capabilities?.[key] === true ? 'selected' : ''}>Supported</option><option value="false" ${provider.capabilities?.[key] === false ? 'selected' : ''}>Unsupported</option></select></div>`).join('')}${field('contextWindow', 'Context window (tokens)', provider.capabilities?.contextWindow || '', { type: 'number' })}<label class="check-label"><input type="checkbox" name="legacyThinking" ${provider.compat?.adaptiveToEnabled ? 'checked' : ''}>Legacy adaptive-to-enabled thinking workaround</label></details>`);
   bindForm(async (form, values) => {
     const body = { name: values.name.trim(), type: values.type, baseUrl: values.baseUrl.trim(), defaultModel: values.defaultModel.trim(),
       apiKey: values.apiKey.trim() || (provider.apiKey ? '***' : ''), userAgent: values.userAgent.trim(), endpointPath: values.endpointPath.trim(),
-      headers: jsonField(form, 'headers'), compat: { noReasoningEffortWithTools: !!values.noReasoning } };
+      headers: jsonField(form, 'headers'), compat: { noReasoningEffortWithTools: !!values.noReasoning, adaptiveToEnabled: !!values.legacyThinking },
+      capabilities: { ...Object.fromEntries(['tools', 'vision', 'responses', 'countTokens'].map(key => [key, values[`cap-${key}`] === '' ? null : values[`cap-${key}`] === 'true'])), contextWindow: values.contextWindow ? Number(values.contextWindow) : null } };
     await api(provider.id ? `/api/providers/${provider.id}` : '/api/providers', { method: provider.id ? 'PUT' : 'POST', body });
     closeDialog(); toast(provider.id ? 'Provider updated' : 'Provider added'); await loadWorkspace();
+  });
+}
+
+function refreshLiveStatuses() {
+  const health = new Map((STATE.routing.health || []).map(entry => [entry.id, entry]));
+  for (const node of document.querySelectorAll('[data-action="edit-provider"]')) {
+    const provider = STATE.providers.find(p => p.id === node.dataset.id), status = health.get(node.dataset.id);
+    if (provider) node.closest('tr').children[3].innerHTML = tag(provider.enabled === false ? 'Disabled' : status?.tripped ? 'Tripped' : status?.cooling ? 'Cooling' : 'Enabled', provider.enabled === false ? '' : status?.tripped || status?.cooling ? 'amber' : 'green');
+  }
+  for (const node of document.querySelectorAll('[data-action="check-mcp"]')) {
+    const server = STATE.servers.find(s => s.id === node.dataset.id);
+    const badge = node.closest('.connection-card')?.querySelector('.connection-heading > .tag');
+    if (!server || !badge) continue;
+    const state = server.authKind === 'oauth' && !server.auth?.connected ? 'Sign-in needed' : server.health.state === 'disconnected' ? 'Disconnected' : server.health.state === 'error' ? 'Needs attention' : server.enabled === false ? 'Paused' : server.health.state === 'connected' ? 'Connected' : 'Not tested';
+    badge.outerHTML = tag(state, state === 'Connected' ? 'green' : state === 'Needs attention' ? 'red' : '');
+  }
+}
+
+function editProfile(id) {
+  const profile = STATE.routing.profiles?.find(p => p.id === id) || { providerIds: [], requirements: {} };
+  showDialog('Routing profile', `<form id="edit-form"><div class="dialog-body">${field('id', 'Profile name', id || '', { required: true, placeholder: 'coding' })}<p class="subtle">Enter provider names in priority order, one per line.</p>${field('providers', 'Provider order', profile.providerIds.map(id => STATE.providers.find(p => p.id === id)?.name || id).join('\n'), { multiline: true, required: true, rows: 5 })}<p class="subtle">Available: ${esc(STATE.providers.map(p => p.name).join(', '))}</p>${['tools', 'vision'].map(key => `<label class="check-label"><input type="checkbox" name="${key}" ${profile.requirements[key] ? 'checked' : ''}>Require ${key === 'tools' ? 'tool calling' : 'image input'}</label>`).join('')}${field('context', 'Minimum context window', profile.requirements.contextWindow || '', { type: 'number' })}<p class="subtle">Known incompatibilities are skipped. Unknown capabilities remain eligible.</p></div>${footer('Save profile')}</form>`);
+  bindForm(async (form, values) => {
+    const providerIds = values.providers.split('\n').filter(v => v.trim()).map(name => {
+      const p = STATE.providers.find(p => p.name.toLowerCase() === name.trim().toLowerCase()); if (!p) throw new Error(`Unknown provider: ${name}`); return p.id;
+    });
+    const next = { id: values.id, providerIds, requirements: { tools: !!values.tools, vision: !!values.vision, ...(values.context ? { contextWindow: Number(values.context) } : {}) } };
+    await api('/api/routing', { method: 'POST', body: { profiles: [...(STATE.routing.profiles || []).filter(p => p.id !== id), next] } });
+    closeDialog(); await loadWorkspace();
   });
 }
 
 function editSchedule(schedule = {}) {
   if (!STATE.providers.length) return toast('Add a provider before creating a schedule.', true);
   showDialog(schedule.id ? 'Edit routing window' : 'Route on your schedule', `<form id="edit-form"><div class="dialog-body"><div class="field"><label for="field-providerId">Provider</label><select id="field-providerId" name="providerId">${STATE.providers.map((provider) => `<option value="${provider.id}" ${schedule.providerId === provider.id ? 'selected' : ''}>${esc(provider.name)}</option>`).join('')}</select></div><div class="field-grid">${field('start', 'Start time', schedule.start || '01:30', { type: 'time', required: true })}${field('end', 'End time', schedule.end || '03:30', { type: 'time', required: true })}${field('label', 'Label', schedule.label, { full: true, placeholder: 'Overnight coding' })}${field('timezone', 'Timezone', schedule.timezone || Intl.DateTimeFormat().resolvedOptions().timeZone, { full: true, required: true })}</div><div class="field"><label>Days (leave empty for every day)</label><div class="inline-row">${['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'].map((day) => `<label class="check-label"><input name="days" value="${day}" type="checkbox" ${schedule.days?.includes(day) ? 'checked' : ''}>${day}</label>`).join('')}</div></div><label class="check-label"><input name="fallback" type="checkbox" ${schedule.fallbackOnFailure ? 'checked' : ''}>Use the fallback chain if the scheduled provider fails</label><p class="subtle" style="font-size:10px;margin-top:12px">An end time before the start time wraps past midnight.</p></div>${footer('Save window')}</form>`, 'ROUTING');
+  $('edit-form').querySelector('.dialog-body').insertAdjacentHTML('beforeend', '<p class="subtle">Weekdays refer to the start of an overnight window. First matching window wins; equal start/end times are invalid. DST follows local wall-clock time.</p><p id="schedule-preview" class="subtle" aria-live="polite"></p>');
+  let previewTimer, previewVersion = 0;
+  const preview = async () => {
+    const version = ++previewVersion, form = $('edit-form');
+    if (!form) return;
+    const values = Object.fromEntries(new FormData(form));
+    try {
+      const result = await api('/api/schedules/preview', { method: 'POST', body: { ...values, days: new FormData(form).getAll('days') } });
+      if (version === previewVersion && $('schedule-preview')) $('schedule-preview').textContent = `Next starts (${values.timezone}): ${result.starts.map(at => new Date(at).toLocaleString([], { timeZone: values.timezone })).join(' · ')}`;
+    } catch { if (version === previewVersion && $('schedule-preview')) $('schedule-preview').textContent = 'Enter valid times and timezone to preview upcoming starts.'; }
+  };
+  $('edit-form').addEventListener('input', () => { clearTimeout(previewTimer); previewTimer = setTimeout(preview, 400); });
+  preview();
   bindForm(async (form, values) => {
     try { new Intl.DateTimeFormat('en', { timeZone: values.timezone }); } catch { throw new Error('Enter a valid IANA timezone, such as Asia/Kolkata.'); }
     await api(schedule.id ? `/api/schedules/${schedule.id}` : '/api/schedules', { method: schedule.id ? 'PUT' : 'POST', body: {
@@ -578,6 +650,15 @@ async function previewSkill(id, marketplace = false) {
   catch (error) { closeDialog(); throw error; }
   const installedId = marketplace ? skill.installedId : skill.id;
   showDialog(skill.name, `<div class="dialog-body"><div class="preview-meta">${tag(skill.sourceName || 'Personal')}${tag(skill.license || 'License unspecified')}${skill.commit ? tag(skill.commit.slice(0, 8)) : ''}${installedId ? tag('Installed', 'green') : ''}</div><p class="details-description" style="margin-bottom:0">${esc(skill.description)}</p>${skill.sourceUrl ? `<a class="source-chip" style="margin-top:14px" href="${esc(skill.sourceUrl)}" target="_blank" rel="noopener noreferrer">${icon('github')}View original on GitHub ${icon('arrow-up-right')}</a>` : ''}<pre class="preview-text">${esc(skill.text)}</pre>${skill.files ? `<div class="preview-files">Bundle files: ${skill.files.map((file) => esc(file.path)).join(' · ')}</div>` : ''}</div><div class="dialog-footer">${button('Copy for chat', marketplace ? 'copy-market' : 'copy-skill', id, 'primary', 'copy')}${button('Copy SKILL.md', marketplace ? 'copy-market-raw' : 'copy-raw', id, 'quiet', 'file-text')}${marketplace && (!installedId || skill.updateAvailable) ? button(skill.updateAvailable ? 'Update skill' : 'Install skill', 'install-market', id, 'quiet', 'download') : ''}${installedId ? `<a class="button quiet" href="/api/skills/${installedId}/download">${icon('download')}Download</a>${iconButton('Delete installed skill', 'delete-skill', installedId, 'trash-2')}` : ''}</div>`, marketplace ? 'MARKETPLACE PREVIEW' : 'SKILL LIBRARY');
+  enhanceSkillPreview(skill, marketplace);
+}
+
+function enhanceSkillPreview(skill, marketplace) {
+  const area = $('dialog-content').querySelector('.dialog-body');
+  if (skill.changes?.length) area.insertAdjacentHTML('beforeend', `<h3>Changes from installed copy</h3>${skill.changes.map(f => `<p>${esc(f.status)} · <code>${esc(f.path)}</code></p>`).join('')}`);
+  if (skill.localContent) area.insertAdjacentHTML('beforeend', `<details><summary>Your locally edited SKILL.md</summary><pre class="preview-text">${esc(skill.localContent)}</pre></details>`);
+  if (!marketplace && skill.previousGeneration) $('dialog-content').querySelector('.dialog-footer').insertAdjacentHTML('beforeend', button('Roll back update', 'rollback-skill', skill.id, 'quiet', 'rotate-ccw'));
+  hydrateIcons();
 }
 
 async function copyText(text) {
@@ -632,11 +713,18 @@ async function handleAction(node) {
     case 'add-preset-model': return addPresetAccount(id, node.dataset.model);
     case 'import-providers': return importProviderKeys();
     case 'edit-provider': return editProvider(provider);
+    case 'edit-profile': return editProfile(id);
+    case 'delete-profile': await api('/api/routing', { method: 'POST', body: { profiles: STATE.routing.profiles.filter(p => p.id !== id) } }); return loadWorkspace();
+    case 'test-provider': {
+      const result = await api(`/api/providers/${id}/test`, { method: 'POST' });
+      toast(`${provider.name}: inference passed in ${result.latencyMs} ms`); return loadWorkspace();
+    }
+    case 'reset-provider': await api(`/api/providers/${id}/reset`, { method: 'POST' }); return loadWorkspace();
     case 'use-provider': await api('/api/active', { method: 'POST', body: { id } }); toast('Active provider changed'); return loadWorkspace();
     case 'toggle-provider': await api(`/api/providers/${id}`, { method: 'PUT', body: { enabled: provider.enabled === false } }); return loadWorkspace();
     case 'delete-provider': return confirmAction(`Delete ${provider.name}?`, 'The provider and its routing windows will be removed.', () => api(`/api/providers/${id}`, { method: 'DELETE' }));
     case 'copy-alias': await copyText(`${provider.slug}/${provider.defaultModel}`); return toast('Model alias copied');
-    case 'provider-tab': STATE.providerTab = id; return renderPage();
+    case 'provider-tab': STATE.providerTab = id; await loadPageData(); return renderPage();
     case 'routing-tab': STATE.providerTab = 'routing'; return;
     case 'set-mode': await api('/api/routing', { method: 'POST', body: { mode: id } }); return loadWorkspace();
     case 'reset-health': await api('/api/health/reset', { method: 'POST' }); toast('Provider cooldowns cleared'); return loadWorkspace();
@@ -650,7 +738,7 @@ async function handleAction(node) {
     case 'edit-schedule': return editSchedule(STATE.routing.schedules.find((entry) => entry.id === id));
     case 'delete-schedule': return confirmAction('Remove this routing window?', 'Normal routing will apply during this time.', () => api(`/api/schedules/${id}`, { method: 'DELETE' }));
     case 'add-mcp': return editMcp();
-    case 'mcp-tab': STATE.mcpTab = id; return renderPage();
+    case 'mcp-tab': STATE.mcpTab = id; await loadPageData(); return renderPage();
     case 'setup-integration': return openIntegration(id);
     case 'wizard-next': setupWizard.step = 1; return renderIntegrationWizard();
     case 'wizard-back': rememberWizardValues(); setupWizard.step = 0; return renderIntegrationWizard();
@@ -681,6 +769,7 @@ async function handleAction(node) {
     case 'add-skill': return editSkill();
     case 'edit-skill': return editSkill(id);
     case 'preview-skill': return previewSkill(id);
+    case 'rollback-skill': await api(`/api/skills/${id}/rollback`, { method: 'POST' }); previews.clear(); closeDialog(); toast('Previous skill version restored'); return loadWorkspace();
     case 'copy-skill': return copySkill(id);
     case 'copy-raw': return copySkill(id, false, true);
     case 'toggle-skill': await api(`/api/skills/${id}`, { method: 'PUT', body: { enabled: skill.enabled === false } }); return loadWorkspace();
@@ -767,7 +856,7 @@ $('login-form').addEventListener('submit', async (event) => {
 $('logout').addEventListener('click', async () => {
   try { await api('/api/logout', { method: 'POST' }); showLogin(); previews.clear(); } catch (error) { toast(error.message, true); }
 });
-$('refresh').addEventListener('click', () => { previews.clear(); loadWorkspace().then(() => toast('Workspace refreshed')).catch((error) => toast(error.message, true)); });
+$('refresh').addEventListener('click', () => { previews.clear(); pageLoads.clear(); loadWorkspace().then(() => toast('Workspace refreshed')).catch((error) => toast(error.message, true)); });
 window.addEventListener('hashchange', navigate);
 document.addEventListener('keydown', (event) => {
   if (event.key === '/' && !event.ctrlKey && !event.metaKey && !['INPUT', 'TEXTAREA', 'SELECT'].includes(event.target.tagName) && !$('editor-dialog').open && $('skill-search')) { event.preventDefault(); $('skill-search').focus(); }
@@ -783,15 +872,19 @@ loadWorkspace().then(handleOauthReturn).catch((error) => { if (error.message !==
 // Retain the original router's live routing refresh without repeatedly loading
 // the marketplace or interrupting forms and skill searches.
 let polling = false;
-setInterval(async () => {
+async function pollWorkspace() {
   if (!authenticated || document.hidden || loading || polling || $('editor-dialog').open || !['overview', 'providers', 'mcp'].includes(STATE.page)) return;
   polling = true;
   try {
     const [routing, overview, servers] = await Promise.all([api('/api/routing'), api('/api/overview'), api('/api/mcp/servers')]);
     STATE.routing = routing; STATE.overview = overview; STATE.servers = servers.items; STATE.mcpSessions = servers.sessions;
     document.querySelector('.gateway-status').innerHTML = '<span class="status-dot"></span>Gateway online';
-    if (!$('editor-dialog').open) renderPage();
+    if (!$('editor-dialog').open) {
+      if ($('live-route')) $('live-route').outerHTML = routePanel();
+      refreshActivity(); refreshLiveStatuses(); hydrateIcons();
+    }
   } catch (error) {
     document.querySelector('.gateway-status').textContent = 'Connection lost';
   } finally { polling = false; }
-}, 15000);
+}
+setInterval(pollWorkspace, 15000);

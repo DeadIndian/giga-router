@@ -1,6 +1,6 @@
-// routing logic tests — run: node test-routing.js
+// routing logic tests — run: node --test test/routing.test.js
 const assert = require('assert');
-const { toMinutes, matchSchedule, resolveCandidates, routingOf } = require('./server');
+const { toMinutes, matchSchedule, resolveCandidates, routingOf } = require('../server');
 
 let pass = 0, fail = 0;
 function t(name, fn) {

@@ -18,10 +18,10 @@ process.env.DATA_DIR = directory;
 process.env.ROUTER_KEY = 'test-gateway-key';
 process.env.user = 'tester';
 process.env.password = 'test-password';
-const { app, closeAllMcp } = require('./server');
-const { loadConfig, updateConfig, writeJson } = require('./lib/storage');
-const { parseGitHubSource } = require('./lib/github-source');
-const { parseSkill, indexSource, installSkill } = require('./lib/skills');
+const { app, closeAllMcp } = require('../server');
+const { loadConfig, updateConfig, writeJson } = require('../lib/storage');
+const { parseGitHubSource } = require('../lib/github-source');
+const { parseSkill, indexSource, installSkill } = require('../lib/skills');
 
 let listener, backend, base, cookie, mcpId, keyToken, keyId;
 const clients = [];
@@ -121,7 +121,7 @@ test('manual skill persistence keeps exact raw content and returns clean chat in
   assert.equal(archive.headers.get('content-type'), 'application/zip');
   const files = unzipSync(new Uint8Array(await archive.arrayBuffer()));
   assert.equal(strFromU8(files['code-review/SKILL.md']), rawSkill);
-  assert.equal(fs.readFileSync(path.join(directory, 'skills', result.data.id, 'files', 'SKILL.md'), 'utf8'), rawSkill);
+  assert.equal(fs.readFileSync(path.join(directory, result.data.portablePath, 'SKILL.md'), 'utf8'), rawSkill);
 });
 
 test('GitHub source parsing supports scoped URLs and refuses traversal or lookalike hosts', () => {
@@ -171,8 +171,8 @@ test('marketplace index/install uses pinned commits, includes supporting files a
   assert.equal((await request('/api/marketplace')).data.items[0].updateAvailable, true, 'Supporting file changes are updates even when SKILL.md is unchanged');
   index.tree = index.tree.filter((file) => !file.path.endsWith('scripts/check.py'));
   writeJson(path.join(directory, 'marketplace', 'test-source.json'), index);
-  await installSkill('test-source', 'skills/review', github);
-  assert.equal(fs.existsSync(path.join(directory, 'skills', installed.id, 'files', 'scripts', 'check.py')), false);
+  const updated = await installSkill('test-source', 'skills/review', github);
+  assert.equal(fs.existsSync(path.join(directory, updated.portablePath, 'scripts', 'check.py')), false);
   await request('/api/sources/test-source', 'DELETE');
   assert.equal((await request(`/api/skills/${installed.id}`)).status, 200);
 });
@@ -232,7 +232,7 @@ test('legacy SSE backends receive only their own credentials and complete a real
 });
 
 test('stdio backends work through HTTP and inherit only configured/safe environment values', async () => {
-  const added = await request('/api/mcp/servers', 'POST', { name: 'Local', slug: 'local', transport: 'stdio', command: process.execPath, args: [path.join(__dirname, 'fixtures', 'mcp-stdio.cjs')], env: { FIXTURE_VALUE: 'configured' } });
+  const added = await request('/api/mcp/servers', 'POST', { name: 'Local', slug: 'local', transport: 'stdio', command: process.execPath, args: [path.join(__dirname, '../fixtures', 'mcp-stdio.cjs')], env: { FIXTURE_VALUE: 'configured' } });
   assert.equal(added.status, 201);
   const discovery = await request(`/api/mcp/servers/${added.data.id}/discover`, 'POST');
   assert.equal(discovery.status, 200); assert.equal(discovery.data.items[0].name, 'local__echo');

@@ -4,6 +4,10 @@ Giga Router builds on the original LLM Router implementation and reuses the
 following open-source projects. The production dependencies below are MIT
 licensed. Full dependency notices are also included in their npm packages.
 
+Development-only interoperability tests use `openai@7.43.0` and
+`@anthropic-ai/sdk@1.1.0` (both Apache-2.0). They exercise the public streaming
+APIs against local fixtures and are excluded from the Docker production install.
+
 | Project | Version / source | Use |
 | --- | --- | --- |
 | [MCP TypeScript SDK](https://github.com/modelcontextprotocol/typescript-sdk) | npm `@modelcontextprotocol/sdk` 1.32.1 | MCP clients, HTTP/SSE/stdio transports, gateway server |
@@ -12,6 +16,7 @@ licensed. Full dependency notices are also included in their npm packages.
 | [js-yaml](https://github.com/nodeca/js-yaml) | 5.5.0 | SKILL.md YAML frontmatter |
 | [fflate](https://github.com/101arrowz/fflate) | 0.8.3 | Skill bundle ZIP downloads |
 | [Express](https://github.com/expressjs/express) | 4.22.3 | Existing HTTP server |
+| [eventsource-parser](https://github.com/rexxars/eventsource-parser) | 4.1.2 | Bounded SSE framing, including CR-only and split UTF-8 input (MIT) |
 | [MCP Memory server](https://github.com/modelcontextprotocol/servers/tree/main/src/memory) | npm `@modelcontextprotocol/server-memory` 2025.11.25 | Included local knowledge-graph tool (MIT release) |
 | [MCP Filesystem server](https://github.com/modelcontextprotocol/servers/tree/main/src/filesystem) | npm `@modelcontextprotocol/server-filesystem` 2025.12.18 | Included local shared-files tool (MIT release) |
 | [MCP Sequential Thinking server](https://github.com/modelcontextprotocol/servers/tree/main/src/sequentialthinking) | npm `@modelcontextprotocol/server-sequential-thinking` 2025.12.18 | Included local structured-thinking tool (MIT release) |

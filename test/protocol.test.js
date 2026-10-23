@@ -1,15 +1,15 @@
-// Self-check: sanitize + translation logic. Run: node test.js
+// Self-check: sanitize + translation logic. Run: node --test test/protocol.test.js
 const assert = require('assert');
-const S = require('./server');
+const S = require('../server');
 
 // sanitize: adaptive -> enabled with budget
 {
   const b = { thinking: { type: 'adaptive' } };
-  S.sanitizeThinking(b);
+  S.sanitizeThinking(b, { adaptiveToEnabled: true });
   assert.deepStrictEqual(b.thinking, { type: 'enabled', budget_tokens: 1024 });
 }
 { const b = { thinking: { type: 'adaptive', budget_tokens: 500 } };
-  S.sanitizeThinking(b);
+  S.sanitizeThinking(b, { adaptiveToEnabled: true });
   assert.strictEqual(b.thinking.budget_tokens, 1024); }
 { const b = { thinking: { type: 'enabled', budget_tokens: 2048 } };
   S.sanitizeThinking(b);
@@ -150,8 +150,11 @@ const S = require('./server');
   assert.deepStrictEqual(c3[0].choices[0].delta.tool_calls[0].function, { name: 'f', arguments: '' });
   const c4 = conv.onEvent({ type: 'content_block_delta', index: 1, delta: { type: 'input_json_delta', partial_json: '{"x":' } });
   assert.strictEqual(c4[0].choices[0].delta.tool_calls[0].function.arguments, '{"x":');
-  const c5 = conv.onEvent({ type: 'message_delta', delta: { stop_reason: 'tool_use' } });
-  assert.strictEqual(c5[0].choices[0].finish_reason, 'tool_calls');
+  conv.onEvent({ type: 'content_block_delta', index: 1, delta: { type: 'input_json_delta', partial_json: '1}' } });
+  conv.onEvent({ type: 'message_delta', delta: { stop_reason: 'tool_use' } });
+  conv.onEvent({ type: 'message_stop' });
+  const c5 = []; conv.forceStop(c5);
+  assert.strictEqual(c5.at(-1).choices[0].finish_reason, 'tool_calls');
 }
 
 // endpointUrl: with and without trailing /v1

@@ -1,6 +1,6 @@
 const assert = require('node:assert/strict');
 const { test } = require('node:test');
-const { snapshot, chatModel, verifyFreeLLMCatalog } = require('./lib/provider-models');
+const { snapshot, chatModel, verifyFreeLLMCatalog } = require('../lib/provider-models');
 
 test('community model filter excludes disabled entries and unsupported modalities', () => {
   const base = { modelId: 'chat-model', enabled: true };
