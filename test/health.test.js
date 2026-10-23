@@ -1,9 +1,9 @@
-// health / trip tests — run: node test-health.js
+// health / trip tests — run: node --test test/health.test.js
 const assert = require('assert');
 const {
   markFailure, markSuccess, isCooling, isTripped, healthy, healthSnapshot,
   health, resolveCandidates, TRIP_AFTER, FAIL_COOLDOWN_MS, TRIP_COOLDOWN_MS,
-} = require('./server');
+} = require('../server');
 
 let pass = 0, fail = 0;
 function t(name, fn) {

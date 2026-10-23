@@ -9,6 +9,8 @@ services:
     environment:
       NODE_ENV: production
       DATA_DIR: /app/data
+      PORT: 3002
+      HOST: 0.0.0.0
     # Localhost by default — set HOST_BIND=0.0.0.0 in .env for LAN access.
     ports:
       - "${HOST_BIND:-127.0.0.1}:${PORT:-3002}:3002"

@@ -6,3 +6,4 @@ data/
 config-backup-*.json
 *.log
 .gstack/
+_site/

@@ -12,10 +12,10 @@ process.env.DATA_DIR = dataDir;
 process.env.user = 'defaults-user';
 process.env.password = 'defaults-password';
 process.env.GIGA_ROUTER_DEFAULT_MARKETPLACES = 'true';
-const { app } = require('./server');
-const { loadConfig, saveConfig, writeJson } = require('./lib/storage');
-const { DEFAULT_MARKETPLACES, SNAPSHOT_DIR, seedDefaultMarketplaces } = require('./lib/marketplace-defaults');
-const { listMarketplace, previewEntry } = require('./lib/skills');
+const { app } = require('../server');
+const { loadConfig, saveConfig, writeJson } = require('../lib/storage');
+const { DEFAULT_MARKETPLACES, SNAPSHOT_DIR, seedDefaultMarketplaces } = require('../lib/marketplace-defaults');
+const { listMarketplace, previewEntry } = require('../lib/skills');
 
 const manifest = JSON.parse(fs.readFileSync(path.join(SNAPSHOT_DIR, 'manifest.json'), 'utf8'));
 let listener, base, cookie;
@@ -71,7 +71,7 @@ test('built-in removal persists across a new process and keeps installed copies'
   assert.equal(removed.status, 200);
   assert.deepEqual(loadConfig().removedDefaultMarketplaces, ['superpowers']);
   assert.equal(fs.existsSync(path.join(dataDir, 'marketplace', `${source.id}.json`)), false);
-  const child = execFileSync(process.execPath, ['-e', 'const {seedDefaultMarketplaces}=require("./lib/marketplace-defaults");const {loadConfig}=require("./lib/storage");seedDefaultMarketplaces();console.log(JSON.stringify(loadConfig().sources.map(s=>s.builtinId)))'], { cwd: __dirname, env: { ...process.env, DATA_DIR: dataDir } });
+  const child = execFileSync(process.execPath, ['-e', 'const {seedDefaultMarketplaces}=require("./lib/marketplace-defaults");const {loadConfig}=require("./lib/storage");seedDefaultMarketplaces();console.log(JSON.stringify(loadConfig().sources.map(s=>s.builtinId)))'], { cwd: path.join(__dirname, '..'), env: { ...process.env, DATA_DIR: dataDir } });
   assert.equal(JSON.parse(child).includes('superpowers'), false);
   assert.equal((await request(`/api/skills/${local.data.id}`)).status, 200);
   const marketplace = await request('/api/marketplace');

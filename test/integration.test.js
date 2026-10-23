@@ -9,7 +9,7 @@ const path = require('node:path');
 const dataDir = fs.mkdtempSync(path.join(os.tmpdir(), 'llmrouter-test-'));
 process.env.DATA_DIR = dataDir;
 process.env.ROUTER_KEY = 'test-router-key';
-const { app, readSSE } = require('./server');
+const { app, readSSE } = require('../server');
 
 let router, upstream, origin, respond;
 const requests = [];
@@ -146,7 +146,7 @@ test('OpenCode non-streaming requests keep the OpenAI response format', async ()
 });
 
 test('OpenCode streaming requests pass through unchanged', async () => {
-  const stream = frame({ choices: [{ delta: { content: 'OK' } }] }) + 'data: [DONE]\n\n';
+  const stream = frame({ choices: [{ delta: { content: 'OK' } }] }) + frame({ choices: [{ delta: {}, finish_reason: 'stop' }] }) + 'data: [DONE]\n\n';
   respond = (res) => { res.setHeader('content-type', 'text/event-stream'); res.end(stream); };
   const res = await post('/v1/chat/completions', { ...prompt, stream: true });
   assert.equal(await res.text(), stream);
@@ -193,10 +193,10 @@ test('upstream stream errors are not disguised as successful empty messages', as
     res.end(frame({ error: { message: 'test stream failed' } }));
   };
   const res = await post('/v1/messages', { ...prompt, stream: true });
-  const events = eventsOf(await res.text());
-  assert.equal(events.at(-1).type, 'error');
-  assert.match(events.at(-1).error.message, /test stream failed/);
-  assert.ok(!events.some((e) => e.type === 'message_stop'));
+  assert.equal(res.status, 502, 'startup-only failure is returned before committing a stream');
+  const error = await res.json();
+  assert.equal(error.type, 'error');
+  assert.match(error.error.message, /test stream failed/);
 });
 
 test('SSE parser handles split UTF-8 bytes, CRLF, multiline data, and final data without a newline', async () => {

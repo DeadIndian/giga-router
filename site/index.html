@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#17191d">
+  <title>Giga Router — Your AI stack. One way in.</title>
+  <meta name="description" content="One self-hosted connection for your AI models, MCP tools, and skills. Bring your API keys, choose your routes, and connect your favorite clients.">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Giga Router — Your AI stack. One way in.">
+  <meta property="og:description" content="Models, tools, and skills. Connected through one self-hosted workspace.">
+  <meta property="og:url" content="__SITE_URL__/">
+  <meta name="twitter:card" content="summary">
+  <link rel="canonical" href="__SITE_URL__/">
+  <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./styles.css">
+  <script src="./site.js" defer></script>
+</head>
+<body>
+  <svg class="symbols" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <symbol id="arrow" viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6"/></symbol>
+    <symbol id="external" viewBox="0 0 24 24"><path d="M7 17 17 7M7 7h10v10"/></symbol>
+    <symbol id="copy" viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V4H4v12h4"/></symbol>
+    <symbol id="terminal" viewBox="0 0 24 24"><path d="m5 6 6 6-6 6m9 0h5"/></symbol>
+    <symbol id="route" viewBox="0 0 24 24"><circle cx="6" cy="5" r="2"/><circle cx="6" cy="19" r="2"/><circle cx="18" cy="5" r="2"/><path d="M6 7v10m12-10c0 7-12 3-12 10"/></symbol>
+    <symbol id="layers" viewBox="0 0 24 24"><path d="m12 3 10 5-10 5L2 8l10-5Zm-10 9 10 5 10-5M2 16l10 5 10-5"/></symbol>
+    <symbol id="plug" viewBox="0 0 24 24"><path d="M8 3v5m8-5v5M6 8h12v3a6 6 0 0 1-12 0V8Zm6 9v4"/></symbol>
+    <symbol id="check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></symbol>
+    <symbol id="box" viewBox="0 0 24 24"><path d="m12 3 9 5v8l-9 5-9-5V8l9-5Zm0 10 9-5M12 13 3 8m9 5v8M7.5 5.5l9 5"/></symbol>
+    <symbol id="menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></symbol>
+    <symbol id="shield" viewBox="0 0 24 24"><path d="m12 3 8 3v6c0 5-8 9-8 9s-8-4-8-9V6l8-3Z"/><path d="m8 12 3 3 5-6"/></symbol>
+    <symbol id="clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+  </svg>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="#" aria-label="Giga Router home"><img src="./assets/favicon.svg" alt="" width="36" height="36"><span>Giga Router<span class="brand-period">.</span></span></a>
+      <button class="menu-toggle" type="button" aria-label="Toggle navigation" aria-expanded="false" aria-controls="navigation" hidden><svg class="icon" aria-hidden="true"><use href="#menu"/></svg></button>
+      <nav id="navigation" aria-label="Main navigation">
+        <a href="#features">Why Giga Router</a><a href="#how-it-works">How it works</a><a href="#quick-start">Quick start</a>
+        <a class="nav-github" href="__REPO_URL__">GitHub <svg class="icon" aria-hidden="true"><use href="#external"/></svg></a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero container" aria-labelledby="hero-heading">
+      <div class="hero-copy">
+        <div class="eyebrow"><span class="status-dot"></span> SELF-HOSTED. FULLY YOURS.</div>
+        <h1 id="hero-heading">Your AI stack.<br><span>One way in.</span></h1>
+        <p class="hero-description">Your models, tools, and skills deserve to work together. Bring them into one workspace. Connect your favorite client. Get back to building.</p>
+        <div class="hero-actions"><a class="button primary" href="#quick-start">Get started <svg class="icon" aria-hidden="true"><use href="#arrow"/></svg></a><a class="button secondary" href="__REPO_URL__">Explore the code <svg class="icon" aria-hidden="true"><use href="#external"/></svg></a></div>
+        <div class="hero-notes"><span><svg class="icon" aria-hidden="true"><use href="#check"/></svg> Your API keys</span><span><svg class="icon" aria-hidden="true"><use href="#check"/></svg> Your infrastructure</span><span><svg class="icon" aria-hidden="true"><use href="#check"/></svg> One connection</span></div>
+      </div>
+
+      <div class="route-demo" role="group" aria-label="Interactive routing illustration">
+        <div class="demo-chrome"><div class="window-dots" aria-hidden="true"><i></i><i></i><i></i></div><span>giga-router / routing</span><span class="demo-label">INTERACTIVE EXAMPLE</span></div>
+        <div class="demo-body">
+          <div class="route-source"><div class="source-icon"><svg class="icon" aria-hidden="true"><use href="#terminal"/></svg></div><div><span class="tiny-label">YOUR CLIENT</span><strong>One request. Your rules.</strong></div><span class="request-badge">POST</span></div>
+          <div class="connector" aria-hidden="true"><span></span><svg class="icon"><use href="#arrow"/></svg></div>
+          <div class="router-node"><img src="./assets/favicon.svg" alt="" width="38" height="38"><div><strong>Giga Router</strong><code id="route-intent">profile/coding</code></div><span class="router-status"><span class="status-dot"></span> Ready to route</span></div>
+          <div class="demo-tabs" role="tablist" aria-label="Routing scenario">
+            <button type="button" role="tab" id="tab-priority" aria-selected="true" aria-controls="route-example" data-scenario="priority">Priority</button>
+            <button type="button" role="tab" id="tab-fallback" aria-selected="false" aria-controls="route-example" tabindex="-1" data-scenario="fallback">Failover</button>
+            <button type="button" role="tab" id="tab-capabilities" aria-selected="false" aria-controls="route-example" tabindex="-1" data-scenario="capabilities">Capabilities</button>
+          </div>
+          <div id="route-example" role="tabpanel" aria-labelledby="tab-priority" tabindex="0">
+            <div class="route-row" data-state="selected"><span class="route-index">01</span><div class="route-provider"><strong>Local model</strong><span class="route-detail">First eligible provider in your chain</span></div><span class="route-state">Selected</span></div>
+            <div class="route-row" data-state="standby"><span class="route-index">02</span><div class="route-provider"><strong>Cloud · primary</strong><span class="route-detail">Ready when you need it</span></div><span class="route-state">Standby</span></div>
+            <div class="route-row" data-state="standby"><span class="route-index">03</span><div class="route-provider"><strong>Cloud · backup</strong><span class="route-detail">Next in the fallback chain</span></div><span class="route-state">Standby</span></div>
+          </div>
+          <p class="route-summary" id="route-summary" aria-live="polite"><svg class="icon" aria-hidden="true"><use href="#route"/></svg><span>Your priority order. The first eligible provider gets the request.</span></p>
+        </div>
+        <div class="demo-footer"><span><span class="status-dot"></span> Illustration only · no live requests</span><span>TRY A SCENARIO ↑</span></div>
+      </div>
+    </section>
+
+    <section class="compatibility container" aria-label="Supported connections"><p>MADE FOR THE WAY YOU ALREADY WORK</p><div><span>OpenAI-compatible</span><i aria-hidden="true">/</i><span>Anthropic Messages</span><i aria-hidden="true">/</i><span>MCP</span><i aria-hidden="true">/</i><span>Local models</span></div></section>
+
+    <section class="features container section" id="features" aria-labelledby="features-heading">
+      <div class="section-heading"><div><p class="eyebrow">A LITTLE LESS PLUMBING</p><h2 id="features-heading">All the pieces.<br>A better place for them.</h2></div><p>Switch models without rewiring your clients. Add tools without repeating setup. Keep your best instructions close.</p></div>
+      <div class="feature-grid">
+        <article class="feature-card models-card"><div class="feature-icon"><svg class="icon" aria-hidden="true"><use href="#route"/></svg></div><h3>Many models.<br>One front door.</h3><p>Bring your OpenAI-compatible, Anthropic, or local endpoints. Choose priority chains, scheduled routes, or named profiles for the way you work.</p><div class="endpoint-preview"><span class="tiny-label">YOUR CLIENT SEES</span><code>http://localhost:3002/v1</code><div><span>Local</span><span>Cloud</span><span>Your next model</span></div></div><a class="text-link" href="__REPO_URL__/blob/main/docs/compatibility.md">Explore API compatibility <svg class="icon" aria-hidden="true"><use href="#external"/></svg></a></article>
+        <article class="feature-card tools-card"><div class="feature-icon"><svg class="icon" aria-hidden="true"><use href="#plug"/></svg></div><h3>A toolbox that<br>travels with you.</h3><p>Connect MCP servers to the router once. Give your assistants a single endpoint, with scoped keys for the tools they can access.</p><div class="tool-grid" role="group" aria-label="Example MCP integrations"><span><svg class="icon" aria-hidden="true"><use href="#box"/></svg> Files</span><span><svg class="icon" aria-hidden="true"><use href="#layers"/></svg> Memory</span><span><svg class="icon" aria-hidden="true"><use href="#terminal"/></svg> GitHub</span><span class="tool-extra">+ your tools</span></div><a class="text-link" href="__REPO_URL__/blob/main/docs/mcp-integrations.md">Meet your integrations <svg class="icon" aria-hidden="true"><use href="#external"/></svg></a></article>
+        <article class="feature-card skills-card"><div class="feature-icon"><svg class="icon" aria-hidden="true"><use href="#layers"/></svg></div><h3>Good instructions.<br>Always within reach.</h3><p>Browse skill catalogs, preview instructions, and install complete bundles. Copy them into a chat or load them over MCP. Roll back an update when you need to.</p><div class="skill-preview"><div><span class="file-mark">MD</span><strong>SKILL.md</strong><span class="saved-label">Installed</span></div><span class="tiny-label">YOUR NEXT CODE REVIEW</span><p>Read the diff. Trace the behavior.<br>Focus on what matters.</p></div><a class="text-link" href="__REPO_URL__#skills-and-marketplace">Build your skill library <svg class="icon" aria-hidden="true"><use href="#external"/></svg></a></article>
+      </div>
+      <div class="principles"><article><svg class="icon" aria-hidden="true"><use href="#shield"/></svg><div><h3>Your workspace, your keys</h3><p>A self-hosted, single-user service. Provider keys stay on your router.</p></div></article><article><svg class="icon" aria-hidden="true"><use href="#clock"/></svg><div><h3>Failures you can understand</h3><p>See attempts, timing, cooldowns, and why a provider was skipped.</p></div></article><article><svg class="icon" aria-hidden="true"><use href="#check"/></svg><div><h3>Fewer moving parts</h3><p>One Node.js service, a local dashboard, and persistent data you own.</p></div></article></div>
+    </section>
+
+    <section class="workflow section" id="how-it-works" aria-labelledby="workflow-heading"><div class="container workflow-grid">
+      <div class="workflow-copy"><p class="eyebrow">SMALL SETUP. LONG-TERM SIMPLICITY.</p><h2 id="workflow-heading">Connect once.<br>Keep your<br> <span>options open.</span></h2><p>Your editor talks to Giga Router. You decide what’s behind it, from the dashboard.</p><a class="text-link" href="__REPO_URL__#connect-a-client">Find your client setup <svg class="icon" aria-hidden="true"><use href="#external"/></svg></a></div>
+      <ol class="steps"><li><span class="step-number">01</span><div><h3>Bring what you already use</h3><p>Add an endpoint, API key, and default model. Use a bundled provider preset or your own configuration.</p><span class="step-chip">Providers & routing</span></div></li><li><span class="step-number">02</span><div><h3>Give your client one address</h3><p>Point your editor or agent at the router. Use its access key for model requests and the MCP gateway.</p><span class="step-chip">Access & endpoints</span></div></li><li><span class="step-number">03</span><div><h3>Make the route your own</h3><p>Prefer a local model. Set up a fallback. Save a coding profile. Your client configuration can stay put.</p><span class="step-chip">profile/coding</span></div></li></ol>
+    </div></section>
+
+    <section class="quick-start section" id="quick-start" aria-labelledby="start-heading"><div class="container start-grid">
+      <div class="start-copy"><p class="eyebrow">LET’S GET YOU CONNECTED</p><h2 id="start-heading">Less setup.<br> More making.</h2><p>Take the dashboard for a spin, or give it a permanent home with Docker.</p><div class="start-requirements"><svg class="icon" aria-hidden="true"><use href="#terminal"/></svg><span>Preview: Node.js __MIN_NODE__+ and npm.<br>Docker: Docker Engine and Compose.</span></div><a class="text-link" href="__REPO_URL__#quick-start">Read the full installation guide <svg class="icon" aria-hidden="true"><use href="#external"/></svg></a></div>
+      <div class="install-card">
+        <div class="install-tabs" role="tablist" aria-label="Installation method"><button id="install-preview-tab" type="button" role="tab" aria-selected="true" aria-controls="install-preview">Try a preview <span>DISPOSABLE</span></button><button id="install-docker-tab" type="button" role="tab" aria-selected="false" aria-controls="install-docker" tabindex="-1">Docker install</button></div>
+        <div id="install-preview" role="tabpanel" aria-labelledby="install-preview-tab" tabindex="0"><div class="code-header"><span>TERMINAL</span><button class="copy-button" type="button" data-copy="preview-code" aria-label="Copy preview commands"><svg class="icon" aria-hidden="true"><use href="#copy"/></svg><span>Copy</span></button></div><pre><code id="preview-code">git clone __CLONE_URL__
+cd __PROJECT_DIR__
+npm ci
+npm run preview</code></pre><div class="install-note"><span class="note-number">↗</span><p>Open the local address printed in your terminal.<br>Sign in with <code>preview</code> / <code>preview-password</code>.</p></div><p class="install-footnote">Uses a random loopback port and temporary data. Ctrl+C stops the preview and removes its workspace.</p></div>
+        <div id="install-docker" role="tabpanel" aria-labelledby="install-docker-tab" tabindex="0" hidden><div class="code-header"><span>1 / GET THE PROJECT</span><button class="copy-button" type="button" data-copy="docker-code" aria-label="Copy Docker setup commands"><svg class="icon" aria-hidden="true"><use href="#copy"/></svg><span>Copy</span></button></div><pre><code id="docker-code">git clone __CLONE_URL__
+cd __PROJECT_DIR__
+cp .env.example .env</code></pre><div class="install-note"><span class="note-number">2</span><p>Edit <code>.env</code> and set your dashboard <code>user</code>, <code>password</code>, and a random <code>ROUTER_KEY</code>.</p></div><div class="code-header"><span>3 / START THE ROUTER</span><button class="copy-button" type="button" data-copy="docker-start-code" aria-label="Copy Docker start command"><svg class="icon" aria-hidden="true"><use href="#copy"/></svg><span>Copy</span></button></div><pre class="short-code"><code id="docker-start-code">docker compose up -d --build --wait</code></pre><p class="install-footnote">Open <code>http://localhost:3002</code>. Your settings persist in a Docker volume. <a href="__REPO_URL__/blob/main/docs/operations.md">Updating an existing installation?</a></p></div>
+      </div>
+    </div></section>
+
+    <section class="faq container section" aria-labelledby="faq-heading"><div><p class="eyebrow">THE USEFUL DETAILS</p><h2 id="faq-heading">Good questions.<br>Straight answers.</h2><a class="text-link" href="__REPO_URL__/issues">Ask on GitHub <svg class="icon" aria-hidden="true"><use href="#external"/></svg></a></div><div class="faq-list">
+      <details><summary>Does this run on GitHub Pages?<span aria-hidden="true">+</span></summary><p>This project website does. The router itself runs on your own computer or server using Node.js or Docker. GitHub Pages serves static files and cannot run the router’s APIs.</p></details>
+      <details><summary>Do I bring my own API keys?<span aria-hidden="true">+</span></summary><p>Yes. Add your documented provider API keys, or connect an auth-less local endpoint. Your clients use a Giga Router access key. Provider presets help with setup; they don’t grant credits or guarantee free access.</p></details>
+      <details><summary>What happens when a provider fails?<span aria-hidden="true">+</span></summary><p>In auto mode, eligible startup failures can try the next provider in your chain. After output begins, an error is reported instead of mixing responses from different models. The dashboard explains attempts and cooldowns.</p></details>
+      <details><summary>Will every API feature work with every model?<span aria-hidden="true">+</span></summary><p>Native routes retain provider-specific features. Translation between Chat Completions and Messages supports a documented subset. Responses forwarding requires a provider with that capability enabled. See the <a href="__REPO_URL__/blob/main/docs/compatibility.md">compatibility guide</a> for the details.</p></details>
+      <details><summary>Can I use it with a team?<span aria-hidden="true">+</span></summary><p>Giga Router is designed as a single-user workspace. Scoped access keys let your own clients use different APIs and MCP servers. It isn’t a multi-tenant account or billing platform.</p></details>
+    </div></section>
+
+    <section class="closing container"><div class="closing-mark"><img src="./assets/favicon.svg" alt="" width="56" height="56"></div><h2>Make your AI stack<br><span>feel like your own.</span></h2><p>One workspace. A lot of possibilities.</p><a class="button primary" href="#quick-start">Start routing <svg class="icon" aria-hidden="true"><use href="#arrow"/></svg></a></section>
+  </main>
+  <footer class="container site-footer"><div><a class="brand" href="#"><img src="./assets/favicon.svg" alt="" width="28" height="28"><span>Giga Router</span></a><p>Routing without the fuss.</p></div><nav aria-label="Footer navigation"><a href="__REPO_URL__">Source code</a><a href="__REPO_URL__#documentation">Documentation</a><a href="__REPO_URL__/issues">Issues & ideas</a></nav><span class="footer-note">Built for your own corner of the internet.</span></footer>
+  <p id="copy-status" class="sr-only" role="status"></p>
+</body>
+</html>
