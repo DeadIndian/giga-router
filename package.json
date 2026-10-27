@@ -3,10 +3,17 @@
   "version": "1.1.0",
   "description": "A no-fuss router for your models, tools, and skills",
   "private": true,
+  "engines": {
+    "node": ">=22.12"
+  },
   "scripts": {
-    "start": "node server.js",
-    "test": "node --test test.js test-*.js",
-    "check": "node --check server.js && node --check public/app.js && node --check lib/auth.js && node --check lib/mcp.js && node --check lib/skills.js && node --check lib/storage.js && node --check lib/github-source.js && node --check lib/validation.js && node --check lib/activity.js && node --check lib/marketplace-defaults.js && node --check lib/mcp-catalog.js && node --check lib/provider-catalog.js && node --check lib/mcp-integrations.js && node --check lib/mcp-oauth.js && node --check lib/mcp-vault.js && node --check scripts/update-marketplaces.js && node --check scripts/capture-branding.cjs && bash -n scripts/deploy-local.sh && node --check lib/provider-models.js && node --check scripts/update-provider-models.js",
+    "start": "node --env-file-if-exists=.env server.js",
+    "test": "node --test test/*.test.js",
+    "check": "node scripts/check.cjs",
+    "preview": "node scripts/preview.cjs",
+    "build:site": "node scripts/build-site.cjs",
+    "preview:site": "node scripts/preview-site.cjs",
+    "test:site": "node scripts/check-site.cjs",
     "update:marketplaces": "node scripts/update-marketplaces.js",
     "update:providers": "node scripts/update-provider-models.js"
   },
@@ -15,9 +22,14 @@
     "@modelcontextprotocol/server-filesystem": "2025.12.18",
     "@modelcontextprotocol/server-memory": "2025.11.25",
     "@modelcontextprotocol/server-sequential-thinking": "2025.12.18",
+    "eventsource-parser": "4.1.2",
     "express": "4.22.3",
     "feather-icons": "4.29.2",
     "fflate": "0.8.3",
     "js-yaml": "5.5.0"
+  },
+  "devDependencies": {
+    "@anthropic-ai/sdk": "1.1.0",
+    "openai": "7.43.0"
   }
 }

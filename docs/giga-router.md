@@ -2,7 +2,9 @@
 
 ## Existing foundation
 
-The app is the existing Express/Node 22 router in `server.js`. Its provider
+The app uses Express and Node 22.12+. `server.js` composes focused modules in
+`lib/llm/`; see [the current code map](../CONTEXT.md) and
+[compatibility guide](compatibility.md). Its provider
 configuration and routing windows live in `DATA_DIR/config.json`. The running
 Docker service uses the `llmrouter_llmrouter-data` volume by default, explicitly
 mapped so a folder rename preserves existing data. Compose also keeps the

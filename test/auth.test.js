@@ -13,8 +13,8 @@ test('single-user password changes authenticate, persist, and revoke old dashboa
   process.env.password = 'original-password';
   process.env.ROUTER_KEY = 'unchanged-gateway-key';
   const express = require('express');
-  const { mountAuth } = require('./lib/auth');
-  const { saveConfig } = require('./lib/storage');
+  const { mountAuth } = require('../lib/auth');
+  const { saveConfig } = require('../lib/storage');
   saveConfig({ providers: [{ id: 'kept-provider' }], skills: [], mcpServers: [], sources: [], accessKeys: [] });
   const configBefore = fs.readFileSync(path.join(dataDir, 'config.json'));
   const app = express(); app.use(express.json()); mountAuth(app);
@@ -77,7 +77,7 @@ test('single-user password changes authenticate, persist, and revoke old dashboa
     await t.test('a fresh process uses the saved password instead of its environment password', async () => {
       listener.closeAllConnections(); await new Promise(resolve => listener.close(resolve));
       child = spawn(process.execPath, ['-e', `const express=require('express');const app=express();app.use(express.json());require('./lib/auth').mountAuth(app);const server=app.listen(0,'127.0.0.1',()=>console.log(server.address().port));`], {
-        cwd: __dirname, env: { ...process.env, password: 'different-environment-password' }, stdio: ['ignore', 'pipe', 'pipe'],
+        cwd: path.join(__dirname, '..'), env: { ...process.env, password: 'different-environment-password' }, stdio: ['ignore', 'pipe', 'pipe'],
       });
       let output = '';
       await new Promise((resolve, reject) => {

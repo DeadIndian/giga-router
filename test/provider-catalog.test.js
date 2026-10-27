@@ -5,7 +5,7 @@ const os = require('node:os');
 const path = require('node:path');
 const { once } = require('node:events');
 const { spawnSync } = require('node:child_process');
-const { catalog, accountPreset, importAccounts } = require('./lib/provider-catalog');
+const { catalog, accountPreset, importAccounts } = require('../lib/provider-catalog');
 
 test('catalog distinguishes verified free tiers from evaluation and unverified presets', () => {
   const entries = catalog();
@@ -79,16 +79,16 @@ with sqlite3.connect(sys.argv[1]) as db:
  db.execute('CREATE TABLE provider_connections (provider TEXT, name TEXT, api_key TEXT, default_model TEXT, auth_type TEXT)')
  db.executemany('INSERT INTO provider_connections VALUES (?,?,?,?,?)', [('groq','Personal','fake-private-key',None,'apikey'),('groq','Browser','fake-session-key','model','oauth')])`, database]);
     assert.equal(create.status, 0, create.stderr?.toString());
-    const run = spawnSync('python3', [path.join(__dirname, 'scripts/export-omniroute-keys.py'), '--database', database, '--output', output]);
+    const run = spawnSync('python3', [path.join(__dirname, '../scripts/export-omniroute-keys.py'), '--database', database, '--output', output]);
     assert.equal(run.status, 0, run.stderr?.toString());
     assert.equal(run.stdout.toString().includes('fake-private-key'), false);
     const exported = JSON.parse(fs.readFileSync(output));
     assert.equal(exported.accounts.length, 1); assert.equal(exported.accounts[0].apiKey, 'fake-private-key');
     assert.equal(fs.readFileSync(output, 'utf8').includes('fake-session-key'), false);
     if (process.platform !== 'win32') assert.equal(fs.statSync(output).mode & 0o777, 0o600);
-    const repeated = spawnSync('python3', [path.join(__dirname, 'scripts/export-omniroute-keys.py'), '--database', database, '--output', output]);
+    const repeated = spawnSync('python3', [path.join(__dirname, '../scripts/export-omniroute-keys.py'), '--database', database, '--output', output]);
     assert.notEqual(repeated.status, 0);
-    const listing = spawnSync('python3', [path.join(__dirname, 'scripts/export-omniroute-keys.py'), '--database', database, '--list']);
+    const listing = spawnSync('python3', [path.join(__dirname, '../scripts/export-omniroute-keys.py'), '--database', database, '--list']);
     assert.equal(listing.status, 0); assert.equal(listing.stdout.toString().includes('fake-private-key'), false);
   } finally { fs.rmSync(directory, { recursive: true, force: true }); }
 });
@@ -98,8 +98,8 @@ test('account APIs preserve routing, isolate credentials, and apply imports atom
   process.env.DATA_DIR = dataDir;
   process.env.user = 'provider-user'; process.env.password = 'provider-password';
   process.env.ROUTER_KEY = 'test-gateway-key';
-  const { app, resolveCandidates, buildUpstream } = require('./server');
-  const { saveConfig, loadConfig } = require('./lib/storage');
+  const { app, resolveCandidates, buildUpstream } = require('../server');
+  const { saveConfig, loadConfig } = require('../lib/storage');
   const routing = { mode: 'manual', autoOrder: ['kept'], schedules: [{ id: 'window', providerId: 'kept', start: '01:00', end: '02:00' }] };
   saveConfig({ providers: [{ id: 'kept', name: 'Existing', type: 'openai', baseUrl: 'https://existing.example/v1', defaultModel: 'existing-model', apiKey: 'existing-private-key' }], activeId: 'kept', routing });
   const listener = app.listen(0, '127.0.0.1');

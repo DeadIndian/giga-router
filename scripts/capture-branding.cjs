@@ -32,6 +32,22 @@ async function capture() {
     await page.getByLabel('Password', { exact: true }).fill('preview-password');
     await page.getByRole('button', { name: 'Open workspace' }).click();
     await page.waitForSelector('#app:not([hidden])');
+    // An optional catalog outage must not make the signed-in workspace unusable.
+    await page.route('**/api/providers/catalog', route => route.fulfill({ status: 503, contentType: 'application/json', body: '{"error":"fixture unavailable"}' }));
+    await page.locator('nav a[href="#providers"]').click();
+    await page.getByRole('button', { name: 'Free APIs', exact: true }).click();
+    await page.locator('nav a[href="#overview"]').click();
+    await page.getByRole('heading', { name: 'Live routing', exact: true }).waitFor();
+    await page.unroute('**/api/providers/catalog');
+    require('../lib/activity').recordActivity({ kind: 'llm', name: 'Fixture provider', requestId: 'fixture-request', status: 'ok', durationMs: 5, attempts: [] });
+    await page.evaluate(() => pollWorkspace());
+    await page.locator('#recent-activity').getByText('Fixture provider', { exact: true }).waitFor();
+    await page.getByText('Request details', { exact: true }).click();
+    const details = await page.locator('#recent-activity details').elementHandle();
+    await page.evaluate(() => pollWorkspace());
+    if (!await details.evaluate(node => node.isConnected && node.open)) throw Error('Refresh replaced expanded request details');
+    await page.getByText('Request details', { exact: true }).click();
+    await details.dispose();
     await page.screenshot({ path: path.join(output, 'overview.png') });
     await page.locator('nav a[href="#marketplace"]').click();
     await page.waitForSelector('.skill-card');
@@ -60,6 +76,10 @@ async function capture() {
     await page.getByLabel('Custom model ID', { exact: true }).fill('custom-preview-model');
     await page.getByRole('button', { name: 'Cancel', exact: true }).click();
     await page.getByLabel('Find a provider or model', { exact: true }).fill('DeepSeek');
+    const stableSearch = await page.getByLabel('Find a provider or model', { exact: true }).elementHandle();
+    await page.evaluate(() => pollWorkspace());
+    if (!await stableSearch.evaluate(node => node === document.activeElement && node.value === 'DeepSeek')) throw Error('Background refresh replaced the active search control');
+    await stableSearch.dispose();
     if (await page.locator('.provider-card').count() < 3) throw Error('Model search did not find multiple providers');
     await page.getByLabel('Free access', { exact: true }).selectOption('free');
     await page.getByRole('heading', { name: 'Source-listed free access', exact: true }).waitFor({ state: 'hidden' });
@@ -82,6 +102,21 @@ async function capture() {
     await page.locator('tbody tr').filter({ hasText: 'Groq · Personal' }).waitFor();
     await page.locator('tbody tr').filter({ hasText: 'Groq · Work' }).waitFor();
     await page.locator('tbody tr').filter({ hasText: 'Mistral · Imported' }).waitFor();
+    await page.locator('tbody tr').filter({ hasText: 'Groq · Personal' }).getByRole('button', { name: 'Edit provider', exact: true }).click();
+    await page.getByText('Model capabilities', { exact: true }).click();
+    await page.getByLabel('Native Responses API', { exact: true }).selectOption('true');
+    await page.locator('#edit-form button[type="submit"]').click();
+    await page.waitForSelector('#editor-dialog:not([open])', { state: 'attached' });
+    await page.getByRole('button', { name: 'Routing & schedules', exact: true }).click();
+    await page.getByRole('button', { name: 'Add profile', exact: true }).click();
+    await page.getByLabel('Profile name', { exact: true }).fill('coding');
+    await page.getByLabel('Provider order', { exact: true }).fill('Groq · Personal\nGroq · Work');
+    await page.getByRole('button', { name: 'Save profile', exact: true }).click();
+    await page.getByText('profile/coding', { exact: true }).waitFor();
+    await page.getByRole('button', { name: 'Add window', exact: true }).click();
+    await page.getByLabel('Timezone', { exact: true }).fill('UTC');
+    await page.locator('#schedule-preview').getByText(/Next starts/).waitFor();
+    await page.getByRole('button', { name: 'Cancel', exact: true }).click();
     for (const section of ['overview', 'providers', 'mcp', 'skills', 'marketplace', 'access']) {
       await page.locator(`nav a[href="#${section}"]`).click();
       for (const width of [390, 1024, 1440]) {

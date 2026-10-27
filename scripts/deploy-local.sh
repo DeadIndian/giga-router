@@ -9,7 +9,7 @@ fi
 
 systemctl enable --now docker
 docker compose config --quiet
-snapshot_script='const fs=require("fs"),crypto=require("crypto");const p="/app/data/config.json";if(!fs.existsSync(p)){console.log("none");process.exit(0)}const c=JSON.parse(fs.readFileSync(p));const a="/app/data/admin-auth.json";const stable={providers:c.providers,activeId:c.activeId,routing:c.routing,mcpServers:c.mcpServers,skills:c.skills,accessKeys:c.accessKeys,account:fs.existsSync(a)?fs.readFileSync(a,"utf8"):null};console.log(crypto.createHash("sha256").update(JSON.stringify(stable)).digest("hex"))'
+snapshot_script=$(cat scripts/config-fingerprint.cjs)
 previous_container=$(docker compose ps -q llmrouter)
 before='none'
 if [ -n "$previous_container" ]; then
@@ -30,6 +30,7 @@ docker compose build llmrouter
 if [ -n "$previous_container" ]; then
   before=$(docker exec "$previous_container" node -e "$snapshot_script")
   docker exec "$previous_container" node -e 'const fs=require("fs");for(const name of ["config","admin-auth"]){const p="/app/data/"+name+".json";if(fs.existsSync(p)){const backup="/app/data/"+name+".pre-deployment.json";fs.copyFileSync(p,backup);fs.chmodSync(backup,0o600)}}'
+  docker exec "$previous_container" node -e 'const fs=require("fs"),path=require("path");const dest="/app/data/backups/credentials-"+Date.now();for(const name of ["mcp-credentials.key","mcp-credentials"]){const p=path.join("/app/data",name);if(fs.existsSync(p)){fs.mkdirSync(dest,{recursive:true,mode:0o700});fs.cpSync(p,path.join(dest,name),{recursive:true})}}'
 fi
 
 docker compose up -d --no-build --wait --wait-timeout 120 llmrouter

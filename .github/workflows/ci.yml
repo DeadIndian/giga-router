@@ -10,7 +10,10 @@ permissions:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
@@ -23,7 +26,6 @@ jobs:
       - run: npm test
 
   screenshots:
-    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -35,7 +37,7 @@ jobs:
       - run: npm ci
       - name: Install screenshot tools
         run: |
-          npm install --prefix "$RUNNER_TEMP/branding-browser" --no-save playwright
+          npm install --prefix "$RUNNER_TEMP/branding-browser" --no-save playwright@1.58.2
           "$RUNNER_TEMP/branding-browser/node_modules/.bin/playwright" install --with-deps chromium
       - name: Capture dashboard and check responsive layouts
         env:
@@ -46,3 +48,12 @@ jobs:
         with:
           name: branding-screenshots
           path: ${{ runner.temp }}/branding-screenshots
+      - name: Check public website
+        env:
+          NODE_PATH: ${{ runner.temp }}/branding-browser/node_modules
+          SITE_SCREENSHOT_DIR: ${{ runner.temp }}/site-screenshots
+        run: npm run test:site
+      - uses: actions/upload-artifact@v4
+        with:
+          name: website-screenshots
+          path: ${{ runner.temp }}/site-screenshots

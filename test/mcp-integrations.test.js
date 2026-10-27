@@ -12,16 +12,22 @@ const { Server } = require('@modelcontextprotocol/sdk/server/index.js');
 const { StreamableHTTPServerTransport } = require('@modelcontextprotocol/sdk/server/streamableHttp.js');
 const types = require('@modelcontextprotocol/sdk/types.js');
 
-const directory = fs.mkdtempSync(path.join(os.tmpdir(), 'giga-integrations-'));
+const workspace = fs.mkdtempSync(path.join(os.tmpdir(), 'giga-integrations-'));
+const realDirectory = path.join(workspace, 'data');
+const directory = path.join(workspace, 'data-alias');
+fs.mkdirSync(realDirectory);
+// Windows TEMP can use an 8.3 alias. A junction/symlink reproduces the same
+// mismatch between an API path and the filesystem server's canonical allowlist.
+fs.symlinkSync(realDirectory, directory, process.platform === 'win32' ? 'junction' : 'dir');
 process.env.DATA_DIR = directory;
 process.env.ROUTER_KEY = 'gateway-integration-test';
 process.env.user = 'integration-user';
 process.env.password = 'integration-password';
-const { app, closeAllMcp } = require('./server');
-const { loadConfig } = require('./lib/storage');
-const { integrationById } = require('./lib/mcp-catalog');
-const { readCredentials, writeCredentials, KEY_PATH } = require('./lib/mcp-vault');
-const oauth = require('./lib/mcp-oauth');
+const { app, closeAllMcp } = require('../server');
+const { loadConfig } = require('../lib/storage');
+const { integrationById } = require('../lib/mcp-catalog');
+const { readCredentials, writeCredentials, KEY_PATH } = require('../lib/mcp-vault');
+const oauth = require('../lib/mcp-oauth');
 let router, provider, base, providerBase, cookie, proof, notionId, filesId;
 let currentAccess = 'access-1', currentRefresh = 'refresh-1', refreshCount = 0;
 let rejectRefresh = false;
@@ -99,7 +105,7 @@ after(async () => {
   for (const { client, transport } of clients) { await transport.terminateSession().catch(() => {}); await client.close(); }
   await closeAllMcp(); for (const transport of transports.values()) await transport.close();
   for (const server of [router, provider]) { server.closeAllConnections(); await new Promise((resolve) => server.close(resolve)); }
-  fs.rmSync(directory, { recursive: true, force: true });
+  fs.rmSync(workspace, { recursive: true, force: true });
 });
 
 test('curated catalog supplies beginner instructions and local activation templates without running anything', async () => {
@@ -120,7 +126,11 @@ test('local Files activates, exposes real tools, and serves uploaded documents t
   const client = await mcpClient();
   const read = await client.callTool({ name: 'files__read_text_file', arguments: { path: path.join(files.data.folder, 'readme.txt') } });
   assert.equal(read.content[0].text, 'Hello from the shared folder');
-  const blocked = await client.callTool({ name: 'files__read_text_file', arguments: { path: path.join(directory, 'config.json') } });
+  const listed = await client.callTool({ name: 'files__list_directory', arguments: { path: files.data.folder } });
+  assert.notEqual(listed.isError, true); assert.match(listed.content[0].text, /readme\.txt/);
+  // Use a canonical outside path so this tests the directory boundary itself,
+  // rather than passing because an unresolved alias was rejected first.
+  const blocked = await client.callTool({ name: 'files__read_text_file', arguments: { path: fs.realpathSync.native(path.join(directory, 'config.json')) } });
   assert.equal(blocked.isError, true);
   assert.equal((await api(`/api/mcp/servers/${filesId}/files`, 'POST', { name: '../outside', data: 'YQ==' })).response.status, 400);
 });
@@ -143,7 +153,8 @@ test('guided token setup encrypts credentials and does not expose them in catalo
   assert.ok(!JSON.stringify(result.data).includes(currentAccess));
   assert.ok(!fs.readFileSync(path.join(directory, 'config.json'), 'utf8').includes(currentAccess));
   const vault = fs.readFileSync(path.join(directory, 'mcp-credentials', id + '.json'), 'utf8'); assert.ok(!vault.includes(currentAccess));
-  assert.equal(readCredentials(id).token, currentAccess); assert.equal(fs.statSync(KEY_PATH).mode & 0o777, 0o600);
+  assert.equal(readCredentials(id).token, currentAccess);
+  if (process.platform !== 'win32') assert.equal(fs.statSync(KEY_PATH).mode & 0o777, 0o600);
   const catalog = await api('/api/mcp/catalog'); assert.ok(!JSON.stringify(catalog.data).includes(currentAccess));
   const update = await api('/api/mcp/catalog/github/connect', 'POST', { method: 'token', values: { readOnly: true } }); assert.equal(update.data.server.id, id);
   assert.equal((await api(`/api/mcp/servers/${id}`, 'PUT', { url: 'http://elsewhere/mcp' })).response.status, 400);

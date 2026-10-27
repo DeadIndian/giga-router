@@ -5,6 +5,10 @@ import json
 import os
 from pathlib import Path
 import sqlite3
+import sys
+
+if hasattr(sys.stdout, 'reconfigure'):
+    sys.stdout.reconfigure(errors='backslashreplace')
 
 
 def main():
@@ -36,7 +40,7 @@ def main():
     except BaseException:
         output.unlink(missing_ok=True)
         raise
-    print(f'Exported {len(accounts)} API-key accounts to {output} (mode 0600). Import in Providers & routing → Free APIs, then delete the export.')
+    print(f'Exported {len(accounts)} API-key accounts to {output} (mode 0600). Import in Providers & routing > Free APIs, then delete the export.')
 
 
 if __name__ == '__main__':

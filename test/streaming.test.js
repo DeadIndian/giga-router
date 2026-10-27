@@ -5,7 +5,7 @@ const {
   openAIToAnthropicResp,
   openaiStreamToAnthropic,
   buildUpstream,
-} = require('./server');
+} = require('../server');
 
 function streamEvents(chunks, events = []) {
   const converter = openaiStreamToAnthropic();

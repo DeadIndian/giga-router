@@ -1,6 +1,6 @@
-// provider-quirk tests — run: node test-provider.js
+// provider-quirk tests — run: node --test test/provider.test.js
 const assert = require('assert');
-const { buildUpstream } = require('./server');
+const { buildUpstream } = require('../server');
 
 let pass = 0, fail = 0;
 function t(name, fn) {
