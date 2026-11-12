@@ -97,6 +97,20 @@ On **My connections**:
 - **Remove** deletes the connection and its credentials. Your uploaded files and
   memory facts are retained in the data volume.
 
+## Limit which tools a server exposes
+
+Any MCP server can carry a tool policy, set in **Edit** under **Allowed tools** and
+**Blocked tools** (or as `toolPolicy: { allow: [], deny: [] }` through
+`/api/mcp/servers`). Enter backend tool names without the namespace, such as
+`retain`, one per line.
+
+- If **Allowed tools** is not empty, only those tools are listed and callable.
+- **Blocked tools** are always hidden and rejected, even if also allowed.
+- The policy applies to every gateway key. Leave both lists empty to expose all tools.
+
+For example, allow `retain`, `recall`, and `reflect` on a memory server so clients
+cannot call its bank-deleting tools. Prompts and resources are not filtered.
+
 ## Hosting and browser sign-in
 
 When you run the router on your own computer, `http://localhost:3002` or
