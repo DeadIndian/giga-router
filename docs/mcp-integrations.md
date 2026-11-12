@@ -29,6 +29,9 @@ configuration, where to get your router key, and how to check the connection.
 | Supabase | Browser sign-in or personal access token | Supabase account and the Project ID from your project dashboard |
 | Context7 | Start without a key or supply an API key | No account required to start; free key provides higher limits |
 | Tavily | Browser sign-in or API key | Tavily account; its usage limits apply |
+| Firecrawl | Start without a key or supply an API key | No account to start; crawl/map/agent tools and higher limits need a Firecrawl key |
+| Google Developer Docs | Google API key | Google Cloud project with the Developer Knowledge API enabled |
+| Google Maps | Google API key | Google Cloud project with billing and the Maps Grounding Lite API enabled |
 | Files | Included local tool | Nothing to install; an easy shared folder is created by default |
 | Memory | Included local tool | Nothing to install; facts are stored in the router's data volume |
 | Thinking | Included local tool | Nothing to install |

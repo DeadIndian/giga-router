@@ -109,7 +109,7 @@ after(async () => {
 });
 
 test('curated catalog supplies beginner instructions and local activation templates without running anything', async () => {
-  const result = await api('/api/mcp/catalog'); assert.equal(result.response.status, 200); assert.equal(result.data.items.length, 9);
+  const result = await api('/api/mcp/catalog'); assert.equal(result.response.status, 200); assert.equal(result.data.items.length, 12);
   assert.ok(result.data.items.find((entry) => entry.id === 'github').tokenSteps.length > 3);
   assert.ok(result.data.items.filter((entry) => entry.oauth).every((entry) => entry.docs && entry.oauth.origins.length));
   assert.equal(loadConfig().mcpServers.length, 0); assert.equal(result.data.setup.callbackUrl, base + '/api/mcp/oauth/callback');
@@ -249,4 +249,15 @@ test('GitHub app setup uses static credentials, hides its secret, and keeps regi
   assert.ok(!fs.readFileSync(path.join(directory, 'mcp-credentials', id + '.json'), 'utf8').includes('static-app-secret'));
   await api(`/api/mcp/servers/${id}/disconnect`, 'POST');
   assert.equal(readCredentials(id).client.client_id, 'test-client'); assert.equal(readCredentials(id).tokens, undefined);
+});
+
+test('Google and Firecrawl integrations are catalogued with the right token header', () => {
+  for (const id of ['google-developer-knowledge', 'google-maps']) {
+    const entry = integrationById(id);
+    assert.equal(entry.tokenHeader, 'X-Goog-Api-Key'); assert.deepEqual(entry.methods, ['token']);
+    assert.ok(entry.url.startsWith('https://') && !entry.url.includes('?') && entry.tokenSteps.length);
+  }
+  const firecrawl = integrationById('firecrawl');
+  assert.equal(firecrawl.url, 'https://mcp.firecrawl.dev/v2/mcp'); assert.equal(firecrawl.tokenHeader, undefined);
+  assert.ok(firecrawl.methods.includes('none') && firecrawl.methods.includes('token'));
 });

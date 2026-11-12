@@ -20,7 +20,7 @@ streaming, scheduled routing, and failover remain the routing engine.
 - MCP servers can be registered, enabled, disabled, discovered, and removed.
   HTTP, legacy SSE, and stdio backends use the official MCP SDK. Tools,
   prompts, and resources are namespaced behind the authenticated gateway.
-- Nine curated MCP integrations provide beginner-friendly Choose/Connect/Ready
+- Twelve curated MCP integrations provide beginner-friendly Choose/Connect/Ready
   guides, provider OAuth or token setup, automatic tests, and reconnect/removal.
   Files, Memory, and Thinking run from included MIT-licensed packages. Files has
   dashboard uploads; Memory serializes calls against one persistent graph.
