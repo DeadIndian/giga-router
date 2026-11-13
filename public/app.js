@@ -326,6 +326,11 @@ function renderPage() {
   }
   if (STATE.page === 'providers' && STATE.providerTab === 'routing') {
     $('page-content').insertAdjacentHTML('beforeend', `<div class="panel"><div class="panel-header"><h2>Routing profiles</h2>${button('Add profile', 'edit-profile', '', 'small', 'plus')}</div><div class="panel-body"><p class="subtle">Select a saved chain with model <code>profile/name</code>.</p>${(STATE.routing.profiles || []).map(p => `<div class="setting-row"><code>profile/${esc(p.id)}</code><span>${esc(p.providerIds.map(id => STATE.providers.find(p => p.id === id)?.name || id).join(' → '))}</span>${button('Edit', 'edit-profile', p.id, 'small quiet')}${button('Remove', 'delete-profile', p.id, 'small quiet')}</div>`).join('')}</div></div>`);
+    api('/api/embeddings').then(e => {
+      if (STATE.page !== 'providers' || STATE.providerTab !== 'routing' || $('embedding-pools')) return;
+      STATE.embeddings = e; const name = pid => STATE.providers.find(p => p.id === pid)?.name || pid;
+      $('page-content').insertAdjacentHTML('beforeend', `<div class="panel" id="embedding-pools"><div class="panel-header"><h2>Embedding pools</h2>${button('Edit pools', 'edit-embeddings', '', 'small', 'plus')}</div><div class="panel-body"><p class="subtle">Call <code>/v1/embeddings</code> with model <code>pool/name</code>. Targets fail over in order. List only providers serving the <strong>same</strong> embedding model: different models produce incompatible vectors.</p>${(e.pools || []).map(p => `<div class="setting-row"><code>pool/${esc(p.id)}</code><span>${esc(p.targets.map(t => `${name(t.providerId)} · ${t.model}`).join(' → '))}${p.dimensions ? ` · ${p.dimensions} dimensions` : ''}</span></div>`).join('') || '<p class="subtle">No pools yet.</p>'}</div></div>`);
+    }).catch(() => {});
   }
   refreshActivity();
   hydrateIcons();
@@ -414,6 +419,23 @@ function refreshLiveStatuses() {
     const state = server.authKind === 'oauth' && !server.auth?.connected ? 'Sign-in needed' : server.health.state === 'disconnected' ? 'Disconnected' : server.health.state === 'error' ? 'Needs attention' : server.enabled === false ? 'Paused' : server.health.state === 'connected' ? 'Connected' : 'Not tested';
     badge.outerHTML = tag(state, state === 'Connected' ? 'green' : state === 'Needs attention' ? 'red' : '');
   }
+}
+
+function editEmbeddings() {
+  const pools = (STATE.embeddings?.pools || []).map(p => ({ ...p, targets: p.targets.map(t => ({ provider: STATE.providers.find(x => x.id === t.providerId)?.name || t.providerId, model: t.model, ...(t.dimensions ? { dimensions: t.dimensions } : {}) })) }));
+  const example = [{ id: 'memory', dimensions: 1024, targets: [{ provider: 'Provider name', model: 'baai/bge-m3' }] }];
+  showDialog('Embedding pools', `<form id="edit-form"><div class="dialog-body"><p class="subtle">Each pool fails over between its targets in order. Use provider names exactly as shown on the Providers page. Every target in a pool must serve the same model.</p>${field('pools', 'Pools (JSON)', JSON.stringify(pools.length ? pools : example, null, 2), { multiline: true, mono: true, rows: 14 })}</div>${footer('Save pools')}</form>`, 'EMBEDDINGS');
+  bindForm(async (form) => {
+    const parsed = jsonField(form, 'pools', []);
+    if (!Array.isArray(parsed)) throw new Error('Pools must be a JSON list');
+    const body = parsed.map(p => ({ ...p, targets: (p.targets || []).map(t => {
+      const provider = STATE.providers.find(x => x.name.toLowerCase() === String(t.provider || '').toLowerCase() || x.id === t.provider || x.id === t.providerId);
+      if (!provider) throw new Error(`Unknown provider: ${t.provider || t.providerId}`);
+      return { providerId: provider.id, model: t.model, ...(t.dimensions ? { dimensions: t.dimensions } : {}) };
+    }) }));
+    await api('/api/embeddings', { method: 'PUT', body: { pools: body } });
+    closeDialog(); toast('Embedding pools saved'); await loadWorkspace();
+  });
 }
 
 function editProfile(id) {
@@ -715,6 +737,7 @@ async function handleAction(node) {
     case 'import-providers': return importProviderKeys();
     case 'edit-provider': return editProvider(provider);
     case 'edit-profile': return editProfile(id);
+    case 'edit-embeddings': return editEmbeddings();
     case 'delete-profile': await api('/api/routing', { method: 'POST', body: { profiles: STATE.routing.profiles.filter(p => p.id !== id) } }); return loadWorkspace();
     case 'test-provider': {
       const result = await api(`/api/providers/${id}/test`, { method: 'POST' });

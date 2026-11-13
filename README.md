@@ -159,6 +159,23 @@ circuit, and provider retry hints can extend the wait. Caller errors and client
 cancellation do not damage provider health. Once output begins, errors remain
 errors rather than switching providers halfway through a response.
 
+## Embeddings with failover
+
+`POST /v1/embeddings` is OpenAI-compatible. Send `model: "<provider>/<model>"` for
+one provider, or `model: "pool/<name>"` for an **embedding pool**: an ordered list
+of providers that serve the *same* embedding model. Pools are edited under
+**Providers → Routing → Embedding pools** (or `PUT /api/embeddings`).
+
+- Rate-limited or failing targets cool down (honouring `Retry-After`) and the next
+  target is tried.
+- Responses are normalised: missing `index` fields are filled, order is restored,
+  and `encoding_format: "base64"` is supported for OpenAI SDK clients.
+- If a pool sets `dimensions`, any target returning a different vector size is
+  treated as a failure, so a misconfigured target cannot corrupt a vector index.
+
+Do not mix different embedding models in one pool: their vectors are not
+comparable even when the sizes match.
+
 ## Skills and marketplace
 
 Browse the bundled offline catalogs or add your own GitHub repository. Preview
