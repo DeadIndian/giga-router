@@ -1,7 +1,7 @@
 # Free API providers and accounts
 
-The expanded catalog includes **36 API-key providers and 387 chat-model presets**
-as of 2026-10-19. Search **DeepSeek**, **Qwen**, **Gemma**, **GPT-OSS**, or any
+The expanded catalog includes **34 API-key providers and 374 chat-model presets**
+as of 2026-11-23. Search **DeepSeek**, **Qwen**, **Gemma**, **GPT-OSS**, or any
 provider in **Free APIs**, expand its model list, and click **Add this model**.
 Account setup now has a model dropdown plus an option for a custom model ID.
 The complete bundled IDs and per-model provenance are in
@@ -27,10 +27,10 @@ subscription-login workarounds are used.
 | Provider / get a key | Preset models | Free access / official evidence |
 | --- | --- | --- |
 | [Groq](https://console.groq.com/keys) | `openai/gpt-oss-120b`, `openai/gpt-oss-20b`, `qwen/qwen3.8-27b` | [Free Plan limits](https://console.groq.com/docs/rate-limits), per model and organization. |
-| [Google AI Studio](https://aistudio.google.com/apikey) | `gemini-2.5-flash`, `gemini-3.8-flash` | [Free-tier pricing](https://ai.google.dev/gemini-api/docs/pricing). Use a free-tier project; regional/project limits and free-tier data usage terms apply. |
+| [Google AI Studio](https://aistudio.google.com/apikey) | `gemini-3.8-flash` | [Free-tier pricing](https://ai.google.dev/gemini-api/docs/pricing). Use a free-tier project; regional/project limits and free-tier data usage terms apply. |
 | [Mistral Studio](https://console.mistral.ai/api-keys/) | `mistral-small-latest` | [Free mode enabled by default, no card](https://docs.mistral.ai/getting-started/quickstarts/studio/activate-and-generate-api-key), with usage/rate limits. |
 | [OpenRouter](https://openrouter.ai/keys) | `openrouter/free`; also supports explicit `:free` model IDs | [Free model limits](https://openrouter.ai/docs/api/reference/limits). The free router picks an available free model. Multiple accounts/keys do not increase rate limits. |
-| [Cloudflare Workers AI](https://dash.cloudflare.com/) | `@cf/meta/llama-3.1-8b-instruct` | [10,000 free neurons/day](https://developers.cloudflare.com/workers-ai/platform/pricing/). Requires account ID and a Workers AI API token. Some frontier models are paid. |
+| [Cloudflare Workers AI](https://dash.cloudflare.com/) | `@cf/meta/llama-3.3-70b-instruct-fp8-fast` | [10,000 free neurons/day](https://developers.cloudflare.com/workers-ai/platform/pricing/). Requires account ID and a Workers AI API token. Some frontier models are paid. |
 | [ElectronHub](https://app.electronhub.ai) | GPT-OSS, Gemma, Nemotron and more | [Daily Neutrinos and weekly credits](https://docs.electronhub.ai/billing/credits). 10 Neutrinos/day for `:free` routes; some requests cost several. $0.25 shared weekly credits fund eligible routes with nonzero token prices. |
 | [SimpleLLM](https://app.simplellm.eu) | `free-Llama-3.1-8B-Instruct`, `free-gemma-4-E4B` | [Free model quotas](https://simplellm.eu/docs/limits.html) and zero input/output prices in the [public catalog](https://simplellm.eu/api/models). Hourly/daily request and token limits apply. |
 | [Inferbase](https://inferbase.ai) | GPT-OSS, Gemma, Llama, Qwen | [Free plan](https://inferbase.ai/pricing): 5,000 requests/month, 100 managed requests and $0.50 model usage/day, shared across models. Free managed inference has a 1,024-token output limit. |

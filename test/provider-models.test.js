@@ -32,3 +32,14 @@ test('official catalogs replace stale free IDs and retain only eligible model ty
   assert.deepEqual(ids('simplellm'), ['free-alias']);
   assert.deepEqual(ids('kilo'), ['kilo-free:free']);
 });
+
+test('markdown-rendered Google pricing is read and deprecated models are dropped', () => {
+  const row = id => ({ platform: 'google', modelId: id, enabled: true, displayName: id });
+  const free = '{% table %} * Feature * Free Tier * Paid * Input price * Free of charge * $0.30 --- * Output price * Free of charge * $2.50';
+  const result = snapshot({
+    freellm: { version: 'test', models: [row('gemini-current'), row('gemini-old')] },
+    openrouter: { data: [] }, nvidia: { data: [] }, electronhub: { data: [] }, simplellm: [], cloudflarePricing: 'Some models require a paid billing method nothing relevant Pay with AI Gateway credits.',
+    geminiPricing: `*[\`gemini-current\`]* ${free} ` + ' '.repeat(1600) + `*[\`gemini-old\`]* is deprecated and is no longer available to select in Google AI Studio. ${free}`,
+  }, '2026-11-23');
+  assert.deepEqual(result.providers.gemini.map(model => model.id), ['gemini-current']);
+});

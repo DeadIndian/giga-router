@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "checkedAt": "2026-10-19",
-  "freellmVersion": "2026.10.19.35633f",
+  "checkedAt": "2026-11-23",
+  "freellmVersion": "2026.11.23",
   "providers": {
     "gemini": [
       {
@@ -25,15 +25,6 @@
       {
         "id": "gemini-3.1-flash-lite",
         "name": "Gemini 3.1 Flash-Lite",
-        "source": "Google pricing + FreeLLMAPI",
-        "status": "Documented free-tier input/output; project limits apply",
-        "contextWindow": 1048576,
-        "supportsTools": true,
-        "supportsVision": true
-      },
-      {
-        "id": "gemini-2.5-flash",
-        "name": "Gemini 2.5 Flash",
         "source": "Google pricing + FreeLLMAPI",
         "status": "Documented free-tier input/output; project limits apply",
         "contextWindow": 1048576,
@@ -142,15 +133,6 @@
         "supportsVision": false
       },
       {
-        "id": "Mistral-Nemo-Instruct-2407",
-        "name": "Mistral Nemo (OVH)",
-        "source": "FreeLLMAPI public catalog",
-        "status": "Source-listed free access; check provider terms",
-        "contextWindow": 128000,
-        "supportsTools": true,
-        "supportsVision": false
-      },
-      {
         "id": "Qwen3Guard-Gen-8B",
         "name": "Qwen3Guard Gen 8B (OVH safety)",
         "source": "FreeLLMAPI public catalog",
@@ -195,33 +177,6 @@
         "status": "Uses daily free Neurons on Workers Free; overage on paid plans is billable",
         "contextWindow": 131072,
         "supportsTools": true,
-        "supportsVision": false
-      },
-      {
-        "id": "@cf/qwen/qwen3-30b-a3b-fp8",
-        "name": "Qwen3 30B-A3B fp8 (CF)",
-        "source": "Cloudflare pricing + FreeLLMAPI",
-        "status": "Uses daily free Neurons on Workers Free; overage on paid plans is billable",
-        "contextWindow": 131072,
-        "supportsTools": true,
-        "supportsVision": false
-      },
-      {
-        "id": "@cf/deepseek-ai/deepseek-r1-distill-qwen-32b",
-        "name": "DeepSeek R1 Distill Qwen 32B (CF)",
-        "source": "Cloudflare pricing + FreeLLMAPI",
-        "status": "Uses daily free Neurons on Workers Free; overage on paid plans is billable",
-        "contextWindow": 131072,
-        "supportsTools": true,
-        "supportsVision": false
-      },
-      {
-        "id": "@cf/nvidia/nemotron-3-120b-a12b",
-        "name": "Nemotron 3 120B (CF)",
-        "source": "Cloudflare pricing + FreeLLMAPI",
-        "status": "Uses daily free Neurons on Workers Free; overage on paid plans is billable",
-        "contextWindow": 262144,
-        "supportsTools": false,
         "supportsVision": false
       },
       {
@@ -288,15 +243,6 @@
         "supportsVision": false
       },
       {
-        "id": "@cf/qwen/qwq-32b",
-        "name": "QwQ 32B (CF)",
-        "source": "Cloudflare pricing + FreeLLMAPI",
-        "status": "Uses daily free Neurons on Workers Free; overage on paid plans is billable",
-        "contextWindow": 131072,
-        "supportsTools": true,
-        "supportsVision": false
-      },
-      {
         "id": "@cf/mistralai/mistral-small-3.1-24b-instruct",
         "name": "Mistral Small 3.1 24B (CF)",
         "source": "Cloudflare pricing + FreeLLMAPI",
@@ -315,15 +261,6 @@
         "supportsVision": true
       },
       {
-        "id": "@cf/meta/llama-3.1-8b-instruct-fp8",
-        "name": "Llama 3.1 8B (CF)",
-        "source": "Cloudflare pricing + FreeLLMAPI",
-        "status": "Uses daily free Neurons on Workers Free; overage on paid plans is billable",
-        "contextWindow": 131072,
-        "supportsTools": true,
-        "supportsVision": false
-      },
-      {
         "id": "@cf/meta/llama-3.2-3b-instruct",
         "name": "Llama 3.2 3B (CF)",
         "source": "Cloudflare pricing + FreeLLMAPI",
@@ -335,15 +272,6 @@
       {
         "id": "@cf/aisingapore/gemma-sea-lion-v4-27b-it",
         "name": "Gemma SEA-LION v4 27B (CF)",
-        "source": "Cloudflare pricing + FreeLLMAPI",
-        "status": "Uses daily free Neurons on Workers Free; overage on paid plans is billable",
-        "contextWindow": 131072,
-        "supportsTools": false,
-        "supportsVision": false
-      },
-      {
-        "id": "@cf/meta/llama-3.2-1b-instruct",
-        "name": "Llama 3.2 1B Instruct (CF)",
         "source": "Cloudflare pricing + FreeLLMAPI",
         "status": "Uses daily free Neurons on Workers Free; overage on paid plans is billable",
         "contextWindow": 131072,
@@ -407,74 +335,42 @@
         "supportsVision": true
       }
     ],
-    "ollama": [
-      {
-        "id": "gpt-oss:120b",
-        "name": "GPT-OSS 120B (Ollama)",
-        "source": "FreeLLMAPI public catalog",
-        "status": "Source-listed free access; check provider terms",
-        "contextWindow": 131072,
-        "supportsTools": true,
-        "supportsVision": false
-      },
-      {
-        "id": "gemma4:31b",
-        "name": "Gemma 4 31B (Ollama)",
-        "source": "FreeLLMAPI public catalog",
-        "status": "Source-listed free access; check provider terms",
-        "contextWindow": 131072,
-        "supportsTools": false,
-        "supportsVision": false
-      },
-      {
-        "id": "nemotron-3-super",
-        "name": "Nemotron-3 Super (Ollama)",
-        "source": "FreeLLMAPI public catalog",
-        "status": "Source-listed free access; check provider terms",
-        "contextWindow": 262144,
-        "supportsTools": true,
-        "supportsVision": false
-      },
-      {
-        "id": "gpt-oss:20b",
-        "name": "GPT-OSS 20B (Ollama)",
-        "source": "FreeLLMAPI public catalog",
-        "status": "Source-listed free access; check provider terms",
-        "contextWindow": 131072,
-        "supportsTools": true,
-        "supportsVision": false
-      },
-      {
-        "id": "nemotron-3-nano:30b",
-        "name": "Nemotron 3 Nano 30B (Ollama)",
-        "source": "FreeLLMAPI public catalog",
-        "status": "Source-listed free access; check provider terms",
-        "contextWindow": 262144,
-        "supportsTools": true,
-        "supportsVision": false
-      },
-      {
-        "id": "nemotron-3-ultra",
-        "name": "Nemotron 3 Ultra (Ollama)",
-        "source": "FreeLLMAPI public catalog",
-        "status": "Source-listed free access; check provider terms",
-        "contextWindow": 1048576,
-        "supportsTools": true,
-        "supportsVision": false
-      }
-    ],
     "openrouter": [
       {
-        "id": "minimax/minimax-m3.1-flash:free",
-        "name": "MiniMax: MiniMax M3.1 Flash (free)",
+        "id": "inclusionai/ling-3.2-flash:free",
+        "name": "inclusionAI: Ling 3.2 Flash (free)",
         "source": "OpenRouter public API",
         "status": "Zero prompt and completion prices",
-        "contextWindow": 1000000,
+        "contextWindow": 1048576,
         "supportsTools": true
       },
       {
-        "id": "xingchen-agi/xing4.0-29b-a4b:free",
-        "name": "XingChen: Xing4.0 29B A4B (free)",
+        "id": "baidu/ernie-5.5-flash-preview:free",
+        "name": "Baidu: ERNIE-5.5-Flash-Preview (free)",
+        "source": "OpenRouter public API",
+        "status": "Zero prompt and completion prices",
+        "contextWindow": 1024000,
+        "supportsTools": true
+      },
+      {
+        "id": "liquid/lfm-3-1.7b:free",
+        "name": "LiquidAI: LFM3-1.7B (free)",
+        "source": "OpenRouter public API",
+        "status": "Zero prompt and completion prices",
+        "contextWindow": 262144,
+        "supportsTools": true
+      },
+      {
+        "id": "particle-ai/particle-1:free",
+        "name": "Particle AI: Particle-1 (free)",
+        "source": "OpenRouter public API",
+        "status": "Zero prompt and completion prices",
+        "contextWindow": 1048576,
+        "supportsTools": true
+      },
+      {
+        "id": "recursive/flint-v1.0:free",
+        "name": "Recursive: Flint (free)",
         "source": "OpenRouter public API",
         "status": "Zero prompt and completion prices",
         "contextWindow": 262144,
@@ -497,59 +393,11 @@
         "supportsTools": true
       },
       {
-        "id": "liquid/lfm-2.5-2.6b:free",
-        "name": "LiquidAI: LFM2.5-2.6B (free)",
-        "source": "OpenRouter public API",
-        "status": "Zero prompt and completion prices",
-        "contextWindow": 65536,
-        "supportsTools": true
-      },
-      {
         "id": "nvidia/nemotron-3.5-lightning:free",
         "name": "NVIDIA: Nemotron 3.5 Lightning (free)",
         "source": "OpenRouter public API",
         "status": "Zero prompt and completion prices",
         "contextWindow": 1000000,
-        "supportsTools": true
-      },
-      {
-        "id": "thinkingmachines/inkling-small:free",
-        "name": "Thinking Machines: Inkling Small (free)",
-        "source": "OpenRouter public API",
-        "status": "Zero prompt and completion prices",
-        "contextWindow": 1048576,
-        "supportsTools": true
-      },
-      {
-        "id": "poolside/laguna-s-2.1:free",
-        "name": "Poolside: Laguna S 2.1 (free)",
-        "source": "OpenRouter public API",
-        "status": "Zero prompt and completion prices",
-        "contextWindow": 262144,
-        "supportsTools": true
-      },
-      {
-        "id": "thinkingmachines/inkling:free",
-        "name": "Thinking Machines: Inkling (free)",
-        "source": "OpenRouter public API",
-        "status": "Zero prompt and completion prices",
-        "contextWindow": 1048576,
-        "supportsTools": true
-      },
-      {
-        "id": "poolside/laguna-xs-2.1:free",
-        "name": "Poolside: Laguna XS 2.1 (free)",
-        "source": "OpenRouter public API",
-        "status": "Zero prompt and completion prices",
-        "contextWindow": 262144,
-        "supportsTools": true
-      },
-      {
-        "id": "cohere/north-mini-code:free",
-        "name": "Cohere: North Mini Code (free)",
-        "source": "OpenRouter public API",
-        "status": "Zero prompt and completion prices",
-        "contextWindow": 256000,
         "supportsTools": true
       },
       {
@@ -579,14 +427,6 @@
       {
         "id": "google/gemma-4-31b-it:free",
         "name": "Google: Gemma 4 31B (free)",
-        "source": "OpenRouter public API",
-        "status": "Zero prompt and completion prices",
-        "contextWindow": 262144,
-        "supportsTools": true
-      },
-      {
-        "id": "nvidia/nemotron-3-super-120b-a12b:free",
-        "name": "NVIDIA: Nemotron 3 Super (free)",
         "source": "OpenRouter public API",
         "status": "Zero prompt and completion prices",
         "contextWindow": 262144,
@@ -780,6 +620,15 @@
         "contextWindow": 128000,
         "supportsTools": true,
         "supportsVision": false
+      },
+      {
+        "id": "gpt-oss:20b",
+        "name": "gpt-oss:20b (LLM7)",
+        "source": "FreeLLMAPI public catalog",
+        "status": "Source-listed free access; check provider terms",
+        "contextWindow": 128000,
+        "supportsTools": false,
+        "supportsVision": false
       }
     ],
     "mistral": [
@@ -902,26 +751,8 @@
         "status": "Development allowance; check account/model access"
       },
       {
-        "id": "nvidia/nemotron-3-super-120b-a12b",
-        "name": "nvidia/nemotron-3-super-120b-a12b",
-        "source": "NVIDIA public API",
-        "status": "Development allowance; check account/model access"
-      },
-      {
-        "id": "openai/gpt-oss-20b",
-        "name": "openai/gpt-oss-20b",
-        "source": "NVIDIA public API",
-        "status": "Development allowance; check account/model access"
-      },
-      {
         "id": "nvidia/nemotron-3-ultra-550b-a55b",
         "name": "nvidia/nemotron-3-ultra-550b-a55b",
-        "source": "NVIDIA public API",
-        "status": "Development allowance; check account/model access"
-      },
-      {
-        "id": "meta/llama-3.2-90b-vision-instruct",
-        "name": "meta/llama-3.2-90b-vision-instruct",
         "source": "NVIDIA public API",
         "status": "Development allowance; check account/model access"
       },
@@ -944,50 +775,26 @@
         "status": "Development allowance; check account/model access"
       },
       {
-        "id": "meta/llama-3.2-11b-vision-instruct",
-        "name": "meta/llama-3.2-11b-vision-instruct",
-        "source": "NVIDIA public API",
-        "status": "Development allowance; check account/model access"
-      },
-      {
         "id": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
         "name": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
         "source": "NVIDIA public API",
         "status": "Development allowance; check account/model access"
       },
       {
-        "id": "01-ai/yi-large",
-        "name": "01-ai/yi-large",
+        "id": "z-ai/glm-5.3-flash",
+        "name": "z-ai/glm-5.3-flash",
         "source": "NVIDIA public API",
         "status": "Development allowance; check account/model access"
       },
       {
-        "id": "ai21labs/jamba-1.5-large-instruct",
-        "name": "ai21labs/jamba-1.5-large-instruct",
+        "id": "stepfun-ai/step-5-preview",
+        "name": "stepfun-ai/step-5-preview",
         "source": "NVIDIA public API",
         "status": "Development allowance; check account/model access"
       },
       {
-        "id": "aisingapore/sea-lion-7b-instruct",
-        "name": "aisingapore/sea-lion-7b-instruct",
-        "source": "NVIDIA public API",
-        "status": "Development allowance; check account/model access"
-      },
-      {
-        "id": "databricks/dbrx-instruct",
-        "name": "databricks/dbrx-instruct",
-        "source": "NVIDIA public API",
-        "status": "Development allowance; check account/model access"
-      },
-      {
-        "id": "deepseek-ai/deepseek-v4.1-flash",
-        "name": "deepseek-ai/deepseek-v4.1-flash",
-        "source": "NVIDIA public API",
-        "status": "Development allowance; check account/model access"
-      },
-      {
-        "id": "google/gemma-2b",
-        "name": "google/gemma-2b",
+        "id": "fastino/gliner2-pii",
+        "name": "fastino/gliner2-pii",
         "source": "NVIDIA public API",
         "status": "Development allowance; check account/model access"
       },
@@ -1004,122 +811,26 @@
         "status": "Development allowance; check account/model access"
       },
       {
-        "id": "ibm/granite-3.0-3b-a800m-instruct",
-        "name": "ibm/granite-3.0-3b-a800m-instruct",
+        "id": "minimaxai/minimax-m3.1-flash",
+        "name": "minimaxai/minimax-m3.1-flash",
         "source": "NVIDIA public API",
         "status": "Development allowance; check account/model access"
       },
       {
-        "id": "ibm/granite-3.0-8b-instruct",
-        "name": "ibm/granite-3.0-8b-instruct",
+        "id": "mistralai/mistral-large-4-1t-a52b",
+        "name": "mistralai/mistral-large-4-1t-a52b",
         "source": "NVIDIA public API",
         "status": "Development allowance; check account/model access"
       },
       {
-        "id": "ibm/granite-34b-code-instruct",
-        "name": "ibm/granite-34b-code-instruct",
+        "id": "moonshotai/kimi-k3.1-pro",
+        "name": "moonshotai/kimi-k3.1-pro",
         "source": "NVIDIA public API",
         "status": "Development allowance; check account/model access"
       },
       {
-        "id": "ibm/granite-8b-code-instruct",
-        "name": "ibm/granite-8b-code-instruct",
-        "source": "NVIDIA public API",
-        "status": "Development allowance; check account/model access"
-      },
-      {
-        "id": "meta/codellama-70b",
-        "name": "meta/codellama-70b",
-        "source": "NVIDIA public API",
-        "status": "Development allowance; check account/model access"
-      },
-      {
-        "id": "meta/llama2-70b",
-        "name": "meta/llama2-70b",
-        "source": "NVIDIA public API",
-        "status": "Development allowance; check account/model access"
-      },
-      {
-        "id": "microsoft/phi-3-vision-128k-instruct",
-        "name": "microsoft/phi-3-vision-128k-instruct",
-        "source": "NVIDIA public API",
-        "status": "Development allowance; check account/model access"
-      },
-      {
-        "id": "microsoft/phi-3.5-moe-instruct",
-        "name": "microsoft/phi-3.5-moe-instruct",
-        "source": "NVIDIA public API",
-        "status": "Development allowance; check account/model access"
-      },
-      {
-        "id": "mistralai/codestral-22b-instruct-v0.1",
-        "name": "mistralai/codestral-22b-instruct-v0.1",
-        "source": "NVIDIA public API",
-        "status": "Development allowance; check account/model access"
-      },
-      {
-        "id": "mistralai/mistral-7b-instruct-v0.3",
-        "name": "mistralai/mistral-7b-instruct-v0.3",
-        "source": "NVIDIA public API",
-        "status": "Development allowance; check account/model access"
-      },
-      {
-        "id": "mistralai/mistral-large",
-        "name": "mistralai/mistral-large",
-        "source": "NVIDIA public API",
-        "status": "Development allowance; check account/model access"
-      },
-      {
-        "id": "mistralai/mistral-large-2-instruct",
-        "name": "mistralai/mistral-large-2-instruct",
-        "source": "NVIDIA public API",
-        "status": "Development allowance; check account/model access"
-      },
-      {
-        "id": "mistralai/mixtral-8x22b-v0.1",
-        "name": "mistralai/mixtral-8x22b-v0.1",
-        "source": "NVIDIA public API",
-        "status": "Development allowance; check account/model access"
-      },
-      {
-        "id": "moonshotai/kimi-k2.6",
-        "name": "moonshotai/kimi-k2.6",
-        "source": "NVIDIA public API",
-        "status": "Development allowance; check account/model access"
-      },
-      {
-        "id": "nv-mistralai/mistral-nemo-12b-instruct",
-        "name": "nv-mistralai/mistral-nemo-12b-instruct",
-        "source": "NVIDIA public API",
-        "status": "Development allowance; check account/model access"
-      },
-      {
-        "id": "nvidia/llama-3.1-nemotron-51b-instruct",
-        "name": "nvidia/llama-3.1-nemotron-51b-instruct",
-        "source": "NVIDIA public API",
-        "status": "Development allowance; check account/model access"
-      },
-      {
-        "id": "nvidia/llama-3.1-nemotron-70b-instruct",
-        "name": "nvidia/llama-3.1-nemotron-70b-instruct",
-        "source": "NVIDIA public API",
-        "status": "Development allowance; check account/model access"
-      },
-      {
-        "id": "nvidia/llama-3.1-nemotron-ultra-253b-v1",
-        "name": "nvidia/llama-3.1-nemotron-ultra-253b-v1",
-        "source": "NVIDIA public API",
-        "status": "Development allowance; check account/model access"
-      },
-      {
-        "id": "nvidia/llama3-chatqa-1.5-70b",
-        "name": "nvidia/llama3-chatqa-1.5-70b",
-        "source": "NVIDIA public API",
-        "status": "Development allowance; check account/model access"
-      },
-      {
-        "id": "nvidia/mistral-nemo-minitron-8b-8k-instruct",
-        "name": "nvidia/mistral-nemo-minitron-8b-8k-instruct",
+        "id": "nvidia/nemotron-3.5-bolt-e4b",
+        "name": "nvidia/nemotron-3.5-bolt-e4b",
         "source": "NVIDIA public API",
         "status": "Development allowance; check account/model access"
       },
@@ -1128,214 +839,6 @@
         "name": "nvidia/nemotron-3.5-super-vl-120b-a12b",
         "source": "NVIDIA public API",
         "status": "Development allowance; check account/model access"
-      },
-      {
-        "id": "nvidia/nemotron-4-340b-instruct",
-        "name": "nvidia/nemotron-4-340b-instruct",
-        "source": "NVIDIA public API",
-        "status": "Development allowance; check account/model access"
-      },
-      {
-        "id": "nvidia/nemotron-nano-3-30b-a3b",
-        "name": "nvidia/nemotron-nano-3-30b-a3b",
-        "source": "NVIDIA public API",
-        "status": "Development allowance; check account/model access"
-      },
-      {
-        "id": "stepfun-ai/step-5-preview",
-        "name": "stepfun-ai/step-5-preview",
-        "source": "NVIDIA public API",
-        "status": "Development allowance; check account/model access"
-      },
-      {
-        "id": "writer/palmyra-creative-122b",
-        "name": "writer/palmyra-creative-122b",
-        "source": "NVIDIA public API",
-        "status": "Development allowance; check account/model access"
-      },
-      {
-        "id": "writer/palmyra-fin-70b-32k",
-        "name": "writer/palmyra-fin-70b-32k",
-        "source": "NVIDIA public API",
-        "status": "Development allowance; check account/model access"
-      },
-      {
-        "id": "writer/palmyra-med-70b",
-        "name": "writer/palmyra-med-70b",
-        "source": "NVIDIA public API",
-        "status": "Development allowance; check account/model access"
-      },
-      {
-        "id": "writer/palmyra-med-70b-32k",
-        "name": "writer/palmyra-med-70b-32k",
-        "source": "NVIDIA public API",
-        "status": "Development allowance; check account/model access"
-      },
-      {
-        "id": "z-ai/glm-5.3",
-        "name": "z-ai/glm-5.3",
-        "source": "NVIDIA public API",
-        "status": "Development allowance; check account/model access"
-      },
-      {
-        "id": "z-ai/glm-5.3-flash",
-        "name": "z-ai/glm-5.3-flash",
-        "source": "NVIDIA public API",
-        "status": "Development allowance; check account/model access"
-      },
-      {
-        "id": "zyphra/zamba2-7b-instruct",
-        "name": "zyphra/zamba2-7b-instruct",
-        "source": "NVIDIA public API",
-        "status": "Development allowance; check account/model access"
-      }
-    ],
-    "kilo": [
-      {
-        "id": "kilo-auto/free",
-        "name": "Auto Free",
-        "source": "Kilo public model API",
-        "status": "Listed free with zero input/output prices; provider terms apply"
-      },
-      {
-        "id": "nvidia/nemotron-3.5-super-vl:free",
-        "name": "NVIDIA: Nemotron 3.5 Super VL (free)",
-        "source": "Kilo public model API",
-        "status": "Listed free with zero input/output prices; provider terms apply"
-      },
-      {
-        "id": "reflection/beam-free",
-        "name": "Reflection: Beam 1.0 (free)",
-        "source": "Kilo public model API",
-        "status": "Listed free with zero input/output prices; provider terms apply"
-      },
-      {
-        "id": "stealth/glyph-cluster",
-        "name": "Stealth: Glyph Cluster (free)",
-        "source": "Kilo public model API",
-        "status": "Listed free with zero input/output prices; provider terms apply"
-      },
-      {
-        "id": "minimax/minimax-m3.1-flash:free",
-        "name": "MiniMax: MiniMax M3.1 Flash (free)",
-        "source": "Kilo public model API",
-        "status": "Listed free with zero input/output prices; provider terms apply"
-      },
-      {
-        "id": "xingchen-agi/xing4.0-29b-a4b:free",
-        "name": "XingChen: Xing4.0 29B A4B (free)",
-        "source": "Kilo public model API",
-        "status": "Listed free with zero input/output prices; provider terms apply"
-      },
-      {
-        "id": "dots-studio/dots-3-note-preview:free",
-        "name": "Dots Studio: Dots3-Note Preview (free)",
-        "source": "Kilo public model API",
-        "status": "Listed free with zero input/output prices; provider terms apply"
-      },
-      {
-        "id": "liquid/lfm-2.5-2.6b:free",
-        "name": "LiquidAI: LFM2.5-2.6B (free)",
-        "source": "Kilo public model API",
-        "status": "Listed free with zero input/output prices; provider terms apply"
-      },
-      {
-        "id": "nvidia/nemotron-3.5-lightning:free",
-        "name": "NVIDIA: Nemotron 3.5 Lightning (free)",
-        "source": "Kilo public model API",
-        "status": "Listed free with zero input/output prices; provider terms apply"
-      },
-      {
-        "id": "thinkingmachines/inkling-small:free",
-        "name": "Thinking Machines: Inkling Small (free)",
-        "source": "Kilo public model API",
-        "status": "Listed free with zero input/output prices; provider terms apply"
-      },
-      {
-        "id": "poolside/laguna-s-2.1:free",
-        "name": "Poolside: Laguna S 2.1 (free)",
-        "source": "Kilo public model API",
-        "status": "Listed free with zero input/output prices; provider terms apply"
-      },
-      {
-        "id": "poolside/laguna-xs-2.1:free",
-        "name": "Poolside: Laguna XS 2.1 (free)",
-        "source": "Kilo public model API",
-        "status": "Listed free with zero input/output prices; provider terms apply"
-      },
-      {
-        "id": "cohere/north-mini-code:free",
-        "name": "Cohere: North Mini Code (free)",
-        "source": "Kilo public model API",
-        "status": "Listed free with zero input/output prices; provider terms apply"
-      },
-      {
-        "id": "nvidia/nemotron-3-ultra-550b-a55b:free",
-        "name": "NVIDIA: Nemotron 3 Ultra (free)",
-        "source": "Kilo public model API",
-        "status": "Listed free with zero input/output prices; provider terms apply"
-      },
-      {
-        "id": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
-        "name": "NVIDIA: Nemotron 3 Nano Omni (free)",
-        "source": "Kilo public model API",
-        "status": "Listed free with zero input/output prices; provider terms apply"
-      },
-      {
-        "id": "nvidia/nemotron-3-super-120b-a12b:free",
-        "name": "NVIDIA: Nemotron 3 Super (free)",
-        "source": "Kilo public model API",
-        "status": "Listed free with zero input/output prices; provider terms apply"
-      },
-      {
-        "id": "openrouter/free",
-        "name": "OpenRouter Free Models Router",
-        "source": "Kilo public model API",
-        "status": "Listed free with zero input/output prices; provider terms apply"
-      }
-    ],
-    "agnes": [
-      {
-        "id": "agnes-2.0-flash",
-        "name": "Agnes 2.0 Flash",
-        "source": "FreeLLMAPI public catalog",
-        "status": "Source-listed free access; check provider terms",
-        "contextWindow": 262144,
-        "supportsTools": true,
-        "supportsVision": true
-      },
-      {
-        "id": "agnes-2.5-flash",
-        "name": "Agnes 2.5 Flash",
-        "source": "FreeLLMAPI public catalog",
-        "status": "Source-listed free access; check provider terms",
-        "contextWindow": 262144,
-        "supportsTools": true,
-        "supportsVision": true
-      },
-      {
-        "id": "agnes-3.0-flash",
-        "name": "Agnes 3.0 Flash (Agnes AI)",
-        "source": "FreeLLMAPI public catalog",
-        "status": "Source-listed free access; check provider terms",
-        "supportsTools": false,
-        "supportsVision": false
-      },
-      {
-        "id": "agnes-2.5-pro",
-        "name": "Agnes 2.5 Pro (Agnes AI)",
-        "source": "FreeLLMAPI public catalog",
-        "status": "Source-listed free access; check provider terms",
-        "supportsTools": false,
-        "supportsVision": false
-      },
-      {
-        "id": "agnes-2.5-pro-alpha",
-        "name": "Agnes 2.5 Pro Alpha (Agnes AI)",
-        "source": "FreeLLMAPI public catalog",
-        "status": "Source-listed free access; check provider terms",
-        "supportsTools": false,
-        "supportsVision": false
       }
     ],
     "bazaarlink": [
@@ -1398,15 +901,6 @@
       {
         "id": "koboldcpp/Gemma-4-E4B-Uncensored-HauhauCS-Aggressive",
         "name": "Gemma 4 E4B Uncensored Aggressive (AI Horde)",
-        "source": "FreeLLMAPI public catalog",
-        "status": "Source-listed free access; check provider terms",
-        "contextWindow": 4096,
-        "supportsTools": false,
-        "supportsVision": false
-      },
-      {
-        "id": "koboldcpp/Gemma-4-E4B-it-Ultra-Uncensored-Heretic",
-        "name": "Gemma 4 E4B Ultra Uncensored (AI Horde)",
         "source": "FreeLLMAPI public catalog",
         "status": "Source-listed free access; check provider terms",
         "contextWindow": 4096,
@@ -1554,14 +1048,6 @@
         "supportsVision": false
       },
       {
-        "id": "koboldcpp/Rocinante-X-12B",
-        "name": "Rocinante-X-12B (AI Horde)",
-        "source": "FreeLLMAPI public catalog",
-        "status": "Source-listed free access; check provider terms",
-        "supportsTools": false,
-        "supportsVision": false
-      },
-      {
         "id": "koboldcpp/Llama-3.2-3B-Instruct-Q4_K_M",
         "name": "Llama-3 2-3B-Instruct-Q4 K M (AI Horde)",
         "source": "FreeLLMAPI public catalog",
@@ -1641,6 +1127,100 @@
         "status": "Source-listed free access; check provider terms",
         "supportsTools": false,
         "supportsVision": false
+      },
+      {
+        "id": "koboldcpp/Qwen2.5-Coder-3B-Instruct",
+        "name": "Qwen2.5 Coder 3B Instruct (AI Horde)",
+        "source": "FreeLLMAPI public catalog",
+        "status": "Source-listed free access; check provider terms",
+        "supportsTools": false,
+        "supportsVision": false
+      }
+    ],
+    "kilo": [
+      {
+        "id": "kilo-auto/free",
+        "name": "Auto Free",
+        "source": "Kilo public model API",
+        "status": "Listed free with zero input/output prices; provider terms apply"
+      },
+      {
+        "id": "inclusionai/ling-3.2-flash:free",
+        "name": "inclusionAI: Ling 3.2 Flash (free)",
+        "source": "Kilo public model API",
+        "status": "Listed free with zero input/output prices; provider terms apply"
+      },
+      {
+        "id": "baidu/ernie-5.5-flash-preview:free",
+        "name": "Baidu: ERNIE-5.5-Flash-Preview (free)",
+        "source": "Kilo public model API",
+        "status": "Listed free with zero input/output prices; provider terms apply"
+      },
+      {
+        "id": "liquid/lfm-3-1.7b:free",
+        "name": "LiquidAI: LFM3-1.7B (free)",
+        "source": "Kilo public model API",
+        "status": "Listed free with zero input/output prices; provider terms apply"
+      },
+      {
+        "id": "particle-ai/particle-1:free",
+        "name": "Particle AI: Particle-1 (free)",
+        "source": "Kilo public model API",
+        "status": "Listed free with zero input/output prices; provider terms apply"
+      },
+      {
+        "id": "recursive/flint-v1.0:free",
+        "name": "Recursive: Flint (free)",
+        "source": "Kilo public model API",
+        "status": "Listed free with zero input/output prices; provider terms apply"
+      },
+      {
+        "id": "nvidia/nemotron-3.5-super-vl:free",
+        "name": "NVIDIA: Nemotron 3.5 Super VL (free)",
+        "source": "Kilo public model API",
+        "status": "Listed free with zero input/output prices; provider terms apply"
+      },
+      {
+        "id": "dots-studio/dots-3-note-preview:free",
+        "name": "Dots Studio: Dots3-Note Preview (free)",
+        "source": "Kilo public model API",
+        "status": "Listed free with zero input/output prices; provider terms apply"
+      },
+      {
+        "id": "nvidia/nemotron-3.5-lightning:free",
+        "name": "NVIDIA: Nemotron 3.5 Lightning (free)",
+        "source": "Kilo public model API",
+        "status": "Listed free with zero input/output prices; provider terms apply"
+      },
+      {
+        "id": "nvidia/nemotron-3-ultra-550b-a55b:free",
+        "name": "NVIDIA: Nemotron 3 Ultra (free)",
+        "source": "Kilo public model API",
+        "status": "Listed free with zero input/output prices; provider terms apply"
+      },
+      {
+        "id": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
+        "name": "NVIDIA: Nemotron 3 Nano Omni (free)",
+        "source": "Kilo public model API",
+        "status": "Listed free with zero input/output prices; provider terms apply"
+      },
+      {
+        "id": "openrouter/free",
+        "name": "OpenRouter Free Models Router",
+        "source": "Kilo public model API",
+        "status": "Listed free with zero input/output prices; provider terms apply"
+      },
+      {
+        "id": "reflection/beam-free",
+        "name": "Reflection: Beam 1.0 (Free)",
+        "source": "Kilo public model API",
+        "status": "Listed free with zero input/output prices; provider terms apply"
+      },
+      {
+        "id": "stealth/glyph-cluster",
+        "name": "Glyph Cluster",
+        "source": "Kilo public model API",
+        "status": "Listed free with zero input/output prices; provider terms apply"
       }
     ],
     "aion": [
@@ -1710,15 +1290,6 @@
         "supportsVision": true
       },
       {
-        "id": "nvidia/nemotron-3-super-120b-a12b",
-        "name": "Nemotron 3 Super 120B (Requesty)",
-        "source": "FreeLLMAPI public catalog",
-        "status": "Source-listed free access; check provider terms",
-        "contextWindow": 1048576,
-        "supportsTools": true,
-        "supportsVision": false
-      },
-      {
         "id": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
         "name": "Nemotron 3 Nano Omni Reasoning (Requesty)",
         "source": "FreeLLMAPI public catalog",
@@ -1743,6 +1314,15 @@
         "status": "Source-listed free access; check provider terms",
         "contextWindow": 1048576,
         "supportsTools": true,
+        "supportsVision": false
+      },
+      {
+        "id": "novita/ling-3.1-flash",
+        "name": "Ling 3.1 Flash (Requesty)",
+        "source": "FreeLLMAPI public catalog",
+        "status": "Source-listed free access; check provider terms",
+        "contextWindow": 262144,
+        "supportsTools": false,
         "supportsVision": false
       }
     ],
@@ -1782,24 +1362,12 @@
         "contextWindow": 131072,
         "supportsTools": false,
         "supportsVision": false
-      }
-    ],
-    "nara": [
-      {
-        "id": "agnes-2.5-flash",
-        "name": "Agnes 2.5 Flash (NaraRouter)",
-        "source": "FreeLLMAPI public catalog",
-        "status": "Source-listed free access; check provider terms",
-        "contextWindow": 262144,
-        "supportsTools": true,
-        "supportsVision": true
       },
       {
-        "id": "laguna-s-2.1",
-        "name": "Laguna S 2.1 (NaraRouter free)",
+        "id": "aisingapore/Nemotron-SEA-LION-v4.8-120B-A12B",
+        "name": "Nemotron 3 Super 120B (NV)",
         "source": "FreeLLMAPI public catalog",
         "status": "Source-listed free access; check provider terms",
-        "contextWindow": 262144,
         "supportsTools": true,
         "supportsVision": false
       }
@@ -1905,6 +1473,25 @@
         "supportsVision": false
       }
     ],
+    "agnes": [
+      {
+        "id": "agnes-2.5-flash",
+        "name": "Agnes 2.5 Flash",
+        "source": "FreeLLMAPI public catalog",
+        "status": "Source-listed free access; check provider terms",
+        "contextWindow": 262144,
+        "supportsTools": true,
+        "supportsVision": true
+      },
+      {
+        "id": "agnes-3.0-flash",
+        "name": "Agnes 3.0 Flash (Agnes AI)",
+        "source": "FreeLLMAPI public catalog",
+        "status": "Source-listed free access; check provider terms",
+        "supportsTools": false,
+        "supportsVision": false
+      }
+    ],
     "xkiro": [
       {
         "id": "mistralai/mistral-large-2512",
@@ -1986,177 +1573,6 @@
         "contextWindow": 262144,
         "supportsTools": true,
         "supportsVision": true
-      },
-      {
-        "id": "qwen/qwen3.8-max:free",
-        "name": "Qwen3.8 Max (xKiro)",
-        "source": "FreeLLMAPI public catalog",
-        "status": "Source-listed free access; check provider terms",
-        "contextWindow": 1000000,
-        "supportsTools": true,
-        "supportsVision": false
-      },
-      {
-        "id": "qwen/qwen3.8-omni-flash:free",
-        "name": "Qwen3.8 Omni Flash (xKiro)",
-        "source": "FreeLLMAPI public catalog",
-        "status": "Source-listed free access; check provider terms",
-        "contextWindow": 1000000,
-        "supportsTools": true,
-        "supportsVision": true
-      },
-      {
-        "id": "qwen/qwen3.7-max:free",
-        "name": "Qwen3.7 Max (xKiro)",
-        "source": "FreeLLMAPI public catalog",
-        "status": "Source-listed free access; check provider terms",
-        "contextWindow": 1000000,
-        "supportsTools": true,
-        "supportsVision": false
-      },
-      {
-        "id": "qwen/qwen3.7-plus:free",
-        "name": "Qwen3.7 Plus (xKiro)",
-        "source": "FreeLLMAPI public catalog",
-        "status": "Source-listed free access; check provider terms",
-        "contextWindow": 1000000,
-        "supportsTools": true,
-        "supportsVision": false
-      },
-      {
-        "id": "qwen/qwen3.7-flash:free",
-        "name": "Qwen3.7 Flash (xKiro)",
-        "source": "FreeLLMAPI public catalog",
-        "status": "Source-listed free access; check provider terms",
-        "contextWindow": 1000000,
-        "supportsTools": true,
-        "supportsVision": false
-      },
-      {
-        "id": "qwen/qwen3.6-plus:free",
-        "name": "Qwen3.6 Plus (xKiro)",
-        "source": "FreeLLMAPI public catalog",
-        "status": "Source-listed free access; check provider terms",
-        "contextWindow": 1000000,
-        "supportsTools": true,
-        "supportsVision": false
-      },
-      {
-        "id": "qwen/qwen3.6-max-preview:free",
-        "name": "Qwen3.6 Max Preview (xKiro)",
-        "source": "FreeLLMAPI public catalog",
-        "status": "Source-listed free access; check provider terms",
-        "contextWindow": 262144,
-        "supportsTools": true,
-        "supportsVision": false
-      },
-      {
-        "id": "qwen/qwen3.6-35b-a3b:free",
-        "name": "Qwen3.6 35B A3B (xKiro)",
-        "source": "FreeLLMAPI public catalog",
-        "status": "Source-listed free access; check provider terms",
-        "contextWindow": 262144,
-        "supportsTools": true,
-        "supportsVision": false
-      },
-      {
-        "id": "qwen/qwen3.6-27b:free",
-        "name": "Qwen3.6 27B (xKiro)",
-        "source": "FreeLLMAPI public catalog",
-        "status": "Source-listed free access; check provider terms",
-        "contextWindow": 262144,
-        "supportsTools": true,
-        "supportsVision": false
-      },
-      {
-        "id": "qwen/qwen3.5-plus:free",
-        "name": "Qwen3.5 Plus (xKiro)",
-        "source": "FreeLLMAPI public catalog",
-        "status": "Source-listed free access; check provider terms",
-        "contextWindow": 1000000,
-        "supportsTools": true,
-        "supportsVision": false
-      },
-      {
-        "id": "qwen/qwen3.5-flash:free",
-        "name": "Qwen3.5 Flash (xKiro)",
-        "source": "FreeLLMAPI public catalog",
-        "status": "Source-listed free access; check provider terms",
-        "contextWindow": 1000000,
-        "supportsTools": true,
-        "supportsVision": false
-      },
-      {
-        "id": "qwen/qwen3.5-397b-a17b:free",
-        "name": "Qwen3.5 397B A17B (xKiro)",
-        "source": "FreeLLMAPI public catalog",
-        "status": "Source-listed free access; check provider terms",
-        "contextWindow": 262144,
-        "supportsTools": true,
-        "supportsVision": false
-      },
-      {
-        "id": "qwen/qwen3.5-omni-plus:free",
-        "name": "Qwen3.5 Omni Plus (xKiro)",
-        "source": "FreeLLMAPI public catalog",
-        "status": "Source-listed free access; check provider terms",
-        "contextWindow": 262144,
-        "supportsTools": true,
-        "supportsVision": true
-      },
-      {
-        "id": "qwen/qwen3.5-omni-flash:free",
-        "name": "Qwen3.5 Omni Flash (xKiro)",
-        "source": "FreeLLMAPI public catalog",
-        "status": "Source-listed free access; check provider terms",
-        "contextWindow": 262144,
-        "supportsTools": true,
-        "supportsVision": true
-      },
-      {
-        "id": "qwen/qwen3-coder-plus:free",
-        "name": "Qwen3 Coder Plus (xKiro)",
-        "source": "FreeLLMAPI public catalog",
-        "status": "Source-listed free access; check provider terms",
-        "contextWindow": 1048576,
-        "supportsTools": true,
-        "supportsVision": false
-      },
-      {
-        "id": "qwen/qwen3-max:free",
-        "name": "Qwen3 Max (xKiro)",
-        "source": "FreeLLMAPI public catalog",
-        "status": "Source-listed free access; check provider terms",
-        "contextWindow": 262144,
-        "supportsTools": true,
-        "supportsVision": false
-      },
-      {
-        "id": "qwen/qwen3-vl-plus:free",
-        "name": "Qwen3 VL Plus (xKiro)",
-        "source": "FreeLLMAPI public catalog",
-        "status": "Source-listed free access; check provider terms",
-        "contextWindow": 262144,
-        "supportsTools": true,
-        "supportsVision": true
-      },
-      {
-        "id": "qwen/qwen3-omni-flash:free",
-        "name": "Qwen3 Omni Flash (xKiro)",
-        "source": "FreeLLMAPI public catalog",
-        "status": "Source-listed free access; check provider terms",
-        "contextWindow": 262144,
-        "supportsTools": true,
-        "supportsVision": true
-      },
-      {
-        "id": "qwen/qwen-plus-2025-07-28:free",
-        "name": "Qwen Plus 2025-07-28 (xKiro)",
-        "source": "FreeLLMAPI public catalog",
-        "status": "Source-listed free access; check provider terms",
-        "contextWindow": 131072,
-        "supportsTools": true,
-        "supportsVision": false
       }
     ],
     "unorouter": [
@@ -2210,20 +1626,56 @@
         "supportsVision": true
       },
       {
-        "id": "deepseek-v4-flash:free",
-        "name": "DeepSeek V4 Flash (Routeway)",
+        "id": "gemma-4-26b-a4b-it-chimerax:free",
+        "name": "Gemma 4 26B A4B IT chimerax (Routeway free)",
         "source": "FreeLLMAPI public catalog",
         "status": "Source-listed free access; check provider terms",
-        "contextWindow": 131072,
+        "contextWindow": 62000,
         "supportsTools": false,
         "supportsVision": false
       },
       {
-        "id": "minimax-m2.7:free",
-        "name": "MiniMax M2.7 (Routeway)",
+        "id": "gemma-4-26b-a4b-it-darksoul:free",
+        "name": "Gemma 4 26B A4B IT darksoul (Routeway free)",
         "source": "FreeLLMAPI public catalog",
         "status": "Source-listed free access; check provider terms",
-        "contextWindow": 204800,
+        "contextWindow": 62000,
+        "supportsTools": false,
+        "supportsVision": false
+      },
+      {
+        "id": "gemma-4-26b-a4b-it-luminous:free",
+        "name": "Gemma 4 26B A4B IT luminous (Routeway free)",
+        "source": "FreeLLMAPI public catalog",
+        "status": "Source-listed free access; check provider terms",
+        "contextWindow": 62000,
+        "supportsTools": false,
+        "supportsVision": false
+      },
+      {
+        "id": "gemma-4-26b-a4b-it-moonlight:free",
+        "name": "Gemma 4 26B A4B IT moonlight (Routeway free)",
+        "source": "FreeLLMAPI public catalog",
+        "status": "Source-listed free access; check provider terms",
+        "contextWindow": 62000,
+        "supportsTools": false,
+        "supportsVision": false
+      },
+      {
+        "id": "gemma-4-26b-a4b-it-musica:free",
+        "name": "Gemma 4 26B A4B IT musica (Routeway free)",
+        "source": "FreeLLMAPI public catalog",
+        "status": "Source-listed free access; check provider terms",
+        "contextWindow": 62000,
+        "supportsTools": false,
+        "supportsVision": false
+      },
+      {
+        "id": "gemma-4-26b-a4b-it-meromero:free",
+        "name": "Gemma 4 26B A4B IT meromero (Routeway free)",
+        "source": "FreeLLMAPI public catalog",
+        "status": "Source-listed free access; check provider terms",
+        "contextWindow": 62000,
         "supportsTools": false,
         "supportsVision": false
       }
@@ -2238,12 +1690,6 @@
       {
         "id": "gpt-4o-mini",
         "name": "OpenAI: GPT-4o-mini",
-        "source": "ElectronHub API + FreeLLMAPI",
-        "status": "Consumes shared weekly credits; token prices may be nonzero"
-      },
-      {
-        "id": "gpt-4.1-nano",
-        "name": "OpenAI: GPT-4.1 Nano",
         "source": "ElectronHub API + FreeLLMAPI",
         "status": "Consumes shared weekly credits; token prices may be nonzero"
       },
@@ -2290,10 +1736,22 @@
         "status": "Consumes shared weekly credits; token prices may be nonzero"
       },
       {
+        "id": "gpt-6-luna",
+        "name": "OpenAI: GPT-6 Luna",
+        "source": "ElectronHub API + FreeLLMAPI",
+        "status": "Consumes shared weekly credits; token prices may be nonzero"
+      },
+      {
         "id": "gpt-oss-20b:free",
         "name": "OpenAI: GPT OSS 20B (free)",
         "source": "ElectronHub public API",
         "status": "Daily free Neutrinos; per-request quota cost varies"
+      },
+      {
+        "id": "gpt-oss-20b",
+        "name": "OpenAI: GPT OSS 20B",
+        "source": "ElectronHub API + FreeLLMAPI",
+        "status": "Consumes shared weekly credits; token prices may be nonzero"
       },
       {
         "id": "gpt-oss-120b:free",
@@ -2332,6 +1790,12 @@
         "status": "Consumes shared weekly credits; token prices may be nonzero"
       },
       {
+        "id": "gemma-2-27b-it",
+        "name": "Google: Gemma 2 27B",
+        "source": "ElectronHub API + FreeLLMAPI",
+        "status": "Consumes shared weekly credits; token prices may be nonzero"
+      },
+      {
         "id": "gemma-3-1b-it",
         "name": "Google: Gemma 3 1B",
         "source": "ElectronHub API + FreeLLMAPI",
@@ -2346,6 +1810,12 @@
       {
         "id": "gemma-3-12b-it",
         "name": "Google: Gemma 3 12B",
+        "source": "ElectronHub API + FreeLLMAPI",
+        "status": "Consumes shared weekly credits; token prices may be nonzero"
+      },
+      {
+        "id": "gemma-3-27b-it",
+        "name": "Google: Gemma 3 27B",
         "source": "ElectronHub API + FreeLLMAPI",
         "status": "Consumes shared weekly credits; token prices may be nonzero"
       },
@@ -2374,10 +1844,10 @@
         "status": "Consumes shared weekly credits; token prices may be nonzero"
       },
       {
-        "id": "llama-3.2-1b",
-        "name": "Meta: Llama 3.2 1B",
-        "source": "ElectronHub API + FreeLLMAPI",
-        "status": "Consumes shared weekly credits; token prices may be nonzero"
+        "id": "gemma-4-uncensored:free",
+        "name": "Google: Gemma 4 Uncensored (free)",
+        "source": "ElectronHub public API",
+        "status": "Daily free Neutrinos; per-request quota cost varies"
       },
       {
         "id": "llama-3.2-3b",
@@ -2392,10 +1862,10 @@
         "status": "Consumes shared weekly credits; token prices may be nonzero"
       },
       {
-        "id": "llama-4-maverick-17b-128e-instruct",
-        "name": "Meta: Llama 4 Maverick",
-        "source": "ElectronHub API + FreeLLMAPI",
-        "status": "Consumes shared weekly credits; token prices may be nonzero"
+        "id": "nemotron-3-nano-omni-30b-a3b-reasoning:free",
+        "name": "NVIDIA: Nemotron 3 Nano Omni (free)",
+        "source": "ElectronHub public API",
+        "status": "Daily free Neutrinos; per-request quota cost varies"
       },
       {
         "id": "nemotron-3-nano-omni-30b-a3b-reasoning",
@@ -2404,16 +1874,22 @@
         "status": "Consumes shared weekly credits; token prices may be nonzero"
       },
       {
-        "id": "nemotron-3-super-120b-a12b",
-        "name": "NVIDIA: Nemotron 3 Super",
-        "source": "ElectronHub API + FreeLLMAPI",
-        "status": "Consumes shared weekly credits; token prices may be nonzero"
+        "id": "nemotron-3-ultra-550b-a55b:free",
+        "name": "NVIDIA: Nemotron 3 Ultra (free)",
+        "source": "ElectronHub public API",
+        "status": "Daily free Neutrinos; per-request quota cost varies"
       },
       {
         "id": "nemotron-3-ultra-550b-a55b",
         "name": "NVIDIA: Nemotron 3 Ultra",
         "source": "ElectronHub API + FreeLLMAPI",
         "status": "Consumes shared weekly credits; token prices may be nonzero"
+      },
+      {
+        "id": "nemotron-3.5-super-vl:free",
+        "name": "NVIDIA: Nemotron 3.5 Super VL (free)",
+        "source": "ElectronHub public API",
+        "status": "Daily free Neutrinos; per-request quota cost varies"
       },
       {
         "id": "nemotron-3.5-lightning:free",
@@ -2428,20 +1904,8 @@
         "status": "Consumes shared weekly credits; token prices may be nonzero"
       },
       {
-        "id": "deepseek-r1-distill-qwen-32b",
-        "name": "DeepSeek: R1 Distill Qwen 32B",
-        "source": "ElectronHub API + FreeLLMAPI",
-        "status": "Consumes shared weekly credits; token prices may be nonzero"
-      },
-      {
         "id": "deepseek-v3.2:free",
         "name": "DeepSeek: DeepSeek V3.2 (free)",
-        "source": "ElectronHub public API",
-        "status": "Daily free Neutrinos; per-request quota cost varies"
-      },
-      {
-        "id": "deepseek-v4-flash:free",
-        "name": "DeepSeek: DeepSeek V4 Flash (free)",
         "source": "ElectronHub public API",
         "status": "Daily free Neutrinos; per-request quota cost varies"
       },
@@ -2458,8 +1922,26 @@
         "status": "Consumes shared weekly credits; token prices may be nonzero"
       },
       {
+        "id": "deepseek-v4.1-flash:free",
+        "name": "DeepSeek: DeepSeek V4.1 Flash (free)",
+        "source": "ElectronHub public API",
+        "status": "Daily free Neutrinos; per-request quota cost varies"
+      },
+      {
         "id": "codestral-2508",
         "name": "Mistral: Codestral 2508",
+        "source": "ElectronHub API + FreeLLMAPI",
+        "status": "Consumes shared weekly credits; token prices may be nonzero"
+      },
+      {
+        "id": "devstral-2512",
+        "name": "Mistral: Devstral 2512",
+        "source": "ElectronHub API + FreeLLMAPI",
+        "status": "Consumes shared weekly credits; token prices may be nonzero"
+      },
+      {
+        "id": "labs-devstral-small-2512",
+        "name": "Mistral: Devstral Small 2",
         "source": "ElectronHub API + FreeLLMAPI",
         "status": "Consumes shared weekly credits; token prices may be nonzero"
       },
@@ -2482,6 +1964,24 @@
         "status": "Consumes shared weekly credits; token prices may be nonzero"
       },
       {
+        "id": "mistral-large-2512",
+        "name": "Mistral: Mistral Large 3",
+        "source": "ElectronHub API + FreeLLMAPI",
+        "status": "Consumes shared weekly credits; token prices may be nonzero"
+      },
+      {
+        "id": "mistral-medium-3-5",
+        "name": "Mistral: Mistral Medium 3.5",
+        "source": "ElectronHub API + FreeLLMAPI",
+        "status": "Consumes shared weekly credits; token prices may be nonzero"
+      },
+      {
+        "id": "mistral-small-2603",
+        "name": "Mistral: Mistral Small 4",
+        "source": "ElectronHub API + FreeLLMAPI",
+        "status": "Consumes shared weekly credits; token prices may be nonzero"
+      },
+      {
         "id": "open-mistral-nemo-2407",
         "name": "Mistral: Open Mistral Nemo 2407",
         "source": "ElectronHub API + FreeLLMAPI",
@@ -2494,10 +1994,22 @@
         "status": "Daily free Neutrinos; per-request quota cost varies"
       },
       {
+        "id": "mistral-small-3.1-24b-instruct",
+        "name": "Mistral: Mistral Small 3.1 24B",
+        "source": "ElectronHub API + FreeLLMAPI",
+        "status": "Consumes shared weekly credits; token prices may be nonzero"
+      },
+      {
         "id": "mistral-small-3.2-24b-instruct:free",
         "name": "Mistral: Mistral Small 3.2 24B (free)",
         "source": "ElectronHub public API",
         "status": "Daily free Neutrinos; per-request quota cost varies"
+      },
+      {
+        "id": "mistral-small-3.2-24b-instruct",
+        "name": "Mistral: Mistral Small 3.2 24B",
+        "source": "ElectronHub API + FreeLLMAPI",
+        "status": "Consumes shared weekly credits; token prices may be nonzero"
       },
       {
         "id": "command-r-08-2024",
@@ -2506,14 +2018,14 @@
         "status": "Consumes shared weekly credits; token prices may be nonzero"
       },
       {
-        "id": "phi-4",
-        "name": "Microsoft: Phi 4",
+        "id": "north-mini-code-1-0",
+        "name": "Cohere: North Mini Code",
         "source": "ElectronHub API + FreeLLMAPI",
         "status": "Consumes shared weekly credits; token prices may be nonzero"
       },
       {
-        "id": "wizardlm-2-8x22b",
-        "name": "Microsoft: WizardLM-2 8x22B",
+        "id": "phi-4",
+        "name": "Microsoft: Phi 4",
         "source": "ElectronHub API + FreeLLMAPI",
         "status": "Consumes shared weekly credits; token prices may be nonzero"
       },
@@ -2548,20 +2060,8 @@
         "status": "Consumes shared weekly credits; token prices may be nonzero"
       },
       {
-        "id": "qwen-2.5-32b-instruct",
-        "name": "Alibaba: Qwen2.5 32B Instruct",
-        "source": "ElectronHub API + FreeLLMAPI",
-        "status": "Consumes shared weekly credits; token prices may be nonzero"
-      },
-      {
         "id": "qwen-2.5-72b-instruct",
         "name": "Alibaba: Qwen2.5 72B Instruct",
-        "source": "ElectronHub API + FreeLLMAPI",
-        "status": "Consumes shared weekly credits; token prices may be nonzero"
-      },
-      {
-        "id": "qwen-2.5-coder-7b-instruct",
-        "name": "Alibaba: Qwen2.5 Coder 7B Instruct",
         "source": "ElectronHub API + FreeLLMAPI",
         "status": "Consumes shared weekly credits; token prices may be nonzero"
       },
@@ -2638,14 +2138,8 @@
         "status": "Daily free Neutrinos; per-request quota cost varies"
       },
       {
-        "id": "laguna-s-2.1",
-        "name": "Poolside: Laguna S 2.1",
-        "source": "ElectronHub API + FreeLLMAPI",
-        "status": "Consumes shared weekly credits; token prices may be nonzero"
-      },
-      {
-        "id": "laguna-xs-2.1",
-        "name": "Poolside: Laguna XS 2.1",
+        "id": "mytho-max-l2-13b",
+        "name": "Gryphe: Mythomax L2 13B",
         "source": "ElectronHub API + FreeLLMAPI",
         "status": "Consumes shared weekly credits; token prices may be nonzero"
       },
@@ -2662,14 +2156,20 @@
         "status": "Consumes shared weekly credits; token prices may be nonzero"
       },
       {
+        "id": "hy4-preview",
+        "name": "Tencent: Hy4 Preview",
+        "source": "ElectronHub API + FreeLLMAPI",
+        "status": "Consumes shared weekly credits; token prices may be nonzero"
+      },
+      {
         "id": "longcat-flash-chat",
         "name": "Meituan: LongCat Flash Chat",
         "source": "ElectronHub API + FreeLLMAPI",
         "status": "Consumes shared weekly credits; token prices may be nonzero"
       },
       {
-        "id": "ling-3.0-flash-sante",
-        "name": "inclusionAI: Ling 3.0 Flash Sante",
+        "id": "glm-4.5-air",
+        "name": "ZhipuAI: GLM 4.5 Air",
         "source": "ElectronHub API + FreeLLMAPI",
         "status": "Consumes shared weekly credits; token prices may be nonzero"
       },
@@ -2716,8 +2216,14 @@
         "status": "Daily free Neutrinos; per-request quota cost varies"
       },
       {
-        "id": "mimo-v2.5",
-        "name": "Xiaomi: Mimo V2.5",
+        "id": "glm-5.3-flash:free",
+        "name": "ZhipuAI: GLM 5.3 Flash (free)",
+        "source": "ElectronHub public API",
+        "status": "Daily free Neutrinos; per-request quota cost varies"
+      },
+      {
+        "id": "mimo-v2.6-flash",
+        "name": "Xiaomi: MiMo V2.6 Flash",
         "source": "ElectronHub API + FreeLLMAPI",
         "status": "Consumes shared weekly credits; token prices may be nonzero"
       },
@@ -2732,62 +2238,84 @@
         "name": "StepFun: Step 3.7 Flash",
         "source": "ElectronHub API + FreeLLMAPI",
         "status": "Consumes shared weekly credits; token prices may be nonzero"
-      }
-    ],
-    "router9": [
-      {
-        "id": "minimax/minimax-m3",
-        "name": "MiniMax M3 (Router9)",
-        "source": "FreeLLMAPI public catalog",
-        "status": "Source-listed free access; check provider terms",
-        "contextWindow": 1048576,
-        "supportsTools": false,
-        "supportsVision": true
       },
       {
-        "id": "z-ai/glm-5.2",
-        "name": "GLM 5.2 (Router9)",
-        "source": "FreeLLMAPI public catalog",
-        "status": "Source-listed free access; check provider terms",
-        "contextWindow": 1048576,
-        "supportsTools": false,
-        "supportsVision": false
+        "id": "ernie-5.5-flash-preview:free",
+        "name": "Baidu: ERNIE-5.5-Flash-Preview (free)",
+        "source": "ElectronHub public API",
+        "status": "Daily free Neutrinos; per-request quota cost varies"
       },
       {
-        "id": "qwen/qwen3-30b-a3b-instruct-2507",
-        "name": "Qwen3 30B A3B Instruct 2507 (Router9)",
-        "source": "FreeLLMAPI public catalog",
-        "status": "Source-listed free access; check provider terms",
-        "contextWindow": 262144,
-        "supportsTools": false,
-        "supportsVision": false
+        "id": "dots-3-note-preview:free",
+        "name": "Dots Studio: Dots3-Note Preview (free)",
+        "source": "ElectronHub public API",
+        "status": "Daily free Neutrinos; per-request quota cost varies"
       },
       {
-        "id": "qwen/qwen3-235b-a22b-2507",
-        "name": "Qwen3 235B A22B Instruct 2507 (Router9)",
-        "source": "FreeLLMAPI public catalog",
-        "status": "Source-listed free access; check provider terms",
-        "contextWindow": 262144,
-        "supportsTools": false,
-        "supportsVision": false
+        "id": "ling-3.2-flash:free",
+        "name": "inclusionAI: Ling 3.2 Flash (free)",
+        "source": "ElectronHub public API",
+        "status": "Daily free Neutrinos; per-request quota cost varies"
       },
       {
-        "id": "deepseek/deepseek-v4-pro",
-        "name": "DeepSeek V4 Pro (Router9)",
-        "source": "FreeLLMAPI public catalog",
-        "status": "Source-listed free access; check provider terms",
-        "contextWindow": 1048576,
-        "supportsTools": false,
-        "supportsVision": false
+        "id": "lfm-3-1.7b:free",
+        "name": "LiquidAI: LFM3-1.7B (free)",
+        "source": "ElectronHub public API",
+        "status": "Daily free Neutrinos; per-request quota cost varies"
       },
       {
-        "id": "deepseek/deepseek-v4-flash",
-        "name": "DeepSeek V4 Flash 0731 (Router9)",
-        "source": "FreeLLMAPI public catalog",
-        "status": "Source-listed free access; check provider terms",
-        "contextWindow": 1048576,
-        "supportsTools": false,
-        "supportsVision": false
+        "id": "particle-1:free",
+        "name": "Particle AI: Particle-1 (free)",
+        "source": "ElectronHub public API",
+        "status": "Daily free Neutrinos; per-request quota cost varies"
+      },
+      {
+        "id": "flint-v1.0:free",
+        "name": "Recursive: Flint (free)",
+        "source": "ElectronHub public API",
+        "status": "Daily free Neutrinos; per-request quota cost varies"
+      },
+      {
+        "id": "l3-lunaris-8b",
+        "name": "Sao10K: L3 8B Lunaris",
+        "source": "ElectronHub API + FreeLLMAPI",
+        "status": "Consumes shared weekly credits; token prices may be nonzero"
+      },
+      {
+        "id": "deepseek-v4-flash-0731",
+        "name": "HuggingFace: DeepSeek-V4-Flash-0731",
+        "source": "ElectronHub API + FreeLLMAPI",
+        "status": "Consumes shared weekly credits; token prices may be nonzero"
+      },
+      {
+        "id": "gemma-4-31b-aura-large-v1.1",
+        "name": "HuggingFace: Gemma-4-31B-Aura-Large-v1.1",
+        "source": "ElectronHub API + FreeLLMAPI",
+        "status": "Consumes shared weekly credits; token prices may be nonzero"
+      },
+      {
+        "id": "mimo-v2.6-flash-mopd",
+        "name": "HuggingFace: MiMo-V2.6-Flash-MOPD",
+        "source": "ElectronHub API + FreeLLMAPI",
+        "status": "Consumes shared weekly credits; token prices may be nonzero"
+      },
+      {
+        "id": "qwen3.8-27b-omnimerge-v6",
+        "name": "HuggingFace: Qwen3.8-27B-Omnimerge-v6",
+        "source": "ElectronHub API + FreeLLMAPI",
+        "status": "Consumes shared weekly credits; token prices may be nonzero"
+      },
+      {
+        "id": "qwen3.8-27b-swift",
+        "name": "HuggingFace: Qwen3.8-27B-Swift",
+        "source": "ElectronHub API + FreeLLMAPI",
+        "status": "Consumes shared weekly credits; token prices may be nonzero"
+      },
+      {
+        "id": "qwen3.8-flash-next",
+        "name": "HuggingFace: Qwen3.8-Flash-Next",
+        "source": "ElectronHub API + FreeLLMAPI",
+        "status": "Consumes shared weekly credits; token prices may be nonzero"
       }
     ],
     "septor": [
@@ -2867,6 +2395,44 @@
         "name": "Qwen 3.5 9B (CLōD)",
         "source": "FreeLLMAPI public catalog",
         "status": "Source-listed free access; check provider terms",
+        "supportsTools": false,
+        "supportsVision": false
+      }
+    ],
+    "router9": [
+      {
+        "id": "z-ai/glm-5.2",
+        "name": "GLM 5.2 (Router9)",
+        "source": "FreeLLMAPI public catalog",
+        "status": "Source-listed free access; check provider terms",
+        "contextWindow": 1048576,
+        "supportsTools": false,
+        "supportsVision": false
+      },
+      {
+        "id": "qwen/qwen3-235b-a22b-2507",
+        "name": "Qwen3 235B A22B Instruct 2507 (Router9)",
+        "source": "FreeLLMAPI public catalog",
+        "status": "Source-listed free access; check provider terms",
+        "contextWindow": 262144,
+        "supportsTools": false,
+        "supportsVision": false
+      },
+      {
+        "id": "deepseek/deepseek-v4-pro",
+        "name": "DeepSeek V4 Pro (Router9)",
+        "source": "FreeLLMAPI public catalog",
+        "status": "Source-listed free access; check provider terms",
+        "contextWindow": 1048576,
+        "supportsTools": false,
+        "supportsVision": false
+      },
+      {
+        "id": "deepseek/deepseek-v4-flash",
+        "name": "DeepSeek V4 Flash 0731 (Router9)",
+        "source": "FreeLLMAPI public catalog",
+        "status": "Source-listed free access; check provider terms",
+        "contextWindow": 1048576,
         "supportsTools": false,
         "supportsVision": false
       }
@@ -3100,6 +2666,51 @@
         "status": "Source-listed free access; check provider terms",
         "supportsTools": false,
         "supportsVision": false
+      },
+      {
+        "id": "google/gemini-2.5-flash",
+        "name": "Gemini 2.5 Flash",
+        "source": "FreeLLMAPI public catalog",
+        "status": "Source-listed free access; check provider terms",
+        "contextWindow": 1048576,
+        "supportsTools": true,
+        "supportsVision": false
+      },
+      {
+        "id": "google/gemini-3.1-flash-lite",
+        "name": "Gemini 3.1 Flash-Lite",
+        "source": "FreeLLMAPI public catalog",
+        "status": "Source-listed free access; check provider terms",
+        "contextWindow": 1048576,
+        "supportsTools": true,
+        "supportsVision": false
+      },
+      {
+        "id": "cloudflare/@cf/meta/llama-3.3-70b-instruct-fp8-fast",
+        "name": "Llama 3.3 70B fp8-fast (CF)",
+        "source": "FreeLLMAPI public catalog",
+        "status": "Source-listed free access; check provider terms",
+        "contextWindow": 24000,
+        "supportsTools": true,
+        "supportsVision": false
+      },
+      {
+        "id": "cloudflare/@cf/ibm-granite/granite-4.0-h-micro",
+        "name": "Granite 4.0 H Micro (CF)",
+        "source": "FreeLLMAPI public catalog",
+        "status": "Source-listed free access; check provider terms",
+        "contextWindow": 131072,
+        "supportsTools": true,
+        "supportsVision": false
+      },
+      {
+        "id": "cloudflare-vision/@cf/meta/llama-4-scout-17b-16e-instruct",
+        "name": "Llama 4 Scout (CF)",
+        "source": "FreeLLMAPI public catalog",
+        "status": "Source-listed free access; check provider terms",
+        "contextWindow": 131072,
+        "supportsTools": true,
+        "supportsVision": false
       }
     ],
     "waterfall": [
@@ -3191,6 +2802,14 @@
         "contextWindow": 262144,
         "supportsTools": false,
         "supportsVision": false
+      },
+      {
+        "id": "kimi-k3-nvidia-direct",
+        "name": "Kimi K3 NVIDIA Direct (Waterfall)",
+        "source": "FreeLLMAPI public catalog",
+        "status": "Source-listed free access; check provider terms",
+        "supportsTools": false,
+        "supportsVision": false
       }
     ],
     "logfare": [
@@ -3212,6 +2831,767 @@
         "supportsVision": false
       }
     ],
+    "aclide": [
+      {
+        "id": "z-ai/glm-4.7-flashx",
+        "name": "GLM-4.7 FlashX (ACLIDE)",
+        "source": "FreeLLMAPI public catalog",
+        "status": "Source-listed free access; check provider terms",
+        "supportsTools": true,
+        "supportsVision": false
+      },
+      {
+        "id": "z-ai/glm-4.5-airx",
+        "name": "GLM-4.5 AirX (ACLIDE)",
+        "source": "FreeLLMAPI public catalog",
+        "status": "Source-listed free access; check provider terms",
+        "supportsTools": true,
+        "supportsVision": false
+      },
+      {
+        "id": "z-ai/glm-5v-turbo",
+        "name": "GLM-5V Turbo (ACLIDE)",
+        "source": "FreeLLMAPI public catalog",
+        "status": "Source-listed free access; check provider terms",
+        "supportsTools": true,
+        "supportsVision": false
+      },
+      {
+        "id": "z-ai/glm-5-turbo",
+        "name": "GLM-5 Turbo (ACLIDE)",
+        "source": "FreeLLMAPI public catalog",
+        "status": "Source-listed free access; check provider terms",
+        "supportsTools": true,
+        "supportsVision": false
+      },
+      {
+        "id": "qwen/qwen3.8-max:free",
+        "name": "Qwen3.8 Max (ACLIDE)",
+        "source": "FreeLLMAPI public catalog",
+        "status": "Source-listed free access; check provider terms",
+        "supportsTools": true,
+        "supportsVision": false
+      },
+      {
+        "id": "qwen/qwen3.7-max:free",
+        "name": "Qwen3.7 Max (ACLIDE)",
+        "source": "FreeLLMAPI public catalog",
+        "status": "Source-listed free access; check provider terms",
+        "supportsTools": true,
+        "supportsVision": false
+      },
+      {
+        "id": "qwen/qwen3.7-plus:free",
+        "name": "Qwen3.7 Plus (ACLIDE)",
+        "source": "FreeLLMAPI public catalog",
+        "status": "Source-listed free access; check provider terms",
+        "supportsTools": true,
+        "supportsVision": false
+      },
+      {
+        "id": "qwen/qwen3.6-27b:free",
+        "name": "Qwen3.6 27B (ACLIDE)",
+        "source": "FreeLLMAPI public catalog",
+        "status": "Source-listed free access; check provider terms",
+        "supportsTools": true,
+        "supportsVision": false
+      },
+      {
+        "id": "qwen/qwen3.6-max-preview:free",
+        "name": "Qwen3.6 Max Preview (ACLIDE)",
+        "source": "FreeLLMAPI public catalog",
+        "status": "Source-listed free access; check provider terms",
+        "supportsTools": true,
+        "supportsVision": false
+      },
+      {
+        "id": "qwen/qwen3.6-plus:free",
+        "name": "Qwen3.6 Plus (ACLIDE)",
+        "source": "FreeLLMAPI public catalog",
+        "status": "Source-listed free access; check provider terms",
+        "supportsTools": true,
+        "supportsVision": false
+      },
+      {
+        "id": "qwen/qwen3.6-35b-a3b:free",
+        "name": "Qwen3.6 35B A3B (ACLIDE)",
+        "source": "FreeLLMAPI public catalog",
+        "status": "Source-listed free access; check provider terms",
+        "supportsTools": true,
+        "supportsVision": false
+      },
+      {
+        "id": "qwen/qwen3.5-plus:free",
+        "name": "Qwen3.5 Plus (ACLIDE)",
+        "source": "FreeLLMAPI public catalog",
+        "status": "Source-listed free access; check provider terms",
+        "supportsTools": true,
+        "supportsVision": false
+      },
+      {
+        "id": "qwen/qwen3.5-flash:free",
+        "name": "Qwen3.5 Flash (ACLIDE)",
+        "source": "FreeLLMAPI public catalog",
+        "status": "Source-listed free access; check provider terms",
+        "supportsTools": true,
+        "supportsVision": false
+      },
+      {
+        "id": "qwen/qwen3.5-397b-a17b:free",
+        "name": "Qwen3.5 397B (ACLIDE)",
+        "source": "FreeLLMAPI public catalog",
+        "status": "Source-listed free access; check provider terms",
+        "supportsTools": true,
+        "supportsVision": false
+      },
+      {
+        "id": "qwen/qwen3.5-omni-plus:free",
+        "name": "Qwen3.5 Omni Plus (ACLIDE)",
+        "source": "FreeLLMAPI public catalog",
+        "status": "Source-listed free access; check provider terms",
+        "supportsTools": true,
+        "supportsVision": false
+      },
+      {
+        "id": "qwen/qwen3.5-omni-flash:free",
+        "name": "Qwen3.5 Omni Flash (ACLIDE)",
+        "source": "FreeLLMAPI public catalog",
+        "status": "Source-listed free access; check provider terms",
+        "supportsTools": true,
+        "supportsVision": false
+      },
+      {
+        "id": "qwen/qwen3-max:free",
+        "name": "Qwen3 Max (ACLIDE)",
+        "source": "FreeLLMAPI public catalog",
+        "status": "Source-listed free access; check provider terms",
+        "supportsTools": true,
+        "supportsVision": false
+      },
+      {
+        "id": "qwen/qwen3-vl-plus:free",
+        "name": "Qwen3 VL Plus (ACLIDE)",
+        "source": "FreeLLMAPI public catalog",
+        "status": "Source-listed free access; check provider terms",
+        "supportsTools": true,
+        "supportsVision": false
+      },
+      {
+        "id": "qwen/qwen3-omni-flash:free",
+        "name": "Qwen3 Omni Flash (ACLIDE)",
+        "source": "FreeLLMAPI public catalog",
+        "status": "Source-listed free access; check provider terms",
+        "supportsTools": true,
+        "supportsVision": false
+      },
+      {
+        "id": "qwen/qwen3-coder-plus:free",
+        "name": "Qwen3 Coder Plus (ACLIDE)",
+        "source": "FreeLLMAPI public catalog",
+        "status": "Source-listed free access; check provider terms",
+        "supportsTools": true,
+        "supportsVision": false
+      },
+      {
+        "id": "qwen/qwen-plus-2025-07-28:free",
+        "name": "Qwen Plus 2025-07-28 (ACLIDE)",
+        "source": "FreeLLMAPI public catalog",
+        "status": "Source-listed free access; check provider terms",
+        "supportsTools": true,
+        "supportsVision": false
+      },
+      {
+        "id": "mistralai/devstral-medium",
+        "name": "Devstral 2 (ACLIDE)",
+        "source": "FreeLLMAPI public catalog",
+        "status": "Source-listed free access; check provider terms",
+        "supportsTools": false,
+        "supportsVision": false
+      },
+      {
+        "id": "mistralai/codestral-2508",
+        "name": "Codestral 2508 (ACLIDE)",
+        "source": "FreeLLMAPI public catalog",
+        "status": "Source-listed free access; check provider terms",
+        "supportsTools": false,
+        "supportsVision": false
+      },
+      {
+        "id": "mistralai/ministral-8b",
+        "name": "Ministral 3 8B (ACLIDE)",
+        "source": "FreeLLMAPI public catalog",
+        "status": "Source-listed free access; check provider terms",
+        "supportsTools": false,
+        "supportsVision": false
+      },
+      {
+        "id": "mistralai/mistral-medium-3.5",
+        "name": "Mistral Medium 3.5 (ACLIDE)",
+        "source": "FreeLLMAPI public catalog",
+        "status": "Source-listed free access; check provider terms",
+        "supportsTools": false,
+        "supportsVision": false
+      },
+      {
+        "id": "mistralai/ministral-3b",
+        "name": "Ministral 3 3B (ACLIDE)",
+        "source": "FreeLLMAPI public catalog",
+        "status": "Source-listed free access; check provider terms",
+        "supportsTools": false,
+        "supportsVision": false
+      },
+      {
+        "id": "mistralai/ministral-14b",
+        "name": "Ministral 3 14B (ACLIDE)",
+        "source": "FreeLLMAPI public catalog",
+        "status": "Source-listed free access; check provider terms",
+        "supportsTools": false,
+        "supportsVision": false
+      },
+      {
+        "id": "anthropic/claude-haiku-4.5",
+        "name": "Claude Haiku 4.5 (ACLIDE)",
+        "source": "FreeLLMAPI public catalog",
+        "status": "Source-listed free access; check provider terms",
+        "supportsTools": false,
+        "supportsVision": false
+      },
+      {
+        "id": "z-ai/glm-5",
+        "name": "GLM 5 (ACLIDE)",
+        "source": "FreeLLMAPI public catalog",
+        "status": "Source-listed free access; check provider terms",
+        "supportsTools": false,
+        "supportsVision": false
+      }
+    ],
+    "moondream": [
+      {
+        "id": "moondream3.1-9B-A2B",
+        "name": "Moondream 3.1 9B A2B",
+        "source": "FreeLLMAPI public catalog",
+        "status": "Source-listed free access; check provider terms",
+        "supportsTools": false,
+        "supportsVision": true
+      },
+      {
+        "id": "moondream3-preview",
+        "name": "Moondream 3 Preview",
+        "source": "FreeLLMAPI public catalog",
+        "status": "Source-listed free access; check provider terms",
+        "supportsTools": false,
+        "supportsVision": true
+      }
+    ],
+    "llmtr": [
+      {
+        "id": "qwen/qwen3.8-27b-free",
+        "name": "Qwen3.8 27B (LLMTR)",
+        "source": "FreeLLMAPI public catalog",
+        "status": "Source-listed free access; check provider terms",
+        "contextWindow": 131042,
+        "supportsTools": false,
+        "supportsVision": false
+      },
+      {
+        "id": "nvidia/nemotron-3-ultra-550b-a55b",
+        "name": "Nemotron 3 Ultra 550B (LLMTR)",
+        "source": "FreeLLMAPI public catalog",
+        "status": "Source-listed free access; check provider terms",
+        "contextWindow": 1000000,
+        "supportsTools": false,
+        "supportsVision": false
+      },
+      {
+        "id": "nvidia/nemotron-3.5-super-vl-free",
+        "name": "Nemotron 3.5 Super VL (Free)",
+        "source": "FreeLLMAPI public catalog",
+        "status": "Source-listed free access; check provider terms",
+        "contextWindow": 1000000,
+        "supportsTools": false,
+        "supportsVision": false
+      }
+    ],
+    "gizmo": [
+      {
+        "id": "qwen/qwen3.8-27b:free",
+        "name": "Qwen3.8 27B (Gizmo)",
+        "source": "FreeLLMAPI public catalog",
+        "status": "Source-listed free access; check provider terms",
+        "contextWindow": 262144,
+        "supportsTools": false,
+        "supportsVision": false
+      },
+      {
+        "id": "nvidia/nemotron-3.5-lightning:free",
+        "name": "Nemotron 3.5 Lightning (Gizmo)",
+        "source": "FreeLLMAPI public catalog",
+        "status": "Source-listed free access; check provider terms",
+        "contextWindow": 1048576,
+        "supportsTools": false,
+        "supportsVision": false
+      },
+      {
+        "id": "nvidia/nemotron-3-ultra-550b-a55b:free",
+        "name": "Nemotron 3 Ultra 550B (Gizmo)",
+        "source": "FreeLLMAPI public catalog",
+        "status": "Source-listed free access; check provider terms",
+        "contextWindow": 1000000,
+        "supportsTools": false,
+        "supportsVision": false
+      },
+      {
+        "id": "nvidia/nemotron-3-super-120b-a12b:free",
+        "name": "Nemotron 3 Super 120B (Gizmo)",
+        "source": "FreeLLMAPI public catalog",
+        "status": "Source-listed free access; check provider terms",
+        "contextWindow": 1000000,
+        "supportsTools": false,
+        "supportsVision": false
+      },
+      {
+        "id": "poolside/laguna-xs-2.1:free",
+        "name": "Poolside Laguna XS 2.1 (Gizmo)",
+        "source": "FreeLLMAPI public catalog",
+        "status": "Source-listed free access; check provider terms",
+        "contextWindow": 131072,
+        "supportsTools": false,
+        "supportsVision": false
+      },
+      {
+        "id": "poolside/laguna-s-2.1:free",
+        "name": "Poolside Laguna S 2.1 (Gizmo)",
+        "source": "FreeLLMAPI public catalog",
+        "status": "Source-listed free access; check provider terms",
+        "contextWindow": 262144,
+        "supportsTools": false,
+        "supportsVision": false
+      }
+    ],
+    "blockrun": [
+      {
+        "id": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
+        "name": "Nemotron 3 Nano Omni Reasoning (BlockRun)",
+        "source": "FreeLLMAPI public catalog",
+        "status": "Source-listed free access; check provider terms",
+        "contextWindow": 256000,
+        "supportsTools": false,
+        "supportsVision": false
+      },
+      {
+        "id": "nvidia/llama-3.2-11b-vision",
+        "name": "Llama 3.2 11B Vision (BlockRun)",
+        "source": "FreeLLMAPI public catalog",
+        "status": "Source-listed free access; check provider terms",
+        "contextWindow": 128000,
+        "supportsTools": false,
+        "supportsVision": false
+      },
+      {
+        "id": "nvidia/muse-glimmer-30b",
+        "name": "Muse Glimmer 30B (BlockRun)",
+        "source": "FreeLLMAPI public catalog",
+        "status": "Source-listed free access; check provider terms",
+        "contextWindow": 131072,
+        "supportsTools": false,
+        "supportsVision": false
+      },
+      {
+        "id": "poolside/laguna-xs-2.1",
+        "name": "Poolside Laguna XS 2.1 (BlockRun)",
+        "source": "FreeLLMAPI public catalog",
+        "status": "Source-listed free access; check provider terms",
+        "contextWindow": 131072,
+        "supportsTools": false,
+        "supportsVision": false
+      }
+    ],
+    "blaze": [
+      {
+        "id": "free/glm-5.3-flash",
+        "name": "GLM 5.3 Flash (BlazeAPI)",
+        "source": "FreeLLMAPI public catalog",
+        "status": "Source-listed free access; check provider terms",
+        "contextWindow": 128000,
+        "supportsTools": false,
+        "supportsVision": false
+      },
+      {
+        "id": "free/qwen3.8-flash-next",
+        "name": "Qwen3.8 Flash Next (BlazeAPI)",
+        "source": "FreeLLMAPI public catalog",
+        "status": "Source-listed free access; check provider terms",
+        "contextWindow": 128000,
+        "supportsTools": false,
+        "supportsVision": false
+      },
+      {
+        "id": "free/qwen3.8-27b",
+        "name": "Qwen3.8 27B (BlazeAPI)",
+        "source": "FreeLLMAPI public catalog",
+        "status": "Source-listed free access; check provider terms",
+        "contextWindow": 128000,
+        "supportsTools": false,
+        "supportsVision": false
+      }
+    ],
+    "typhoon": [
+      {
+        "id": "typhoon-v2.5-30b-a3b-instruct",
+        "name": "Typhoon 2.5 30B A3B Instruct",
+        "source": "FreeLLMAPI public catalog",
+        "status": "Source-listed free access; check provider terms",
+        "contextWindow": 131072,
+        "supportsTools": true,
+        "supportsVision": false
+      }
+    ],
+    "plugsky": [
+      {
+        "id": "plugsky-micro",
+        "name": "Plugsky Micro",
+        "source": "FreeLLMAPI public catalog",
+        "status": "Source-listed free access; check provider terms",
+        "contextWindow": 262144,
+        "supportsTools": false,
+        "supportsVision": false
+      },
+      {
+        "id": "plugsky-lite",
+        "name": "Plugsky Lite",
+        "source": "FreeLLMAPI public catalog",
+        "status": "Source-listed free access; check provider terms",
+        "contextWindow": 131072,
+        "supportsTools": false,
+        "supportsVision": false
+      }
+    ],
+    "inferbase": [
+      {
+        "id": "deepseek-v4-flash:fp8",
+        "name": "DeepSeek V4 Flash (fp8) (Inferbase)",
+        "source": "FreeLLMAPI public catalog",
+        "status": "Source-listed free access; check provider terms",
+        "contextWindow": 8192,
+        "supportsTools": false,
+        "supportsVision": false
+      },
+      {
+        "id": "qwen3-8-flash",
+        "name": "Qwen3.8 Flash (Inferbase)",
+        "source": "FreeLLMAPI public catalog",
+        "status": "Source-listed free access; check provider terms",
+        "contextWindow": 8192,
+        "supportsTools": false,
+        "supportsVision": false
+      },
+      {
+        "id": "minimax-m3",
+        "name": "MiniMax M3 (Inferbase)",
+        "source": "FreeLLMAPI public catalog",
+        "status": "Source-listed free access; check provider terms",
+        "contextWindow": 8192,
+        "supportsTools": false,
+        "supportsVision": false
+      },
+      {
+        "id": "qwen3-coder-480b-a35b-instruct:turbo",
+        "name": "Qwen3 Coder 480B A35B Instruct (turbo) (Inferbase)",
+        "source": "FreeLLMAPI public catalog",
+        "status": "Source-listed free access; check provider terms",
+        "contextWindow": 8192,
+        "supportsTools": false,
+        "supportsVision": false
+      },
+      {
+        "id": "deepseek-v4-flash-0731",
+        "name": "DeepSeek V4 Flash 0731 (Inferbase)",
+        "source": "FreeLLMAPI public catalog",
+        "status": "Source-listed free access; check provider terms",
+        "contextWindow": 8192,
+        "supportsTools": false,
+        "supportsVision": false
+      },
+      {
+        "id": "openai-gpt-oss-120b",
+        "name": "GPT Oss 120B (Inferbase)",
+        "source": "FreeLLMAPI public catalog",
+        "status": "Source-listed free access; check provider terms",
+        "contextWindow": 8192,
+        "supportsTools": false,
+        "supportsVision": false
+      },
+      {
+        "id": "openai-gpt-oss-20b",
+        "name": "GPT Oss 20B (Inferbase)",
+        "source": "FreeLLMAPI public catalog",
+        "status": "Source-listed free access; check provider terms",
+        "contextWindow": 8192,
+        "supportsTools": false,
+        "supportsVision": false
+      },
+      {
+        "id": "mistral-small-3-2-24b-instruct-2506:fp8",
+        "name": "Mistral Small 3.2 24B Instruct 2506 (fp8) (Inferbase)",
+        "source": "FreeLLMAPI public catalog",
+        "status": "Source-listed free access; check provider terms",
+        "contextWindow": 8192,
+        "supportsTools": false,
+        "supportsVision": false
+      },
+      {
+        "id": "google-gemma-3-27b-it",
+        "name": "Gemma 3 27B (Inferbase)",
+        "source": "FreeLLMAPI public catalog",
+        "status": "Source-listed free access; check provider terms",
+        "contextWindow": 8192,
+        "supportsTools": false,
+        "supportsVision": false
+      },
+      {
+        "id": "google-gemma-4-26b-a4b-it",
+        "name": "Gemma 4 26B A4B IT (Inferbase)",
+        "source": "FreeLLMAPI public catalog",
+        "status": "Source-listed free access; check provider terms",
+        "contextWindow": 8192,
+        "supportsTools": false,
+        "supportsVision": false
+      },
+      {
+        "id": "meta-llama-3-3-70b-instruct",
+        "name": "Llama 3.3 70B Instruct (Inferbase)",
+        "source": "FreeLLMAPI public catalog",
+        "status": "Source-listed free access; check provider terms",
+        "contextWindow": 8192,
+        "supportsTools": false,
+        "supportsVision": false
+      },
+      {
+        "id": "meta-llama-4-scout-17b-16e-instruct:fp8",
+        "name": "Llama 4 Scout 17B 16E Instruct (fp8) (Inferbase)",
+        "source": "FreeLLMAPI public catalog",
+        "status": "Source-listed free access; check provider terms",
+        "contextWindow": 8192,
+        "supportsTools": false,
+        "supportsVision": false
+      },
+      {
+        "id": "nvidia-nemotron-3-nano-30b-a3b",
+        "name": "NVIDIA Nemotron 3 Nano 30B A3B (Inferbase)",
+        "source": "FreeLLMAPI public catalog",
+        "status": "Source-listed free access; check provider terms",
+        "contextWindow": 8192,
+        "supportsTools": false,
+        "supportsVision": false
+      },
+      {
+        "id": "qwen3-14b:fp8",
+        "name": "Qwen 3 14B (fp8) (Inferbase)",
+        "source": "FreeLLMAPI public catalog",
+        "status": "Source-listed free access; check provider terms",
+        "contextWindow": 8192,
+        "supportsTools": false,
+        "supportsVision": false
+      },
+      {
+        "id": "qwen3-5-9b",
+        "name": "Qwen 3.5 9B (Inferbase)",
+        "source": "FreeLLMAPI public catalog",
+        "status": "Source-listed free access; check provider terms",
+        "contextWindow": 8192,
+        "supportsTools": false,
+        "supportsVision": false
+      },
+      {
+        "id": "qwen3-6-35b-a3b",
+        "name": "Qwen 3.6 35B A3B (Inferbase)",
+        "source": "FreeLLMAPI public catalog",
+        "status": "Source-listed free access; check provider terms",
+        "contextWindow": 8192,
+        "supportsTools": false,
+        "supportsVision": false
+      },
+      {
+        "id": "qwen3-next-80b-a3b-instruct:fp8",
+        "name": "Qwen3 Next 80B A3B Instruct (fp8) (Inferbase)",
+        "source": "FreeLLMAPI public catalog",
+        "status": "Source-listed free access; check provider terms",
+        "contextWindow": 8192,
+        "supportsTools": false,
+        "supportsVision": false
+      },
+      {
+        "id": "qwen3-vl-235b-a22b-instruct:fp8",
+        "name": "Qwen 3 VL 235B A22B Instruct (fp8) (Inferbase)",
+        "source": "FreeLLMAPI public catalog",
+        "status": "Source-listed free access; check provider terms",
+        "contextWindow": 8192,
+        "supportsTools": false,
+        "supportsVision": false
+      },
+      {
+        "id": "qwen3-vl-30b-a3b-instruct:fp8",
+        "name": "Qwen 3 VL 30B A3B Instruct (fp8) (Inferbase)",
+        "source": "FreeLLMAPI public catalog",
+        "status": "Source-listed free access; check provider terms",
+        "contextWindow": 8192,
+        "supportsTools": false,
+        "supportsVision": false
+      },
+      {
+        "id": "zai-glm-4-5-air",
+        "name": "GLM 4.5 Air (Inferbase)",
+        "source": "FreeLLMAPI public catalog",
+        "status": "Source-listed free access; check provider terms",
+        "contextWindow": 8192,
+        "supportsTools": false,
+        "supportsVision": false
+      },
+      {
+        "id": "zai-glm-4-5v",
+        "name": "GLM 4.5V (Inferbase)",
+        "source": "FreeLLMAPI public catalog",
+        "status": "Source-listed free access; check provider terms",
+        "contextWindow": 8192,
+        "supportsTools": false,
+        "supportsVision": false
+      },
+      {
+        "id": "zai-glm-4-6v",
+        "name": "GLM 4.6V (Inferbase)",
+        "source": "FreeLLMAPI public catalog",
+        "status": "Source-listed free access; check provider terms",
+        "contextWindow": 8192,
+        "supportsTools": false,
+        "supportsVision": false
+      },
+      {
+        "id": "zai-glm-4-7:fp4",
+        "name": "GLM 4.7 (FP4)",
+        "source": "FreeLLMAPI public catalog",
+        "status": "Source-listed free access; check provider terms",
+        "contextWindow": 8192,
+        "supportsTools": false,
+        "supportsVision": false
+      },
+      {
+        "id": "zai-glm-4-7-flash",
+        "name": "GLM 4.7 Flash (Inferbase)",
+        "source": "FreeLLMAPI public catalog",
+        "status": "Source-listed free access; check provider terms",
+        "contextWindow": 8192,
+        "supportsTools": false,
+        "supportsVision": false
+      },
+      {
+        "id": "google-gemma-3-12b-it",
+        "name": "Gemma 3 12B (Inferbase)",
+        "source": "FreeLLMAPI public catalog",
+        "status": "Source-listed free access; check provider terms",
+        "contextWindow": 8192,
+        "supportsTools": false,
+        "supportsVision": false
+      },
+      {
+        "id": "google-gemma-3-4b-it",
+        "name": "Gemma 3 4B (Inferbase)",
+        "source": "FreeLLMAPI public catalog",
+        "status": "Source-listed free access; check provider terms",
+        "contextWindow": 8192,
+        "supportsTools": false,
+        "supportsVision": false
+      },
+      {
+        "id": "meta-llama-3-1-8b-instruct",
+        "name": "Llama 3.1 8B (Inferbase)",
+        "source": "FreeLLMAPI public catalog",
+        "status": "Source-listed free access; check provider terms",
+        "contextWindow": 8192,
+        "supportsTools": false,
+        "supportsVision": false
+      },
+      {
+        "id": "mistral-nemo-instruct-2407:fp8",
+        "name": "Mistral Nemo FP8 (Inferbase)",
+        "source": "FreeLLMAPI public catalog",
+        "status": "Source-listed free access; check provider terms",
+        "contextWindow": 8192,
+        "supportsTools": false,
+        "supportsVision": false
+      },
+      {
+        "id": "mistral-small-24b-instruct-2501:fp8",
+        "name": "Mistral Small 24B FP8 (Inferbase)",
+        "source": "FreeLLMAPI public catalog",
+        "status": "Source-listed free access; check provider terms",
+        "contextWindow": 8192,
+        "supportsTools": false,
+        "supportsVision": false
+      },
+      {
+        "id": "qwen2-5-72b-instruct:fp8",
+        "name": "Qwen2.5 72B FP8 (Inferbase)",
+        "source": "FreeLLMAPI public catalog",
+        "status": "Source-listed free access; check provider terms",
+        "contextWindow": 8192,
+        "supportsTools": false,
+        "supportsVision": false
+      },
+      {
+        "id": "qwen3-5-35b-a3b",
+        "name": "Qwen3.5 35B A3B",
+        "source": "FreeLLMAPI public catalog",
+        "status": "Source-listed free access; check provider terms",
+        "contextWindow": 8192,
+        "supportsTools": false,
+        "supportsVision": false
+      },
+      {
+        "id": "zai-glm-4-6:fp4",
+        "name": "GLM 4.6 FP4 (Inferbase)",
+        "source": "FreeLLMAPI public catalog",
+        "status": "Source-listed free access; check provider terms",
+        "contextWindow": 8192,
+        "supportsTools": false,
+        "supportsVision": false
+      },
+      {
+        "id": "deepseek-v3-1:fp4",
+        "name": "DeepSeek V3.1 FP4 (Inferbase)",
+        "source": "FreeLLMAPI public catalog",
+        "status": "Source-listed free access; check provider terms",
+        "contextWindow": 8192,
+        "supportsTools": false,
+        "supportsVision": false
+      },
+      {
+        "id": "deepseek-v3-2:fp4",
+        "name": "DeepSeek V3.2 FP4 (Inferbase)",
+        "source": "FreeLLMAPI public catalog",
+        "status": "Source-listed free access; check provider terms",
+        "contextWindow": 8192,
+        "supportsTools": false,
+        "supportsVision": false
+      },
+      {
+        "id": "qwen3-32b:fp8",
+        "name": "Qwen3 32B FP8 (Inferbase)",
+        "source": "FreeLLMAPI public catalog",
+        "status": "Source-listed free access; check provider terms",
+        "contextWindow": 8192,
+        "supportsTools": false,
+        "supportsVision": false
+      },
+      {
+        "id": "qwen3-30b-a3b:fp8",
+        "name": "Qwen3 30B A3B FP8 (Inferbase)",
+        "source": "FreeLLMAPI public catalog",
+        "status": "Source-listed free access; check provider terms",
+        "contextWindow": 8192,
+        "supportsTools": false,
+        "supportsVision": false
+      }
+    ],
     "simplellm": [
       {
         "id": "free-Llama-3.1-8B-Instruct",
@@ -3224,6 +3604,17 @@
         "name": "Gemma E4B Free",
         "source": "SimpleLLM public pricing API",
         "status": "Zero input/output prices; hourly and daily quotas apply"
+      }
+    ],
+    "iteracompute": [
+      {
+        "id": "qwen/qwen3.8-27b",
+        "name": "Qwen3.8 27B (IteraCompute Free)",
+        "source": "FreeLLMAPI public catalog",
+        "status": "Source-listed free access; check provider terms",
+        "contextWindow": 131072,
+        "supportsTools": true,
+        "supportsVision": true
       }
     ]
   }
