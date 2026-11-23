@@ -1,6 +1,6 @@
 # Free API providers and accounts
 
-The expanded catalog includes **34 API-key providers and 374 chat-model presets**
+The expanded catalog includes **35 API-key providers and 375 chat-model presets**
 as of 2026-11-23. Search **DeepSeek**, **Qwen**, **Gemma**, **GPT-OSS**, or any
 provider in **Free APIs**, expand its model list, and click **Add this model**.
 Account setup now has a model dropdown plus an option for a custom model ID.
