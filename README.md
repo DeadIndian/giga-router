@@ -152,6 +152,12 @@ Ordinary model names follow the selected provider's **default model**. Unknown
 slash prefixes, such as upstream `organization/model` IDs, also follow ordinary
 routing. `GET /v1/models` lists saved direct aliases and profiles.
 
+When adding or editing a custom provider, **Fetch available models** asks the
+provider's own `/models` endpoint (OpenAI-style, Anthropic, Ollama and
+Cloudflare shapes are understood) and offers the result as a dropdown for the
+default model. It uses the key typed in the form, or the saved key when the form
+is left blank. You can still type any model ID by hand.
+
 **Live routing** and actual requests use the same planner. Known-incompatible
 models are skipped; unknown capabilities remain eligible. Transient failures
 normally cool down for 60 seconds, five consecutive failures open a 30-minute

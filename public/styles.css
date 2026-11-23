@@ -397,3 +397,5 @@ details > div { padding: 6px 12px 0; }
   .skill-card { min-height: 225px; }
 }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
+.model-picker { display: grid; gap: 8px; margin-top: 8px; justify-items: start; }
+.model-picker select { width: 100%; }
